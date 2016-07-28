@@ -1,0 +1,10 @@
+#version 330
+
+attribute vec4 posAttrib;
+attribute vec2 texAttrib;
+varying vec2 uv;
+void main()
+{
+	gl_Position = posAttrib;
+	uv = texAttrib;
+}

@@ -1,0 +1,454 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{DB686EF8-7832-4323-8C64-E0B60F586582}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Source Files\Math">
+      <UniqueIdentifier>{d81cf49a-efd7-4627-a92a-9dc71606ae8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Texturing">
+      <UniqueIdentifier>{7318503d-f8c9-478c-b32b-775c1709d544}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Sync">
+      <UniqueIdentifier>{b509eb24-d230-44ea-a553-bb58ea41cec9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Camera">
+      <UniqueIdentifier>{4f9e019d-fcb6-4511-911e-0780158822af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Tests">
+      <UniqueIdentifier>{6cebc646-d600-4aad-ae3a-cb8d00157eda}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Data structures">
+      <UniqueIdentifier>{4e05913f-3156-4a08-85bb-29de1c52b603}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Data structures\BVH">
+      <UniqueIdentifier>{94cb38bd-1e59-4fe3-9d08-2e84f0aa9b19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Rendering">
+      <UniqueIdentifier>{59673df3-907e-4257-a39c-cbab52484b9f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Rendering\Scenes">
+      <UniqueIdentifier>{bd0f5736-ab88-4b44-9de9-6ad980ec165e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Modeling">
+      <UniqueIdentifier>{770f41ff-aa58-45c3-afd5-2141ff9401bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Rendering\Buffers">
+      <UniqueIdentifier>{f2af1e39-d667-45b8-ae58-447f5da954ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Rendering\PostProcessing">
+      <UniqueIdentifier>{bc9dcc6d-9e14-47e4-a4aa-9e3ddf12bdc1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Modeling\CPU">
+      <UniqueIdentifier>{05c9c26c-9db1-476e-8436-c61990ac9b46}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Modeling\GPU">
+      <UniqueIdentifier>{7e611955-89bd-4cfb-8b2f-07423f564bc4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Rendering\Particles">
+      <UniqueIdentifier>{f48a608d-9055-4092-9faa-50374c608c34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Rendering\Textures">
+      <UniqueIdentifier>{e66059e1-ed2b-421f-8e27-0f3f251a2226}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\AssemblyDemo">
+      <UniqueIdentifier>{65132aa5-55dc-42b0-b621-03f844ceab22}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Algorithms">
+      <UniqueIdentifier>{3b07e8c1-c6bb-4c69-9bd2-c54b1db6aedb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Util">
+      <UniqueIdentifier>{f241f8c5-22f0-4322-9ea8-f528ceaa25af}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\assignment\App.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\ShaderSetup.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\Util.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\AutomaticDifferentiation.h">
+      <Filter>Source Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\Scene.h">
+      <Filter>Source Files\Rendering\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\TextureUtil.h">
+      <Filter>Source Files\Texturing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\InterestingCurves.h">
+      <Filter>Source Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\RayMarchScene.h">
+      <Filter>Source Files\Rendering\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\HeightMapScene.h">
+      <Filter>Source Files\Rendering\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sync\sync.h">
+      <Filter>Source Files\Sync</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sync\track.h">
+      <Filter>Source Files\Sync</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sync\device.h">
+      <Filter>Source Files\Sync</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sync\data.h">
+      <Filter>Source Files\Sync</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sync\base.h">
+      <Filter>Source Files\Sync</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\BassTimer.h">
+      <Filter>Source Files\Sync</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\ForwardShading.h">
+      <Filter>Source Files\Rendering\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\MemoryAllignedAllocator.h">
+      <Filter>Source Files\Rendering\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\ParallelSort.h">
+      <Filter>Source Files\Rendering\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\TessellationTestScene.h">
+      <Filter>Source Files\Rendering\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\Samplers.h">
+      <Filter>Source Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\CameraPath.h">
+      <Filter>Source Files\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\Spline.h">
+      <Filter>Source Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\PrefixScanTests.h">
+      <Filter>Source Files\Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\GPUBvh.h">
+      <Filter>Source Files\Data structures\BVH</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\QBVH.h">
+      <Filter>Source Files\Data structures\BVH</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\RaycastResult.hpp">
+      <Filter>Source Files\Data structures\BVH</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\SBVH.h">
+      <Filter>Source Files\Data structures\BVH</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\SplitMethod.h">
+      <Filter>Source Files\Data structures\BVH</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\util.hpp">
+      <Filter>Source Files\Data structures\BVH</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\MortonCodes.h">
+      <Filter>Source Files\Data structures\BVH</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\Bvh.hpp">
+      <Filter>Source Files\Data structures\BVH</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\BvhNode.hpp">
+      <Filter>Source Files\Data structures\BVH</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\filesaves.hpp">
+      <Filter>Source Files\Data structures\BVH</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\GBuffer.h">
+      <Filter>Source Files\Rendering\Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\BrightPassFilter.h">
+      <Filter>Source Files\Rendering\PostProcessing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\BloomFilter.h">
+      <Filter>Source Files\Rendering\PostProcessing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\AABB.h">
+      <Filter>Source Files\Data structures\BVH</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\FBOManager.h">
+      <Filter>Source Files\Rendering\Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\RTTriangle.hpp">
+      <Filter>Source Files\Data structures\BVH</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\ToneMapper.h">
+      <Filter>Source Files\Rendering\PostProcessing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\SSAOKernel.h">
+      <Filter>Source Files\Rendering\PostProcessing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\TexturePool.h">
+      <Filter>Source Files\Rendering\Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\curve.h">
+      <Filter>Source Files\Modeling\CPU</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\DistanceField.h">
+      <Filter>Source Files\Modeling\CPU</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\MarchingTetrahedra.h">
+      <Filter>Source Files\Modeling\CPU</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\Object.h">
+      <Filter>Source Files\Modeling\CPU</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\surf.h">
+      <Filter>Source Files\Modeling\CPU</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\DynamicMarchingTetrahedra.h">
+      <Filter>Source Files\Modeling\GPU</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\DisplacedMesh.h">
+      <Filter>Source Files\Modeling\GPU</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\GaussianFilter.h">
+      <Filter>Source Files\Rendering\PostProcessing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\AlphabetMesh.h">
+      <Filter>Source Files\Modeling\CPU</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\ProceduralTextureScene.h">
+      <Filter>Source Files\Rendering\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\Action.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\MeshRenderHelper.h">
+      <Filter>Source Files\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\LightParticles.h">
+      <Filter>Source Files\Rendering\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\IntersectionTest.h">
+      <Filter>Source Files\Data structures\BVH</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\NBodyTest.h">
+      <Filter>Source Files\Rendering\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\GPUPrefixScan.h">
+      <Filter>Source Files\Algorithms</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\Globals.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\GlobalSyncVars.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\FBO.h">
+      <Filter>Source Files\Rendering\Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\SDFGeometryFactory.h">
+      <Filter>Source Files\Modeling\GPU</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\ParticleModelNBody.h">
+      <Filter>Source Files\Rendering\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\SyncVars.h">
+      <Filter>Source Files\Sync</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\ParticleLogoSDF.h">
+      <Filter>Source Files\Rendering\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\LogoScene.h">
+      <Filter>Source Files\Rendering\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\SpaceScene.h">
+      <Filter>Source Files\Rendering\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\NewBloomFilter.h">
+      <Filter>Source Files\Rendering\PostProcessing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\Mesher.h">
+      <Filter>Source Files\Modeling\GPU</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\DemoUtil.h">
+      <Filter>Source Files\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assignment\TunnelScene.h">
+      <Filter>Source Files\Rendering\Scenes</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\assignment\App.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assignment\ShaderSetup.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assignment\Util.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assignment\AutomaticDifferentiation.cpp">
+      <Filter>Source Files\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assignment\Scene.cpp">
+      <Filter>Source Files\Rendering\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assignment\TextureUtil.cpp">
+      <Filter>Source Files\Texturing</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assignment\InterestingCurves.cpp">
+      <Filter>Source Files\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assignment\RayMarchScene.cpp">
+      <Filter>Source Files\Rendering\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assignment\HeightMapScene.cpp">
+      <Filter>Source Files\Rendering\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sync\track.c">
+      <Filter>Source Files\Sync</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sync\data.c">
+      <Filter>Source Files\Sync</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sync\device.c">
+      <Filter>Source Files\Sync</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assignment\ForwardShading.cpp">
+      <Filter>Source Files\Rendering\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assignment\TessellationTestScene.cpp">
+      <Filter>Source Files\Rendering\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assignment\LowDiscrepancySampler.cpp">
+      <Filter>Source Files\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assignment\CameraPath.cpp">
+      <Filter>Source Files\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assignment\PrefixScanTest.cpp">
+      <Filter>Source Files\Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assignment\GPUBvh.cpp">
+      <Filter>Source Files\Data structures\BVH</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assignment\QBVH.cpp">
+      <Filter>Source Files\Data structures\BVH</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assignment\SBVH.cpp">
+      <Filter>Source Files\Data structures\BVH</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assignment\SplitMethod.cpp">
+      <Filter>Source Files\Data structures\BVH</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assignment\MortonCodes.cpp">
+      <Filter>Source Files\Data structures\BVH</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assignment\Bvh.cpp">
+      <Filter>Source Files\Data structures\BVH</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assignment\GBuffer.cpp">
+      <Filter>Source Files\Rendering\Buffers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assignment\BrrightPassFilter.cpp">
+      <Filter>Source Files\Rendering\PostProcessing</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assignment\BloomFilter.cpp">
+      <Filter>Source Files\Rendering\PostProcessing</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assignment\FBOManager.cpp">
+      <Filter>Source Files\Rendering\Buffers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assignment\TonerMapper.cpp">
+      <Filter>Source Files\Rendering\PostProcessing</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assignment\SSAOKernel.cpp">
+      <Filter>Source Files\Rendering\PostProcessing</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assignment\TexturePool.cpp">
+      <Filter>Source Files\Rendering\Buffers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assignment\curve.cpp">
+      <Filter>Source Files\Modeling\CPU</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assignment\CurveObject.cpp">
+      <Filter>Source Files\Modeling\CPU</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assignment\MarchingTetrahedra.cpp">
+      <Filter>Source Files\Modeling\CPU</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assignment\Object.cpp">
+      <Filter>Source Files\Modeling\CPU</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assignment\PointCloud.cpp">
+      <Filter>Source Files\Modeling\CPU</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assignment\surf.cpp">
+      <Filter>Source Files\Modeling\CPU</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assignment\SurfaceObject.cpp">
+      <Filter>Source Files\Modeling\CPU</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assignment\DynamicMarchingTetrahedra.cpp">
+      <Filter>Source Files\Modeling\GPU</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assignment\DisplacedMesh.cpp">
+      <Filter>Source Files\Modeling\GPU</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assignment\GaussianFilter.cpp">
+      <Filter>Source Files\Rendering\PostProcessing</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assignment\AlphabetMesh.cpp">
+      <Filter>Source Files\Modeling\CPU</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assignment\ProceduralTextureScene.cpp">
+      <Filter>Source Files\Rendering\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assignment\MeshRenderHelper.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assignment\LightParticles.cpp">
+      <Filter>Source Files\Rendering\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assignment\NBodyTest.cpp">
+      <Filter>Source Files\Rendering\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assignment\GPUPrefixScan.cpp">
+      <Filter>Source Files\Algorithms</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assignment\FBO.cpp">
+      <Filter>Source Files\Rendering\Buffers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assignment\SDFGeometryFactory.cpp">
+      <Filter>Source Files\Modeling\GPU</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assignment\ParticleModelNBody.cpp">
+      <Filter>Source Files\Rendering\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assignment\SyncVars.cpp">
+      <Filter>Source Files\Sync</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assignment\ParticleLogoSDF.cpp">
+      <Filter>Source Files\Rendering\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assignment\LogoScene.cpp">
+      <Filter>Source Files\Rendering\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assignment\SpaceScene.cpp">
+      <Filter>Source Files\Rendering\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assignment\NewBloomFilter.cpp">
+      <Filter>Source Files\Rendering\PostProcessing</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assignment\Mesher.cpp">
+      <Filter>Source Files\Modeling\GPU</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assignment\DemoUtil.cpp">
+      <Filter>Source Files\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assignment\TunnelScene.cpp">
+      <Filter>Source Files\Rendering\Scenes</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
