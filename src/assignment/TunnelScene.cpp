@@ -57,6 +57,7 @@ namespace FW {
 		gl->setUniform(mesherProg->getUniformLoc("knob0"), Vec4f(FWSync::sdf1, FWSync::sdf2, FWSync::sdf3, FWSync::sdf4));
 		gl->setUniform(mesherProg->getUniformLoc("knob1"), Vec4f(FWSync::sdf5, FWSync::sdf6, FWSync::sdf7, FWSync::sdf8));
 		gl->setUniform(mesherProg->getUniformLoc("knob2"), Vec4f(FWSync::sdf9, FWSync::sdf10, FWSync::sdf11, FWSync::sdf12));
+		gl->setUniform(mesherProg->getUniformLoc("knob3"), Vec4f(FWSync::sdf13, FWSync::sdf14, FWSync::sdf15, FWSync::sdf16));
 		mMesher->update(gl);
 
 		Vec3f cameraPosition = getCameraPosition(FWSync::trefoilTime);

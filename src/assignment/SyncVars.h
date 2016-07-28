@@ -84,6 +84,11 @@ namespace FWSync {
 	SYNC_EXT(sdf11);
 	SYNC_EXT(sdf12);
 
+	SYNC_EXT(sdf13);
+	SYNC_EXT(sdf14);
+	SYNC_EXT(sdf15);
+	SYNC_EXT(sdf16);
+
 	SYNC_EXT(attractorPower);
 
 	SYNC_EXT(trefoilTime);

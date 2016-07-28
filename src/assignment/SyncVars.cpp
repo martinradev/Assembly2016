@@ -68,6 +68,10 @@ namespace FWSync {
 	SYNC_DEF(sdf10);
 	SYNC_DEF(sdf11);
 	SYNC_DEF(sdf12);
+	SYNC_DEF(sdf13);
+	SYNC_DEF(sdf14);
+	SYNC_DEF(sdf15);
+	SYNC_DEF(sdf16);
 
 	SYNC_DEF(attractorPower);
 
@@ -176,6 +180,11 @@ namespace FWSync {
 		sdf11Ptr = sync_get_track(rocket, "sdf_11");
 		sdf12Ptr = sync_get_track(rocket, "sdf_12");
 
+		sdf13Ptr = sync_get_track(rocket, "sdf_13");
+		sdf14Ptr = sync_get_track(rocket, "sdf_14");
+		sdf15Ptr = sync_get_track(rocket, "sdf_15");
+		sdf16Ptr = sync_get_track(rocket, "sdf_16");
+
 		attractorPowerPtr = sync_get_track(rocket, "attractorPower");
 
 		trefoilTimePtr = sync_get_track(rocket, "trefoil_t");
@@ -247,6 +256,10 @@ namespace FWSync {
 		sdf10 = sync_get_val(FWSync::sdf10Ptr, row);
 		sdf11 = sync_get_val(FWSync::sdf11Ptr, row);
 		sdf12 = sync_get_val(FWSync::sdf12Ptr, row);
+		sdf13 = sync_get_val(FWSync::sdf13Ptr, row);
+		sdf14 = sync_get_val(FWSync::sdf14Ptr, row);
+		sdf15 = sync_get_val(FWSync::sdf15Ptr, row);
+		sdf16 = sync_get_val(FWSync::sdf16Ptr, row);
 
 		attractorPower = sync_get_val(FWSync::attractorPowerPtr, row);
 		trefoilTime = sync_get_val(FWSync::trefoilTimePtr, row);
