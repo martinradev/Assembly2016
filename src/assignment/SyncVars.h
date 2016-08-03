@@ -38,6 +38,9 @@ namespace FWSync {
 	extern const sync_track *sceneIndexPtr;
 	extern float sceneIndex;
 
+	extern const sync_track *colorGradingIndexPtr;
+	extern float colorGradingIndex;
+
 	SYNC_EXT(logoGodrayColorR);
 	SYNC_EXT(logoGodrayColorG);
 	SYNC_EXT(logoGodrayColorB);

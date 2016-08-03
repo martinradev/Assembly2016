@@ -149,17 +149,17 @@ namespace FW {
 			glBindTexture(GL_TEXTURE_2D, mOverlays[overlayIndexINT]);
 			ctx->setUniform(tonemapperProgram->getUniformLoc("overlay"), 2);
 			ctx->setUniform(tonemapperProgram->getUniformLoc("useOverlay"), true);
-			ctx->setUniform(tonemapperProgram->getUniformLoc("overlayAlpha"), 1.0f);
+			ctx->setUniform(tonemapperProgram->getUniformLoc("overlayAlpha"), FWSync::overlayAlpha);
 		}
 		else {
 			ctx->setUniform(tonemapperProgram->getUniformLoc("useOverlay"), false);
 		}
 
-		int sceneIndex = floor(FWSync::sceneIndex);
-		sceneIndex = clamp(sceneIndex, 0, 4);
+		int colorGradingIndex = floor(FWSync::colorGradingIndex);
+		colorGradingIndex = clamp(colorGradingIndex, 0, 4);
 
 		glActiveTexture(GL_TEXTURE2+1);
-		glBindTexture(GL_TEXTURE_3D, mColorGradingTexture[sceneIndex]);
+		glBindTexture(GL_TEXTURE_3D, mColorGradingTexture[colorGradingIndex]);
 		ctx->setUniform(tonemapperProgram->getUniformLoc("colorGradingLUT"), 3);
 		ctx->setUniform(tonemapperProgram->getUniformLoc("inImage"), 0);
 		ctx->setUniform(tonemapperProgram->getUniformLoc("bloomImage"), 1);

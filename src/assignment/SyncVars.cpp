@@ -25,6 +25,9 @@ namespace FWSync {
 	const sync_track *sceneIndexPtr;
 	float sceneIndex;
 
+	const sync_track *colorGradingIndexPtr;
+	float colorGradingIndex;
+
 	const sync_track *blurOutPtr;
 	float blurOut;
 
@@ -148,6 +151,7 @@ namespace FWSync {
 
 		blurOutPtr = sync_get_track(rocket, "fade_out");
 		sceneIndexPtr = sync_get_track(rocket, "scene_index");
+		colorGradingIndexPtr = sync_get_track(rocket, "color_LUT");
 
 		logoGodrayColorRPtr = sync_get_track(rocket, "lgc_r");
 		logoGodrayColorGPtr = sync_get_track(rocket, "lgc_g");
@@ -239,6 +243,7 @@ namespace FWSync {
 
 		blurOut = sync_get_val(FWSync::blurOutPtr, row);
 		sceneIndex = sync_get_val(FWSync::sceneIndexPtr, row);
+		colorGradingIndex = sync_get_val(FWSync::colorGradingIndexPtr, row);
 
 		logoGodrayColorR = sync_get_val(FWSync::logoGodrayColorRPtr, row);
 		logoGodrayColorG = sync_get_val(FWSync::logoGodrayColorGPtr, row);
