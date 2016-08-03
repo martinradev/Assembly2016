@@ -115,7 +115,7 @@ void main()
 	float distFromCenter = length(uv - vec2(0.5));
 	
 	vec3 col = applyFXAA(gl_FragCoord.xy, inImage, vec2(textureSize(inImage, 0))).rgb;
-	vec3 cl = texture2D(inImage, uv).xyz + texture2D(bloomImage, uv).xyz;
+	vec3 cl = col + texture2D(bloomImage, uv).xyz;
 	
 	cl *= exposure;
 	
