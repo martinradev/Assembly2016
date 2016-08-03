@@ -627,8 +627,8 @@ namespace FW {
 		cleanUpGUI(wnd, controls);
 
 		static const std::pair<Vec4f, Vec4f> KNOB_SLIDE_DATA[10] = {
-			std::make_pair(Vec4f(-40.0f), Vec4f(40.0f)), // knob1
-			std::make_pair(Vec4f(0.0f), Vec4f(1.0f)), // knob2
+			std::make_pair(Vec4f(-8000.0f), Vec4f(8000.0f)), // knob1
+			std::make_pair(Vec4f(0.0f), Vec4f(5.0f)), // knob2
 			std::make_pair(Vec4f(-1.0f), Vec4f(1.0f)), // knob3
 			std::make_pair(Vec4f(-20.0f), Vec4f(20.0f)), // knob4
 			std::make_pair(Vec4f(0.0f), Vec4f(10.0f)), // knob5
@@ -1133,7 +1133,7 @@ namespace FW {
 		for (size_t i = 0; i < ribbonsCount; ++i) {
 			std::string filePath = "assets/ribbon_path_" + std::to_string(i + 1) + ".txt";
 			loadRibbonPath(filePath, mCurveControlPoints[i]);
-			mRibbonCurves[i] = evalCatmullRomspline(mCurveControlPoints[i], 120.0f, false, 0.0f, 0.0f);
+			mRibbonCurves[i] = evalCatmullRomspline(mCurveControlPoints[i], 240.0f, false, 0.0f, 0.0f);
 		}
 
 		std::vector<Vec3f> starControlPoints;
@@ -1603,7 +1603,29 @@ namespace FW {
 
 	Mat4f TessellationTestScene::getSubmarineToWorldMatrix() {
 		Mat4f toWorld;
-		toWorld = Mat4f::translate(Vec3f(4521.34 + FWSync::submarineOffset, 8622.39, 752.158)) * Mat4f::scale(Vec3f(2.5f));
+
+		int camIndex = int(FWSync::cameraIndex);
+
+		switch (camIndex)
+		{
+		case 0:
+			toWorld = Mat4f::translate(Vec3f(-2400,6600,8000 + FWSync::submarineOffset)) * rot(Vec3f(0, 4.6, 0)) * Mat4f::scale(Vec3f(2.5f));
+			break;
+		case 1:
+			toWorld = Mat4f::translate(Vec3f(-2400, 6600, 8000 + FWSync::submarineOffset)) * rot(Vec3f(0, 4.6, 0)) * Mat4f::scale(Vec3f(2.5f));
+			break;
+		case 2:
+			if (FWSync::cameraTime > 3.0f)
+			{
+				toWorld = Mat4f::translate(Vec3f(4521.34 + FWSync::submarineOffset, 8622.39, 752.158)) * Mat4f::scale(Vec3f(2.5f));
+			}
+			else
+			{
+				toWorld = Mat4f::translate(Vec3f(307, 7007, 2712) + m_knobs[0].getXYZ()) * rot(Vec3f(0, m_knobs[1].x, 0)) * Mat4f::scale(Vec3f(2.5f));
+			}
+			
+			break;
+		}
 		return toWorld;
 	}
 
@@ -1707,12 +1729,14 @@ namespace FW {
 		gl->setUniform(mMeshCurveRenderProgram->getUniformLoc("cameraPosition"), camPos);
 		gl->setUniform(mMeshCurveRenderProgram->getUniformLoc("lightColor"), lightColor);
 		gl->setUniform(mMeshCurveRenderProgram->getUniformLoc("seaColor"), seaColor);
+		
 		for (size_t i = 0; i < mCurveSurfacesVAO.size(); ++i)
 		{
 			glBindVertexArray(mCurveSurfacesVAO[i]);
 			
 			int s = int(FWSync::ribbonStart)*mProfileNumIndices*6;
 			int e = int(FWSync::ribbonEnd)*mProfileNumIndices*6;
+			gl->setUniform(mMeshCurveRenderProgram->getUniformLoc("lastIndex"), float(e)/6.0f);
 			glDrawElements(GL_TRIANGLES, e-s, GL_UNSIGNED_INT, NULL + (char*)(s*sizeof(GL_UNSIGNED_INT)));
 
 		}

@@ -86,6 +86,7 @@ Kd 1 1 1
 Ks 1 1 1
 Km 0
 map_Kd /Maps/fac_270.png
+map_kS /Maps/fac_270_light.png
 
 newmtl default_bldg8
 d 1
@@ -156,6 +157,7 @@ Kd 1 1 1
 Ks 1 1 1
 Km 0
 map_Kd /Maps/fac_280.png
+map_kS /Maps/fac_280_light.png
 
 newmtl Default
 d 1
@@ -216,6 +218,7 @@ Kd 1 1 1
 Ks 1 1 1
 Km 0
 map_Kd /Maps/fac_291.png
+map_kS /Maps/fac_291_light.png
 
 newmtl default_bldg_14
 d 1
@@ -255,6 +258,7 @@ Kd 1 1 1
 Ks 1 1 1
 Km 0
 map_Kd /Maps/fac_231.png
+map_kS /Maps/fac_231_light.png
 
 newmtl default_bank_sign
 d 1
@@ -442,6 +446,7 @@ Kd 1 1 1
 Ks 1 1 1
 Km 0
 map_Kd /Maps/fac_250.png
+map_kS /Maps/fac_250_light.png
 
 newmtl default_floors_bldg16
 d 1

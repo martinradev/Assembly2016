@@ -14,6 +14,7 @@ flat out int materialIndexFrag;
 uniform mat4 toScreen;
 uniform mat4 posToWorld;
 uniform mat4 normalToWorld;
+uniform vec3 cameraPosition;
 
 void main() {
 	
@@ -25,12 +26,12 @@ void main() {
 	
 	gl_Position = toScreen * vec4(position.xyz, 1.0);
 	
-	float depth = gl_Position.z;
+	float depth = distance(positionFrag, cameraPosition);
 	
-	const float MAX_POINT_SIZE = 3.0;
-	const float MIN_POINT_SIZE = 2.0;
+	const float MAX_POINT_SIZE = 8.0;
+	const float MIN_POINT_SIZE = 1.0;
 	
-	gl_PointSize = mix(MIN_POINT_SIZE, MAX_POINT_SIZE, smoothstep(1000.0, 9000.0, depth));
+	gl_PointSize = mix(MAX_POINT_SIZE, MIN_POINT_SIZE, smoothstep(100.0, 9000.0, depth));
 	
 	depthFrag = depth;
 }

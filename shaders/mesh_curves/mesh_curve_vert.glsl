@@ -7,6 +7,7 @@ out vec3 positionFrag;
 out vec3 normalFrag;
 out vec2 uvFrag;
 out float depthFrag;
+out float vertIndex;
 
 uniform mat4 toScreen;
 uniform mat4 posToWorld;
@@ -21,4 +22,5 @@ void main() {
 	
 	gl_Position = toScreen * vec4(position.xyz, 1.0);
 	depthFrag = distance(cameraPosition, positionFrag);
+	vertIndex = gl_VertexID;
 }

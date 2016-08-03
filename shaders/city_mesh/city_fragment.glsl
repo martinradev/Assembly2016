@@ -95,10 +95,17 @@ void main() {
 	color.rgb = mix(color.rgb, 0.05*color.rgb,  pcf);
 	color.rgb = mix(seaColor, color.rgb, s);
 	
-	float a = abs(sin(-sineT + positionFrag.y*0.0005));
-	a = smoothstep(0.8, 2.5, a);
-	a = step(2000.0, positionFrag.y)*a;
-	color.rgb += vec3(0.1*a);
+	
+	
+	if (useSpecularMap)
+	{
+		vec3 specColor = texture(specularSampler, uvFrag).xyz;
+		
+		float a = abs(sin(-sineT + positionFrag.y*0.0005));
+		a = smoothstep(0.8, 2.5, a);
+		a = step(2000.0, positionFrag.y)*a;
+		color.rgb += 60.0*a*specColor;
+	}	
 	
 	fragColor = vec4(color, 1.0);
 	normal = vec4(normalFrag, uvFrag.s);

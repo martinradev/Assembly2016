@@ -112,10 +112,10 @@ namespace FW {
 
 		Mat4f ribbonsToScreen = toScreen;
 
-		if (FWSync::nefertitiParticleStep == 0.0f)
-		{
+		//if (FWSync::nefertitiParticleStep == 0.0f)
+		//{
 			godrayPass(gl, nefertitiToScreen, cloudToScreen, meshToScreen, ribbonsToScreen);
-		}
+		//}
 
 		renderBackground(gl);
 

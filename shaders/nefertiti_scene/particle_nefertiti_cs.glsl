@@ -114,7 +114,7 @@ vec3 evalF(in vec3 pos)
 {
 	
 	//vec3 acc =  vec3(-pos.z, sin(dot(pos,pos))*0.15, pos.x) + curlStep*curlNoise(0.02*pos)*vec3(1,0.4,1);
-	vec3 acc = curlStep*curlNoise(pos)*vec3(1,0.4,1) + integrationStep*vec3(-pos.z, sin(dot(pos,pos))*0.15, pos.x);
+	vec3 acc = curlStep*curlNoise(pos*2.0)*vec3(1,0.8,1) + integrationStep*0.1*vec3(-pos.z, sin(dot(pos,pos))*0.15, pos.x);
 	
 	for (int a = 0; a < numAttractors; ++a)
 	{

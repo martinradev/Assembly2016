@@ -111,9 +111,9 @@ mThreshold(0.0f)
 
 	m_commonCtrl.setStateFilePrefix( "Effects galore by Super Grand" );
 	
-	m_commonCtrl.showControls(false);
-	m_commonCtrl.showFPS(false);
-	ShowCursor(false);
+	//m_commonCtrl.showControls(false);
+	//m_commonCtrl.showFPS(false);
+	//ShowCursor(false);
 	
 	GLContext * gl = m_window.getGL(); // grab the appropriate gl context to be able to setup()
 	
