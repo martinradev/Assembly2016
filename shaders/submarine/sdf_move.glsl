@@ -106,27 +106,41 @@ vec3 curlNoise(in vec3 v)
 	return normalize(curl);
 }
 
-float fTorus(vec3 p, float smallRadius, float largeRadius) {
-	return length(vec2(length(p.xz) - largeRadius, p.y)) - smallRadius;
-}
-
-float fScene(in vec3 p) 
+vec3 evalF(in vec3 pos)
 {
-	return fTorus(p, 30.0, 300.0);
+	return 100.0*curlNoise(0.001*pos) + 3.0*vec3(14.0,13.0,14.0)*sign(vec3(pos.x,1.0,pos.z));
 }
 
-vec3 getNormal(in vec3 p) {
-	
-	vec3 NEPS = vec3(0.0001, 0.0, 0.0);
-	
-	vec3 delta = vec3(
-					fScene(p + NEPS) - fScene(p - NEPS),
-					fScene(p + NEPS.yxz) - fScene(p - NEPS.yxz),
-					fScene(p + NEPS.yzx) - fScene(p - NEPS.yzx)
-				);
-	
-	return normalize(delta);
-	
+vec3 euler(in vec3 pos)
+{
+	return pos + evalF(pos)*dtUniform;
+}
+
+vec3 rk(in vec3 x0)
+{
+	float dt = dtUniform*0.3;
+	vec3 k1 = evalF(x0);
+	vec3 x1 = x0 + (0.5*dt)*k1;
+	vec3 k2 = evalF(x1);
+	vec3 x2 = x0 + (0.5*dt)*k2;
+	vec3 k3 = evalF(x2);
+	vec3 x3 = x0 + dt *k3;
+	vec3 k4 = evalF(x3);
+	return x0 + dt*(k1+2.0*k2+2.0*k3+k4)/ 6.0;
+}
+
+vec3 midpoint(in vec3 x0)
+{
+	float dt = dtUniform*0.15;
+	vec3 f0 = evalF(x0);
+	vec3 xm = x0 + (0.5*dt)*f0;
+	vec3 fm = evalF(xm);
+	return x0 + dt*fm;
+}
+
+vec3 integrate(in vec3 pos)
+{
+	return rk(pos);
 }
 
 void main() {
@@ -145,10 +159,12 @@ void main() {
 		
 		ParticleInfo particle = particles[i + index];
 		
-		const float STEP_CONST = 100.0;
+		/*const float STEP_CONST = 100.0;
 		vec3 acc = -0.5*getNormal(particle.position.xyz);
 		acc += 0.1*curlNoise(acc);
-		vec3 newPos = verlet(acc.zxy, particle.position.xyz, particle.data.yzw, STEP_CONST*dtUniform);
+		vec3 newPos = verlet(acc.zxy, particle.position.xyz, particle.data.yzw, STEP_CONST*dtUniform);*/
+		
+		vec3 newPos = integrate(particle.position.xyz);
 		
 		particles[i+index].data.yzw = particle.position.xyz;
 		particles[i+index].position.xyz = newPos;

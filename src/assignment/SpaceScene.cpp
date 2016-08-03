@@ -77,7 +77,7 @@ namespace FW {
 		GLContext * gl = wnd.getGL();
 
 
-		moveParticleCloud(gl);
+		///moveParticleCloud(gl);
 
 		if (FWSync::nefertitiParticleStep > 0.0f) {
 		moveNefertiti(gl);
@@ -94,6 +94,7 @@ namespace FW {
 			gl->setUniform(mesherProg->getUniformLoc("knob0"), Vec4f(FWSync::sdf1, FWSync::sdf2, FWSync::sdf3, FWSync::sdf4));
 			gl->setUniform(mesherProg->getUniformLoc("knob1"), Vec4f(FWSync::sdf5, FWSync::sdf6, FWSync::sdf7, FWSync::sdf8));
 			gl->setUniform(mesherProg->getUniformLoc("knob2"), Vec4f(FWSync::sdf9, FWSync::sdf10, FWSync::sdf11, FWSync::sdf12));
+			gl->setUniform(mesherProg->getUniformLoc("knob3"), Vec4f(FWSync::sdf13, FWSync::sdf14, FWSync::sdf15, FWSync::sdf16));
 			mMesher->update(gl);
 		}
 		Vec3f cameraPosition = camera.getPosition();
@@ -102,11 +103,11 @@ namespace FW {
 		orientation.setCol(3, Vec4f(0, 0, 0, 1));
 		Mat4f cameraToClip = camera.getCameraToClip();
 
-		Mat4f nefertitiToWorld = Mat4f::translate(Vec3f(800, 0, -4500)) * Mat4f::scale(Vec3f(450, 400, 450));
+		Mat4f nefertitiToWorld = Mat4f::translate(Vec3f(0, 0, 0)) * Mat4f::scale(Vec3f(FWSync::budhaScale)) ;
 		Mat4f nefertitiToScreen = toScreen * nefertitiToWorld;
-		Mat4f meshToWorld = Mat4f::translate(Vec3f(-1000, 0, 2000)) * Mat4f::scale(Vec3f(90.0f));
+		Mat4f meshToWorld = Mat4f::translate(Vec3f(0, 0, 0)) * Mat4f::scale(Vec3f(90.0f));
 		Mat4f meshToScreen = toScreen * meshToWorld;
-		Mat4f cloudToWorld = Mat4f::translate(Vec3f(800, 0, -4500)) * Mat4f::scale(Vec3f(160, 110, 160));
+		Mat4f cloudToWorld = Mat4f::translate(Vec3f(800, 0, -8500)) * Mat4f::scale(Vec3f(320, 120, 320));
 		Mat4f cloudToScreen = toScreen * cloudToWorld;
 
 		Mat4f ribbonsToScreen = toScreen;
@@ -122,10 +123,10 @@ namespace FW {
 		
 		renderNefertiti(gl, nefertitiToScreen, nefertitiToWorld, nefertitiToWorld.inverted().transposed(), cameraPosition);
 
-		renderRibbons(gl, ribbonsToScreen, cameraPosition);
+		//renderRibbons(gl, ribbonsToScreen, cameraPosition);
 
 		
-		renderStatueParticles(gl, cloudToScreen, cloudToWorld, cloudToWorld.inverted().transposed(), cameraPosition);
+		//renderStatueParticles(gl, cloudToScreen, cloudToWorld, cloudToWorld.inverted().transposed(), cameraPosition);
 
 		if (FWSync::nefertitiParticleStep == 0.0f)
 		{
@@ -199,7 +200,7 @@ namespace FW {
 
 		if (mDebugRenderCurve)
 		{
-			debugRenderRibbons();
+			//debugRenderRibbons();
 		}
 
 		mNefertitiFBO->unbind();
@@ -366,6 +367,9 @@ namespace FW {
 	{
 		mNeferittiMesh = (Mesh<VertexPNTC>*)FW::importMesh("assets/nefertiti/nefertiti5.obj");
 
+		Vec3f lo, hi;
+		mNeferittiMesh->getBBox(lo, hi);
+		mNeferittiMesh->xform(Mat4f::scale(Vec3f(2.0f / (hi - lo).max())) * Mat4f::translate((lo + hi) * -0.5f));
 
 		std::vector<ParticleMaterial> materials(mNeferittiMesh->numSubmeshes());
 
@@ -469,11 +473,11 @@ namespace FW {
 
 		std::vector<Vec4f> attractors;
 		attractors.push_back(Vec4f(0, 0, 0, 50));
-		attractors.push_back(Vec4f(1.0, 1.0, -1, -50));
-		attractors.push_back(Vec4f(3, 2.5, -2, -50));
+		attractors.push_back(Vec4f(1.0, 1.0, -1, 50));
+		attractors.push_back(Vec4f(3, 2.5, -2, 50));
 		attractors.push_back(Vec4f(-3, -2, 1, 50));
 		attractors.push_back(Vec4f(5, -4, 1, 50));
-		attractors.push_back(Vec4f(4, 4, 3, -50));
+		attractors.push_back(Vec4f(4, 4, 3, 50));
 		attractors.push_back(Vec4f(4, 0, 4, 50));
 		mNumAttractors = attractors.size();
 		glGenBuffers(1, &mAttractorSSBO);
@@ -738,7 +742,10 @@ namespace FW {
 		gl->setUniform(mParticleCloudMoveProgram->getUniformLoc("dtUniform"), GLOBAL_DT);
 		gl->setUniform(mParticleCloudMoveProgram->getUniformLoc("curlStep"), FWSync::cloudParticleCurlStep);
 		gl->setUniform(mParticleCloudMoveProgram->getUniformLoc("integrationStep"), FWSync::cloudParticleStep);
-
+		gl->setUniform(mParticleCloudMoveProgram->getUniformLoc("numAttractors"), mNumAttractors);
+		gl->setUniform(mParticleCloudMoveProgram->getUniformLoc("attractorPower"), FWSync::attractorPower);
+		glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, mNefertitiVBO);
+		glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, mAttractorSSBO);
 		glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, mParticleCloudVBO);
 
 		int localSizeX = 128;
@@ -749,6 +756,7 @@ namespace FW {
 		glMemoryBarrier(GL_ALL_BARRIER_BITS);
 
 		glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, 0);
+		glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, 0);
 	}
 
 	void SpaceScene::moveNefertiti(GLContext * gl)
@@ -817,7 +825,7 @@ namespace FW {
 
 	Vec3f SpaceScene::getCameraPosition()
 	{
-		return Vec3f(-931,5,6189);
+		return Vec3f(0,0,4000);
 	}
 
 	void SpaceScene::loadRibbonPath(const std::string & fileName, std::vector<Vec3f> & vec) {
@@ -1049,36 +1057,29 @@ namespace FW {
 		glClearColor(0.001,0.001,0.001,1.0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		/*mParticleGodrayProgram->use();
+		mParticleGodrayProgram->use();
 
 		gl->setUniform(mParticleGodrayProgram->getUniformLoc("toScreen"), nefertitiToScreen);
-		gl->setUniform(mParticleGodrayProgram->getUniformLoc("color"), Vec3f(0.0f));
+		gl->setUniform(mParticleGodrayProgram->getUniformLoc("color"), Vec3f(1.0f));
 
 		glBindVertexArray(mNeferittiVAO);
 		glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glDrawArrays(GL_POINTS, 0, mNumNefertitiParticles);
 		glDisable(GL_VERTEX_PROGRAM_POINT_SIZE);
 		glBindVertexArray(0);
 
-		glBindVertexArray(mParticleCloudVAO);
-		glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glDrawArrays(GL_POINTS, 0, mNumNefertitiParticles);
-		glDisable(GL_VERTEX_PROGRAM_POINT_SIZE);
-		glBindVertexArray(0);*/
 
 		mGodrayProgram->use();
 		gl->setUniform(mGodrayProgram->getUniformLoc("color"), Vec3f(0.0f));
 		gl->setUniform(mGodrayProgram->getUniformLoc("toScreen"), ribbonsToScreen);
-		for (size_t i = 0; i < mRibbonVAOs.size(); ++i)
+		/*for (size_t i = 0; i < mRibbonVAOs.size(); ++i)
 		{
 			glBindVertexArray(mRibbonVAOs[i]);
 			int s = int(FWSync::ribbonStart)*mProfileNumIndices * 6;
 			int e = int(FWSync::ribbonEnd)*mProfileNumIndices * 6;
 			glDrawElements(GL_TRIANGLES, e - s, GL_UNSIGNED_INT, NULL + (char*)(s * sizeof(GL_UNSIGNED_INT)));
 		}
-		glBindVertexArray(0);
+		glBindVertexArray(0);*/
 
 		gl->setUniform(mGodrayProgram->getUniformLoc("toScreen"), sdfToScreen);
 		gl->setUniform(mGodrayProgram->getUniformLoc("color"), Vec3f(1.0f));

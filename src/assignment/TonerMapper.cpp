@@ -1,7 +1,7 @@
 #include "ToneMapper.h"
 
 #include "base/Main.hpp"
-
+#include "Globals.h"
 namespace FW {
 
 	ToneMapper::ToneMapper(GLContext * ctx, Vec2i size) :
@@ -13,6 +13,49 @@ namespace FW {
 		//Image * img = importImage("assets/FilmLut.tga");
 		//m_paletteTexture = img->createGLTexture();
 		//delete img;
+
+		for (int i = 1; i <= 6; ++i)
+		{
+			std::string fileName = "assets/overlays/" + std::to_string(i) + ".png";
+			FW::Image * tmpImg = FW::importImage(String(fileName.c_str()));
+			mOverlays[i-1] = tmpImg->createGLTexture();
+			delete tmpImg;
+		}
+
+		glGenTextures(5, mColorGradingTexture);
+
+		for (int i = 0; i < 5; ++i)
+		{
+			std::string name = "assets/color_grading/" + std::to_string(i) + ".png";
+			FW::Image * colorLutImage = importImage(name.c_str());
+
+
+			ImageFormat::ID formatID = colorLutImage->getFormat().getGLFormat();
+			const ImageFormat::StaticFormat* sf = ImageFormat(formatID).getStaticFormat();
+			FW_ASSERT(sf);
+
+			
+			glBindTexture(GL_TEXTURE_3D, mColorGradingTexture[i]);
+			glTexParameteri(GL_TEXTURE_3D, GL_GENERATE_MIPMAP, false);
+			glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+			glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+
+			glTexImage3D(GL_TEXTURE_3D, 0, sf->glInternalFormat,
+				32, 32, 32,
+				0, sf->glFormat, sf->glType, colorLutImage->getPtr());
+
+
+
+
+			delete colorLutImage;
+		}
+		
+
+		GLContext::checkErrors();
 	}
 
 
@@ -75,12 +118,19 @@ namespace FW {
 			1, 1
 		};
 
+		Vec2i sz = wnd.getSize();
+
+		glViewport(0, 0, sz.x, sz.y);
+
 		GLContext * ctx = wnd.getGL();
 
 		GLContext::Program * tonemapperProgram = ctx->getProgram(m_programName.c_str());
 
 		tonemapperProgram->use();
 		ctx->setUniform(tonemapperProgram->getUniformLoc("blurOut"), FWSync::blurOut);
+		ctx->setUniform(tonemapperProgram->getUniformLoc("fadeMix"), FWSync::fadeMix);
+		ctx->setUniform(tonemapperProgram->getUniformLoc("fadeColor"), FWSync::fadeColor);
+		ctx->setUniform(tonemapperProgram->getUniformLoc("time"), GLOBAL_TIMER.getElapsed());
 		/*ctx->setUniform(tonemapperProgram->getUniformLoc("inImage"), 0);
 		ctx->setUniform(tonemapperProgram->getUniformLoc("filmLutImage"), 1);
 		glActiveTexture(GL_TEXTURE0);
@@ -91,9 +141,29 @@ namespace FW {
 
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, mBloomTexture);
-		
+
+		int overlayIndexINT = int(FWSync::overlayIndex);
+		if (overlayIndexINT >= 0 && overlayIndexINT < 6)
+		{
+			glActiveTexture(GL_TEXTURE2);
+			glBindTexture(GL_TEXTURE_2D, mOverlays[overlayIndexINT]);
+			ctx->setUniform(tonemapperProgram->getUniformLoc("overlay"), 2);
+			ctx->setUniform(tonemapperProgram->getUniformLoc("useOverlay"), true);
+			ctx->setUniform(tonemapperProgram->getUniformLoc("overlayAlpha"), 1.0f);
+		}
+		else {
+			ctx->setUniform(tonemapperProgram->getUniformLoc("useOverlay"), false);
+		}
+
+		int sceneIndex = floor(FWSync::sceneIndex);
+		sceneIndex = clamp(sceneIndex, 0, 4);
+
+		glActiveTexture(GL_TEXTURE2+1);
+		glBindTexture(GL_TEXTURE_3D, mColorGradingTexture[sceneIndex]);
+		ctx->setUniform(tonemapperProgram->getUniformLoc("colorGradingLUT"), 3);
 		ctx->setUniform(tonemapperProgram->getUniformLoc("inImage"), 0);
 		ctx->setUniform(tonemapperProgram->getUniformLoc("bloomImage"), 1);
+		
 		ctx->setUniform(tonemapperProgram->getUniformLoc("exposure"), mExposure);
 		ctx->setAttrib(tonemapperProgram->getAttribLoc("posAttrib"), 4, GL_FLOAT, 0, posAttrib);
 		ctx->setAttrib(tonemapperProgram->getAttribLoc("texAttrib"), 2, GL_FLOAT, 0, texAttribINV);

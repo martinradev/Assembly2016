@@ -31,6 +31,8 @@ uniform sampler2D depthMap;
 uniform mat4 toLightScreen;
 uniform vec2 screenSize;
 
+uniform float sineT;
+
 uniform vec3 cameraPosition;
 
 uniform vec2 ldSamples[36];
@@ -92,6 +94,11 @@ void main() {
 	float pcf = getShadowI(positionFrag);
 	color.rgb = mix(color.rgb, 0.05*color.rgb,  pcf);
 	color.rgb = mix(seaColor, color.rgb, s);
+	
+	float a = abs(sin(-sineT + positionFrag.y*0.0005));
+	a = smoothstep(0.8, 2.5, a);
+	a = step(2000.0, positionFrag.y)*a;
+	color.rgb += vec3(0.1*a);
 	
 	fragColor = vec4(color, 1.0);
 	normal = vec4(normalFrag, uvFrag.s);

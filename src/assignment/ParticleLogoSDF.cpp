@@ -20,9 +20,10 @@ namespace FW {
 		mLastPassFBO(lastFBO),
 		mLightPos(0.0,50.0f,0.0),
 		mShadowViewportSize(width, height),
-		mLightColor(Vec3f(0.104, 0.33, 0.51))
+		mLightColor(Vec3f(0.104, 0.33, 0.51)),
+		mCamPtr(&camera)
 	{
-		camera.setPosition(Vec3f(-4.0f, 5.0f, 50.0f));
+		
 		mGBuffer.reset(new GBuffer(width, height));
 
 		GLuint fboDepthTex = TEXTURE_POOL->request(TextureDescriptor(GL_DEPTH_COMPONENT32F, mShadowViewportSize.x, mShadowViewportSize.y, GL_DEPTH_COMPONENT, GL_FLOAT))->m_texture;
@@ -341,6 +342,8 @@ namespace FW {
 
 	void ParticleLogoSDF::render(Window & wnd, const CameraControls & camera) {
 
+		mCamPtr->setPosition(Vec3f(-4.0f, 5.0f, 50.0f));
+
 		GLContext * gl = wnd.getGL();
 		updateParticles(gl);
 
@@ -528,7 +531,7 @@ namespace FW {
 		depthMapUVN.setRow(2, Vec4f(lightDir, 0.0f));
 		depthMapUVN.setRow(3, Vec4f(0.0, 0.0f, 0.0, 1.0f));
 
-		toLightScreen = Mat4f::perspective(90.0f, 1.0f, 150.0f) * depthMapUVN * Mat4f::translate(-mLightPos);
+		toLightScreen = Mat4f::perspective(90.0f, 1.0f, 150.0f, 1.0f) * depthMapUVN * Mat4f::translate(-mLightPos);
 	}
 
 	void ParticleLogoSDF::godrayPass(GLContext * gl, const Mat4f & toClip, const Vec3f & lightColor, const Vec3f & lightPos, const Mat4f & toLightClip, const Vec3f & lightDir, const Vec3f & camPos) {

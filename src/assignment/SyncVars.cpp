@@ -76,6 +76,19 @@ namespace FWSync {
 	SYNC_DEF(attractorPower);
 
 	SYNC_DEF(trefoilTime);
+	SYNC_DEF(overlayIndex);
+	SYNC_DEF(overlayAlpha);
+
+	SYNC_DEF(citySineWaveTime);
+
+	SYNC_DEF(fadeMix);
+	SYNC_DEF(fadeColor);
+
+	SYNC_DEF(fov);
+
+	SYNC_DEF(knotRotate);
+
+	SYNC_DEF(budhaScale);
 
 	static const float bpm = 150.0f; /* beats per minute */
 	static const float rpb = 8.0f; /* rows per beat */
@@ -188,6 +201,20 @@ namespace FWSync {
 		attractorPowerPtr = sync_get_track(rocket, "attractorPower");
 
 		trefoilTimePtr = sync_get_track(rocket, "trefoil_t");
+
+		overlayIndexPtr = sync_get_track(rocket, "overlay_idx");
+		overlayAlphaPtr = sync_get_track(rocket, "overlay_a");
+
+		citySineWaveTimePtr = sync_get_track(rocket, "city_sine_t");
+
+		fadeMixPtr = sync_get_track(rocket, "fade_mix");
+		fadeColorPtr = sync_get_track(rocket, "fade_color");
+
+		fovPtr = sync_get_track(rocket, "fov");
+
+		knotRotatePtr = sync_get_track(rocket, "knot_rotate");
+
+		budhaScalePtr = sync_get_track(rocket, "budha_scale");
 	}
 
 
@@ -263,6 +290,19 @@ namespace FWSync {
 
 		attractorPower = sync_get_val(FWSync::attractorPowerPtr, row);
 		trefoilTime = sync_get_val(FWSync::trefoilTimePtr, row);
+
+		overlayIndex = sync_get_val(FWSync::overlayIndexPtr, row);
+		overlayAlpha = sync_get_val(FWSync::overlayAlphaPtr, row);
+
+		citySineWaveTime = sync_get_val(FWSync::citySineWaveTimePtr, row);
+
+		fadeMix = sync_get_val(FWSync::fadeMixPtr, row);
+		fadeColor = sync_get_val(FWSync::fadeColorPtr, row);
+
+		fov = sync_get_val(FWSync::fovPtr, row);
+		knotRotate = sync_get_val(FWSync::knotRotatePtr, row);
+
+		budhaScale = sync_get_val(FWSync::budhaScalePtr, row);
 	}
 
 };

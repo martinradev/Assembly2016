@@ -39,6 +39,9 @@ namespace FW {
 		// knobs
 		Vec4f m_knobs[10];
 		float mExposure;
+		GLuint mOverlays[6];
+
+		GLuint mColorGradingTexture[5];
 	};
 
 };

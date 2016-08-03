@@ -26,9 +26,9 @@ void main() {
 	gl_Position = toScreen * vec4(position.xyz, 1.0);
 	
 	float l = distance(cameraPos, positionFrag);
-	const float MAX_POINT_SIZE = 13.0;
-	const float MIN_POINT_SIZE = 4.5;
+	const float MAX_POINT_SIZE = 4.0;
+	const float MIN_POINT_SIZE = 2.5;
 	
-	gl_PointSize = mix(MIN_POINT_SIZE, MAX_POINT_SIZE, smoothstep(2.0, 50.0, l));
+	gl_PointSize = mix(MIN_POINT_SIZE, MAX_POINT_SIZE, smoothstep(2.0, 5000.0, l));
 
 }

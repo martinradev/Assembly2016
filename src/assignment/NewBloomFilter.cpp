@@ -59,6 +59,8 @@ namespace FW {
 
 		mFbo->bind();
 
+		glViewport(0, 0, mWidth, mHeight);
+
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		mBrightPassProgram->use();

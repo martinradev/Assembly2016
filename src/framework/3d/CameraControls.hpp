@@ -89,7 +89,7 @@ public:
     Mat3f               getOrientation      (void) const;
     Mat4f               getCameraToWorld    (void) const;
     Mat4f               getWorldToCamera    (void) const;
-    Mat4f               getCameraToClip     (void) const        { return Mat4f::perspective(m_fov, m_near, m_far); }
+    Mat4f               getCameraToClip     (void) const        { return Mat4f::perspective(m_fov, m_near, m_far, mAspectRatio); }
     Mat4f               getWorldToClip      (void) const        { return getCameraToClip() * getWorldToCamera(); }
     Mat4f               getCameraToLeftEye  (void) const        { Mat4f m; m.m02 = m_stereoConvergence; m.m03 = m_stereoSeparation; return m; }
     Mat4f               getCameraToRightEye (void) const        { return getCameraToLeftEye().inverted(); }
@@ -106,6 +106,8 @@ public:
     void                addGUIControls      (void);             // done automatically on Window.addListener(this)
     void                removeGUIControls   (void);
     void                setEnableMovement   (bool enable)       { m_enableMovement = enable; }
+
+	F32					mAspectRatio;
 
 private:
     bool                hasFeature          (Feature feature)   { return ((m_features & feature) != 0); }

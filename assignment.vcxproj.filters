@@ -133,34 +133,7 @@
     <ClInclude Include="src\assignment\PrefixScanTests.h">
       <Filter>Source Files\Tests</Filter>
     </ClInclude>
-    <ClInclude Include="src\assignment\GPUBvh.h">
-      <Filter>Source Files\Data structures\BVH</Filter>
-    </ClInclude>
-    <ClInclude Include="src\assignment\QBVH.h">
-      <Filter>Source Files\Data structures\BVH</Filter>
-    </ClInclude>
-    <ClInclude Include="src\assignment\RaycastResult.hpp">
-      <Filter>Source Files\Data structures\BVH</Filter>
-    </ClInclude>
-    <ClInclude Include="src\assignment\SBVH.h">
-      <Filter>Source Files\Data structures\BVH</Filter>
-    </ClInclude>
-    <ClInclude Include="src\assignment\SplitMethod.h">
-      <Filter>Source Files\Data structures\BVH</Filter>
-    </ClInclude>
     <ClInclude Include="src\assignment\util.hpp">
-      <Filter>Source Files\Data structures\BVH</Filter>
-    </ClInclude>
-    <ClInclude Include="src\assignment\MortonCodes.h">
-      <Filter>Source Files\Data structures\BVH</Filter>
-    </ClInclude>
-    <ClInclude Include="src\assignment\Bvh.hpp">
-      <Filter>Source Files\Data structures\BVH</Filter>
-    </ClInclude>
-    <ClInclude Include="src\assignment\BvhNode.hpp">
-      <Filter>Source Files\Data structures\BVH</Filter>
-    </ClInclude>
-    <ClInclude Include="src\assignment\filesaves.hpp">
       <Filter>Source Files\Data structures\BVH</Filter>
     </ClInclude>
     <ClInclude Include="src\assignment\GBuffer.h">
@@ -172,14 +145,8 @@
     <ClInclude Include="src\assignment\BloomFilter.h">
       <Filter>Source Files\Rendering\PostProcessing</Filter>
     </ClInclude>
-    <ClInclude Include="src\assignment\AABB.h">
-      <Filter>Source Files\Data structures\BVH</Filter>
-    </ClInclude>
     <ClInclude Include="src\assignment\FBOManager.h">
       <Filter>Source Files\Rendering\Buffers</Filter>
-    </ClInclude>
-    <ClInclude Include="src\assignment\RTTriangle.hpp">
-      <Filter>Source Files\Data structures\BVH</Filter>
     </ClInclude>
     <ClInclude Include="src\assignment\ToneMapper.h">
       <Filter>Source Files\Rendering\PostProcessing</Filter>
@@ -277,6 +244,9 @@
     <ClInclude Include="src\assignment\TunnelScene.h">
       <Filter>Source Files\Rendering\Scenes</Filter>
     </ClInclude>
+    <ClInclude Include="src\assignment\FinalScene.h">
+      <Filter>Source Files\Rendering\Scenes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\assignment\App.cpp">
@@ -329,24 +299,6 @@
     </ClCompile>
     <ClCompile Include="src\assignment\PrefixScanTest.cpp">
       <Filter>Source Files\Tests</Filter>
-    </ClCompile>
-    <ClCompile Include="src\assignment\GPUBvh.cpp">
-      <Filter>Source Files\Data structures\BVH</Filter>
-    </ClCompile>
-    <ClCompile Include="src\assignment\QBVH.cpp">
-      <Filter>Source Files\Data structures\BVH</Filter>
-    </ClCompile>
-    <ClCompile Include="src\assignment\SBVH.cpp">
-      <Filter>Source Files\Data structures\BVH</Filter>
-    </ClCompile>
-    <ClCompile Include="src\assignment\SplitMethod.cpp">
-      <Filter>Source Files\Data structures\BVH</Filter>
-    </ClCompile>
-    <ClCompile Include="src\assignment\MortonCodes.cpp">
-      <Filter>Source Files\Data structures\BVH</Filter>
-    </ClCompile>
-    <ClCompile Include="src\assignment\Bvh.cpp">
-      <Filter>Source Files\Data structures\BVH</Filter>
     </ClCompile>
     <ClCompile Include="src\assignment\GBuffer.cpp">
       <Filter>Source Files\Rendering\Buffers</Filter>
@@ -448,6 +400,9 @@
       <Filter>Source Files\Util</Filter>
     </ClCompile>
     <ClCompile Include="src\assignment\TunnelScene.cpp">
+      <Filter>Source Files\Rendering\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assignment\FinalScene.cpp">
       <Filter>Source Files\Rendering\Scenes</Filter>
     </ClCompile>
   </ItemGroup>

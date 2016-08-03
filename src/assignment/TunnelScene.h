@@ -75,6 +75,8 @@ namespace FW {
 		Vec3f getCameraUp(float t);
 		Vec3f getCameraPosition(float t);
 
+
+		friend class FinalScene;
 	};
 
 };

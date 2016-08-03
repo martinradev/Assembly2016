@@ -100,6 +100,10 @@ namespace FW {
 		Vec2i mShadowViewportSize;
 		GLuint mGodrayBlurTex;
 		GLuint mGodrayGaussianBlurredTex;
+
+		CameraControls * mCamPtr;
+
+		friend class FinalScene;
 	};
 
 };

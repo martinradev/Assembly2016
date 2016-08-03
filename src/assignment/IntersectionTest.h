@@ -7,6 +7,8 @@
 
 namespace FW {
 
+#ifdef __AVX2__
+
 	/*
 		Triangle data for 1 ray 4 triangles intersection test
 	*/
@@ -433,7 +435,7 @@ idx = index; \
 		return ((tmin <= t) && (tmax >= 0.0f));
 
 	}
-
+#endif
 	FORCEINLINE bool intersect_sphere(const Vec3f & ro, const Vec3f & rd, const Vec3f & so, const float r, float & t) {
 		Vec3f tmp = so - ro;
 

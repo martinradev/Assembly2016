@@ -33,7 +33,7 @@ void main() {
 	
 	vec3 color = calcLight(normalize(V+lightDirection),normalFrag,lightDirection,difColorIN,lightColor, vec3(0.07, 0.34, 0.68));
 
-	diffuseColorOUT = vec4(color, 1.0);
+	diffuseColorOUT = vec4(0.6*color, 1.0);
 	normalOUT = vec4(normalFrag, 0);
 	oldUVOut = oldUVFrag;
 }

@@ -15,7 +15,7 @@ void main() {
 	
 	vec2 targetUV = texture(velocityTex, uv).rg;
 	
-	const int NUM_SAMPLES = 60;
+	const int NUM_SAMPLES = 1;
 	
 	vec2 delta = (targetUV-uv) / float(25.0);
 	

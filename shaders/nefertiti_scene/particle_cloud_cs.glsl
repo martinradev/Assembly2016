@@ -16,11 +16,18 @@ layout(binding = 0, std430) buffer ParticleArray {
 	
 };
 
+layout(binding = 1, std430) buffer AttractorArray {
+	
+	vec4 attractors[];
+	
+};
+
 uniform int numParticles;
 uniform float curlStep;
 uniform float integrationStep;
 uniform float dtUniform;
-
+uniform int numAttractors;
+uniform float attractorPower;
 
 vec3 verlet(in vec3 a, in vec3 x, in vec3 xOld, in float dt, in float dtratio) {
 	
@@ -104,7 +111,22 @@ vec3 curlNoise(in vec3 v)
 
 vec3 evalF(in vec3 pos)
 {
-	return vec3(-pos.z + sin(pos.z), sin(dot(pos,pos))*0.15, pos.x + cos(pos.y)) + curlStep*curlNoise(0.1*pos)*vec3(1.0,0.4,1.0);
+	vec3 acc = vec3(-pos.z + sin(pos.z), sin(dot(pos,pos))*0.15, pos.x + cos(pos.y)) + curlStep*curlNoise(3.0*(0.1*pos+vec3(-15.0)))*vec3(1.0,2.4,1.0);
+	for (int a = 0; a < numAttractors; ++a)
+	{
+			
+			vec4 attrInfo = attractors[a];
+	
+			float otherMass = 0.1*attractorPower*attrInfo.w;
+			
+			vec3 dirToParticle = (attrInfo.xyz-pos);
+			
+			float r = length(dirToParticle);
+			
+			acc += dirToParticle * otherMass / pow(dot(dirToParticle,dirToParticle) + 1.0, 1.5);
+	}
+	
+	return acc;
 }
 
 vec3 euler(in vec3 pos)

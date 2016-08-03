@@ -26,10 +26,13 @@
 #include "NBodyTest.h"
 #include "ParticleModelNBody.h"
 #include "TunnelScene.h"
+#include "FinalScene.h"
 #include "SyncVars.h"
+#include "gui/Image.hpp"
 #include <iostream>
 #include <conio.h>
 #include <fstream>
+#include <string>
 #include <chrono>
 #include <omp.h>
 using namespace FW;
@@ -42,7 +45,7 @@ FW::Action actionExt = FW::Action::Action_None; // scene action
 namespace FW {
 	FW::Timer GLOBAL_TIMER;
 	float GLOBAL_DT;
-
+	float GLOBAL_RATIO;
 }
 
 namespace FW {
@@ -102,8 +105,8 @@ mThreshold(0.0f)
 	m_commonCtrl.endSliderStack();
 	m_window.setTitle("Effects galore by Super Grand");
     m_window.addListener(this);
-	m_window.setSize(Vec2i(1024, 768));
-	m_window.setFullScreen(true);
+	m_window.setSize(Vec2i(1280, 720));
+	m_window.setFullScreen(false);
     m_window.addListener(&m_commonCtrl);
 
 	m_commonCtrl.setStateFilePrefix( "Effects galore by Super Grand" );
@@ -116,6 +119,7 @@ mThreshold(0.0f)
 	
 	m_cameraCtrl.setNear(0.5f);
 	m_cameraCtrl.setFar(14950.0f);
+	m_cameraCtrl.setFOV(70.0f);
 
 	TEXTURE_POOL = new TexturePool();
 	Vec2i size = m_window.getSize();
@@ -127,8 +131,8 @@ mThreshold(0.0f)
 	mToneMapper.reset(new ToneMapper(gl, size));
 	mToneMapper->setTexture(mLastColorTexture);
 
-	mBloomTexture = TEXTURE_POOL->request(TextureDescriptor(GL_RGBA32F, size.x, size.y, GL_RGBA, GL_FLOAT))->m_texture;
-	mBloomFilter.reset(new NewBloomFilter(gl, mBloomTexture, size.x, size.y));
+	mBloomTexture = TEXTURE_POOL->request(TextureDescriptor(GL_RGBA32F, 0.5*size.x, 0.5*size.y, GL_RGBA, GL_FLOAT))->m_texture;
+	mBloomFilter.reset(new NewBloomFilter(gl, mBloomTexture, 0.5*size.x, 0.5*size.y));
 
 	mToneMapper->setBloomTexture(mBloomTexture);
 
@@ -144,6 +148,9 @@ mThreshold(0.0f)
 	GLOBAL_TIMER = FW::Timer();
 	GLOBAL_TIMER.start();
 	GLOBAL_DT = 0.0f;
+	GLOBAL_RATIO = float(size.y) / float(size.x);
+	m_cameraCtrl.mAspectRatio = GLOBAL_RATIO;
+	
 }
 
 //------------------------------------------------------------------------
@@ -284,6 +291,14 @@ void App::renderFrame(GLContext* gl)
 	else if (FWSync::sceneIndex < 4.0f) {
 		m_scene = mTunnelScene;
 	}
+	else if (FWSync::sceneIndex < 5.0f) {
+		m_scene = mFinalScene;
+	}
+	else if (FWSync::sceneIndex > 5.0f) {
+		exit(0);
+	}
+
+	m_cameraCtrl.setFOV(FWSync::fov);
 
 	glEnable(GL_DEPTH_TEST);
 	glClearColor(0.5, 0.3, 0.4, 1.0);
@@ -401,9 +416,6 @@ void App::setupScenes() {
 	GLContext * gl = m_window.getGL();
 	Vec2i sz = m_window.getSize();
 
-	//NBodyTest * nbodyScene = new NBodyTest(gl, sz.x, sz.y);
-	//m_allScenes.push_back(SceneDescriptor(nbodyScene, "Nbody"));
-
 	mLogoScene = new ParticleLogoSDF(gl, 110, mLastFBO.get(), sz.x, sz.y, m_cameraCtrl);
 	m_allScenes.push_back(SceneDescriptor(mLogoScene, "Particle logo"));
 
@@ -415,11 +427,10 @@ void App::setupScenes() {
 
 	mTunnelScene = new TunnelScene(gl, sz.x, sz.y, mLastFBO.get(), &m_cameraCtrl);
 	m_allScenes.push_back(SceneDescriptor(mSpaceScene, "Tunnel"));
-		 
-	//ParticleModelNBodyScene * particleModelScene = new ParticleModelNBodyScene("assets/sponza/sponza-tessellated-1.3M.bin",gl);
-	//ParticleModelNBodyScene * particleModelScene = new ParticleModelNBodyScene("assets/logo/logo8.obj", gl);
+
+	mFinalScene = new FinalScene(gl, sz.x, sz.y, mLastFBO.get(), &m_cameraCtrl, (TunnelScene*)mTunnelScene, (TessellationTestScene*)mWaterScene, (ParticleLogoSDF*)mLogoScene);
 	
-	m_scene = mWaterScene;
+	m_scene = mLogoScene;
 }
 
 

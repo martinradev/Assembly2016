@@ -75,6 +75,7 @@ private:
 	Scene * mWaterScene;
 	Scene * mSpaceScene;
 	Scene * mTunnelScene;
+	Scene * mFinalScene;
 	
 	std::unique_ptr<NewBloomFilter> mBloomFilter;
 	GLuint mBloomTexture;
@@ -84,6 +85,8 @@ private:
 	float mLuminance;
 	float mOffset;
 	float mThreshold;
+
+	
 };
 
 }

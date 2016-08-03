@@ -2,6 +2,7 @@
 uniform vec4 knob0;
 uniform vec4 knob1;
 uniform vec4 knob2;
+uniform vec4 knob3;
 
 float fHeart(in vec3 p) {
 	float a = pow(p.x*p.x + 2.25 * p.y*p.y +p.z*p.z - 1.0, 3.0);
@@ -106,7 +107,7 @@ float scene3(in vec3 p)
 float fScene(in vec3 p) {
 
 	float result=0;
-	
+	p *= knob3.x;
 	if (knob1.w >= 1.5)
 	{
 		result = scene3(p);
@@ -119,7 +120,6 @@ float fScene(in vec3 p) {
 	{
 		result = scene1(p);
 	}
-	
 	
 	return result;
 }

@@ -205,7 +205,7 @@ namespace FW {
 
 		
 
-		for (size_t i = 0; i < profilePoints.size(); ++i) profilePoints[i] *= 8.6f;
+		for (size_t i = 0; i < profilePoints.size(); ++i) profilePoints[i] *= 12.6f;
 
 		Curve sweepCurve = evalTrefoilKnot(400.0);
 		for (size_t i = 0; i < sweepCurve.size(); ++i) {
@@ -254,7 +254,7 @@ namespace FW {
 			vertexEngravingData[k] = MissileMeshVertex(engraveSurface.VV[k], engraveSurface.VN[k].normalized(), engraveSurface.VT[k].x, engraveSurface.VT[k].y);
 		}
 
-		mNumEngravings = 20;
+		mNumEngravings = 40;
 		std::vector<Mat4f> engravingTransformations(mNumEngravings);
 		size_t engravingStep = sweepCurve.size() / mNumEngravings;
 

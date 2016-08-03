@@ -180,6 +180,7 @@ typedef int64_t GLint64;
 #define GL_RGBA32F                          0x8814
 #define GL_RGBA32UI                         0x8D70
 #define GL_RGBA_INTEGER                     0x8D99
+#define GL_DYNAMIC_DRAW						0x88E8
 #define GL_STATIC_DRAW                      0x88E4
 #define GL_DYNAMIC_COPY                     0x88EA
 #define GL_TEXTURE0                         0x84C0
@@ -194,6 +195,8 @@ typedef int64_t GLint64;
 #define GL_TESS_EVALUATION_SHADER           0x8E87
 #define GL_TESS_CONTROL_SHADER              0x8E88
 #define GL_COMPUTE_SHADER					0x91B9 // ADDED BY Martin Radev
+#define GL_CLAMP_TO_EDGE					0x812F // mr 
+#define GL_TEXTURE_WRAP_R					0x8072 // mr
 #define GL_WRITE_ONLY						0x88B9 // ADDED BY Martin Radev
 #define GL_READ_ONLY						0x88B8 // ADDED BY Martin Radev
 #define GL_READ_WRITE						0x88BA // ADDED BY Martin Radev

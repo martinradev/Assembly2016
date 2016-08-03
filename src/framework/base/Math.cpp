@@ -76,17 +76,18 @@ Mat4f Mat4f::fitToView(const Vec2f& pos, const Vec2f& size, const Vec2f& viewSiz
 
 //------------------------------------------------------------------------
 
-Mat4f Mat4f::perspective(F32 fov, F32 nearDist, F32 farDist)
+Mat4f Mat4f::perspective(F32 fov, F32 nearDist, F32 farDist, F32 aspectRatio)
 {
 	// Camera points towards -z.  0 < near < far.
 	// Matrix maps z range [-near, -far] to [-1, 1], after homogeneous division.
-    F32 f = rcp(tan(fov * FW_PI / 360.0f));
+    F32 f2 = rcp(tan(fov * FW_PI / 360.0f) * aspectRatio);
+	F32 f1 = rcp(tan(fov * FW_PI / 360.0f));
     F32 d = rcp(nearDist - farDist);
 
     Mat4f r;
-    r.setRow(0, Vec4f(  f,      0.0f,   0.0f,                       0.0f                            ));
-    r.setRow(1, Vec4f(  0.0f,   f,      0.0f,                       0.0f                            ));
-    r.setRow(2, Vec4f(  0.0f,   0.0f,   (nearDist + farDist) * d,   2.0f * nearDist * farDist * d   ));
+    r.setRow(0, Vec4f(  f1,      0.0f,   0.0f,                       0.0f                            ));
+    r.setRow(1, Vec4f(  0.0f,   f2,      0.0f,                       0.0f                            ));
+    r.setRow(2, Vec4f(  0.0f,   0.0f,   (farDist) * d,   nearDist * farDist * d   ));
     r.setRow(3, Vec4f(  0.0f,   0.0f,   -1.0f,                      0.0f                            ));
     return r;
 }

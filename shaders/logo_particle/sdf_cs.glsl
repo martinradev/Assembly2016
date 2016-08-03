@@ -102,6 +102,29 @@ vec3 curlNoise(in vec3 v)
 	return normalize(curl);
 }
 
+vec3 evalF(in vec3 pos)
+{
+	return curlNoise(0.45*(pos + vec3(35,0,35)));
+}
+
+vec3 euler(in vec3 pos)
+{
+	return pos + evalF(pos)*dtCurlUniform;
+}
+
+vec3 rk(in vec3 x0)
+{
+	float dt = dtCurlUniform*0.3;
+	vec3 k1 = evalF(x0);
+	vec3 x1 = x0 + (0.5*dt)*k1;
+	vec3 k2 = evalF(x1);
+	vec3 x2 = x0 + (0.5*dt)*k2;
+	vec3 k3 = evalF(x2);
+	vec3 x3 = x0 + dt *k3;
+	vec3 k4 = evalF(x3);
+	return x0 + dt*(k1+2.0*k2+2.0*k3+k4)/ 6.0;
+}
+
 void main() {
 
 	const int PARTICLES_PER_THREAD = 1;
@@ -119,9 +142,11 @@ void main() {
 		
 		ParticleInfo particle = particles[i + index];
 		
-		const float STEP_CONST = 0.542;
-		vec3 acc = curlNoise(0.4*particle.position.xyz);
-		vec3 newPos = verlet(acc, particle.position.xyz, particle.data.yzw, STEP_CONST*dtCurlUniform*dtGlobalUniform, dtCurlRatioUniform);
+		//const float STEP_CONST = 0.542;
+		//vec3 acc = curlNoise(0.4*particle.position.xyz);
+		//vec3 newPos = verlet(acc, particle.position.xyz, particle.data.yzw, STEP_CONST*dtCurlUniform*dtGlobalUniform, dtCurlRatioUniform);
+		
+		vec3 newPos = rk(particle.position.xyz);
 		
 		particles[i+index].data.yzw = particle.position.xyz;
 		particles[i+index].position.xyz = newPos;

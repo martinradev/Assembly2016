@@ -20,7 +20,7 @@ vec3 calcLight(in vec3 dif, in vec3 pos, in vec3 lightPos, in vec3 intensity)
 	
 	float l = distance(pos, lightPos);
 	
-	return  dif * intensity / (l*l*0.0003 + l*0.0002 + 0.03);
+	return  dif * intensity / (l*l*0.00000003 + l*0.000002 + 0.03);
 	
 }
 
@@ -31,7 +31,7 @@ void main() {
 	vec3 color = calcLight(difColorIN,positionFrag, lightPos[0], lightColor[0]);
 	color += 1.2*calcLight(difColorIN,positionFrag, lightPos[1], lightColor[1]);
 
-	diffuseColorOUT = vec4(80.0*color, 0.262);
+	diffuseColorOUT = vec4(color, 0.962);
 	
 	normalOUT = vec4(normalFrag, uvFrag.s);
 	positionOUT = vec4(positionFrag, uvFrag.t);

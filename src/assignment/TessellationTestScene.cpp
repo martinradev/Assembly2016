@@ -78,7 +78,9 @@ namespace FW {
 
 		m_blurResultTex = TEXTURE_POOL->request(TextureDescriptor(GL_RGBA32F, m_ProcessTexSize.x, m_ProcessTexSize.y, GL_RGBA, GL_FLOAT))->m_texture;
 
-
+		mGodrayFBO.reset(new FBO(fboDepthTex));
+		GLuint godrayBlurTex = TEXTURE_POOL->request(TextureDescriptor(GL_RGBA32F, m_ProcessTexSize.x, m_ProcessTexSize.y, GL_RGBA, GL_FLOAT))->m_texture;
+		mGodrayFBO->attachTexture(0, godrayBlurTex);
 
 		glBindTexture(GL_TEXTURE_2D, terrainTex);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -142,8 +144,11 @@ namespace FW {
 			Vec3f(80.0f));
 		m_sdfGeometryFactory->produceGeometry(ctx, desc, &mSphere);*/
 
+		Image * sparkleImage = importImage("assets/sparkle.png");
 
+		mLensFlareParticleTex = sparkleImage->createGLTexture();
 
+		delete sparkleImage;
 
 		loadRibbonPaths();
 
@@ -207,7 +212,7 @@ namespace FW {
 		Vec3f x = cross(y, z).normalized();
 		y = cross(z, x).normalized();
 
-		static const Mat4f perspective = Mat4f::perspective(90.0f, 100.0f, 82000.0f);
+		static const Mat4f perspective = Mat4f::perspective(90.0f, 100.0f, 82000.0f, 1.0f);
 
 		toLight.setRow(0, Vec4f(1.0f, 0.0f, 0.0f, -2100.0f));
 		toLight.setRow(1, Vec4f(0.0f, 0.0f, 1.0f, -1900.0f));
@@ -396,6 +401,7 @@ namespace FW {
 		gl->setUniform(mCityRenderProgram->getUniformLoc("toWorld"), cityToWorld);
 		gl->setUniform(mCityRenderProgram->getUniformLoc("normalToWorld"), cityToWorld);
 		gl->setUniform(mCityRenderProgram->getUniformLoc("cameraPos"), cameraPos);
+		gl->setUniform(mCityRenderProgram->getUniformLoc("sineT"), FWSync::citySineWaveTime);
 
 		gl->setUniform(mCityRenderProgram->getUniformLoc("seaColor"), seaColor);
 		gl->setUniform(mCityRenderProgram->getUniformLoc("lightColor"), lightColor);
@@ -411,7 +417,7 @@ namespace FW {
 
 		renderSubmarine(gl, camToClip, lightPos, lightDir, lightColor, seaColor, cameraPos);
 
-		renderAuthorLogos(gl, camToClip, lightPos, lightDir, lightColor, seaColor, cameraPos);
+		//renderAuthorLogos(gl, camToClip, lightPos, lightDir, lightColor, seaColor, cameraPos);
 		renderSurfaces(gl, camToClip, lightPos, lightDir, lightColor, seaColor, cameraPos);
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
@@ -455,6 +461,11 @@ namespace FW {
 
 		renderUnderwaterParticles(gl, camToCamera, camToClip, seaColor);
 
+		Vec3f up = mCamPtr->getUp();
+		Vec3f dir = mCamPtr->getForward();
+		Vec3f horizontal = cross(up, dir).normalized();
+		//renderFlares(gl, camToClip, mCamPtr->getPosition(), mCamPtr->getUp(), horizontal);
+
 		m_ribbonFBO->unbind();
 
 		/* END RENDER RIBBONS */
@@ -477,6 +488,33 @@ namespace FW {
 		/*
 		END BLUR RIBBONS
 		*/
+		if (FWSync::logoGodrayDecay > 0.0f)
+		{
+			glDisable(GL_DEPTH_TEST);
+			mGodrayFBO->bind();
+			glClear(GL_COLOR_BUFFER_BIT);
+			mSubmarineGodrayProgram->use();
+
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, m_gbuffer->getTexture(GBUFFER_TYPES::GBUFFER_DIFFUSE));
+			gl->setUniform(mSubmarineGodrayProgram->getUniformLoc("bwSampler"), 0);
+
+			Vec4f submarineCenter = camToClip * getSubmarineToWorldMatrix() * Vec4f(0, 0, 0, 1);
+			submarineCenter /= submarineCenter.w;
+			submarineCenter.x = submarineCenter.x * 0.5f + 0.5f;
+			submarineCenter.y = submarineCenter.y * 0.5f + 0.5f;
+
+			gl->setUniform(mSubmarineGodrayProgram->getUniformLoc("lightPos"), submarineCenter.getXY());
+			gl->setUniform(mSubmarineGodrayProgram->getUniformLoc("DECAY"), FWSync::logoGodrayDecay);
+
+			glBindVertexArray(m_quadVAO);
+			glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+			glBindVertexArray(0);
+		
+
+		mGodrayFBO->unbind();
+		glEnable(GL_DEPTH_TEST);
+		}
 
 		glViewport(0, 0, sz.x, sz.y);
 
@@ -503,7 +541,7 @@ namespace FW {
 		gl->setUniform(m_combineProgram->getUniformLoc("terrainColorTex"), 0);
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, m_gbuffer->getTexture(GBUFFER_TYPES::GBUFFER_DIFFUSE));
-
+		
 
 		gl->setUniform(m_combineProgram->getUniformLoc("particleColorTex"), 1);
 		glActiveTexture(GL_TEXTURE1);
@@ -512,6 +550,18 @@ namespace FW {
 		gl->setUniform(m_combineProgram->getUniformLoc("godrayBlurTex"), 2);
 		glActiveTexture(GL_TEXTURE2);
 		glBindTexture(GL_TEXTURE_2D, mGodrayBlurTex);
+
+		if (FWSync::logoGodrayDecay > 0.0f)
+		{
+			gl->setUniform(m_combineProgram->getUniformLoc("useSubmarineGodray"), true);
+			gl->setUniform(m_combineProgram->getUniformLoc("submarineGodray"), 3);
+			glActiveTexture(GL_TEXTURE2 + 1);
+			glBindTexture(GL_TEXTURE_2D, mGodrayFBO->getTexture(0));
+		}
+		else {
+			gl->setUniform(m_combineProgram->getUniformLoc("useSubmarineGodray"), false);
+		}
+		
 
 		/*m_displayProgram->use();
 
@@ -781,6 +831,10 @@ namespace FW {
 			"shaders/mesh_curves/mesh_curve_light_frag.glsl",
 			"underwater_mesh_curve_render_light");
 
+		mSubmarineGodrayProgram = loadShader(ctx, "shaders/common/display_vertex.glsl", "shaders/submarine/godray_blur_frag.glsl", "submarine_godray_city_scene");
+
+		mBillboardLensProgram = loadShader(ctx, "shaders/curve_render/billboard_lens_vert.glsl", "shaders/curve_render/billboard_lens_frag.glsl", "billboard_lens_city");
+
 		ctx->checkErrors();
 	}
 
@@ -909,6 +963,22 @@ namespace FW {
 
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindVertexArray(0);
+
+		glGenVertexArrays(1, &mFlareParticlesVAO);
+		glBindVertexArray(mFlareParticlesVAO);
+
+		glGenBuffers(1, &mFlareParticlesVBO);
+		glBindBuffer(GL_ARRAY_BUFFER, mFlareParticlesVBO);
+
+		glBufferData(GL_ARRAY_BUFFER, sizeof(Vec4f) * 4, NULL, GL_DYNAMIC_DRAW);
+
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
+
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+		glBindVertexArray(0);
+
 	}
 
 	void TessellationTestScene::saveRibbonPaths()
@@ -1063,7 +1133,7 @@ namespace FW {
 		for (size_t i = 0; i < ribbonsCount; ++i) {
 			std::string filePath = "assets/ribbon_path_" + std::to_string(i + 1) + ".txt";
 			loadRibbonPath(filePath, mCurveControlPoints[i]);
-			mRibbonCurves[i] = evalCatmullRomspline(mCurveControlPoints[i], 80.0f, false, 0.0f, 0.0f);
+			mRibbonCurves[i] = evalCatmullRomspline(mCurveControlPoints[i], 120.0f, false, 0.0f, 0.0f);
 		}
 
 		std::vector<Vec3f> starControlPoints;
@@ -1686,6 +1756,64 @@ namespace FW {
 		renderMesh(gl, mCceMesh.get(), mAuthorRenderProgram);
 
 		
+	}
+
+	void TessellationTestScene::renderFlares(GLContext * gl, const Mat4f & toScreen, const Vec3f & cameraPosition, const Vec3f & cameraUp, const Vec3f & cameraHorizontal)
+	{
+		mBillboardLensProgram->use();
+
+		//glDisable(GL_DEPTH_TEST);
+
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, mLensFlareParticleTex);
+		gl->setUniform(mBillboardLensProgram->getUniformLoc("toScreen"), toScreen);
+		gl->setUniform(mBillboardLensProgram->getUniformLoc("flareTex"), 0);
+		Vec4f flarePositions[4];
+
+		int camIndex = FWSync::cameraIndex;
+		float ribbonT = FWSync::ribbonEnd+1.0f;
+		for (size_t i = 0; i < 4; ++i)
+		{
+			int startRibbon = clamp(int(ribbonT), 1, int(mRibbonCurves[i].size()) - 1);
+			float t = ribbonT;
+			t -= int(ribbonT);
+			Vec3f ribbonHead;
+			Vec3f prevRibbonHead;
+
+			if (startRibbon < mRibbonCurves[i].size()) {
+				ribbonHead = mRibbonCurves[i][startRibbon].V;
+				prevRibbonHead = mRibbonCurves[i][startRibbon - 1].V;
+			}
+			else
+			{
+				ribbonHead = mRibbonCurves[i].back().V;
+				prevRibbonHead = mRibbonCurves[i][mRibbonCurves[i].size() - 2].V;
+			}
+
+			Vec3f interpolatedPoint = FW::lerp(prevRibbonHead, ribbonHead, t);
+			flarePositions[i] = Vec4f(interpolatedPoint, 1);
+
+			
+		}
+		glBindVertexArray(mFlareParticlesVAO);
+		glBindBuffer(GL_ARRAY_BUFFER, mFlareParticlesVBO);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(Vec4f) * 4, flarePositions[0].getPtr(), GL_DYNAMIC_DRAW);
+
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_ONE_MINUS_DST_COLOR, GL_ONE);
+		glEnable(GL_POINT_SPRITE);
+		glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
+		
+		glDrawArrays(GL_POINTS, 0, 4);
+		
+		glDisable(GL_POINT_SPRITE);
+		glDisable(GL_VERTEX_PROGRAM_POINT_SIZE);
+		glDisable(GL_BLEND);
+
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindVertexArray(0);
+
+		//glEnable(GL_DEPTH_TEST);
 	}
 
 };

@@ -78,7 +78,7 @@ void main()
 	float numShadowed = 0.0;
 	
 	vec3 lv = vec3(0.0);
-	vec3 startPos = camPos + (0.5 * hashNoise3D(0.001*dir) + 0.5) * dir / float(NUM_STEPS) ;
+	vec3 startPos = camPos + (0.5 * hashNoise3D(0.001*dir) + 0.5) * dir / float(0.5*NUM_STEPS) ;
 	
 	for (int i = 0; i < NUM_STEPS; ++i)
 	{

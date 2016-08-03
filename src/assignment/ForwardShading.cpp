@@ -393,7 +393,7 @@ namespace FW {
 	}
 
 	void ForwardShadingScene::getLightMatrices(Mat4f & toCamera, Mat4f & toScreen) {
-		Mat4f cameraToClip = Mat4f::perspective(90.0f, 0.01f, 200.0f);
+		Mat4f cameraToClip = Mat4f::perspective(90.0f, 0.01f, 200.0f, GLOBAL_RATIO);
 		toCamera.setRow(0, Vec4f(1.0f, 0.0f, 0.0f, 0.0f));
 		toCamera.setRow(1, Vec4f(0.0f, 0.0f, -1.0f, 0.0f));
 		toCamera.setRow(2, Vec4f(0.0f, 1.0f, 0.0f, -25.0f));

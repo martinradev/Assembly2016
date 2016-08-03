@@ -93,6 +93,21 @@ namespace FWSync {
 
 	SYNC_EXT(trefoilTime);
 
+	SYNC_EXT(overlayIndex);
+	SYNC_EXT(overlayAlpha);
+
+	SYNC_EXT(citySineWaveTime);
+
+	SYNC_EXT(fadeMix);
+	SYNC_EXT(fadeColor);
+
+	SYNC_EXT(fov);
+
+	SYNC_EXT(knotRotate);
+
+
+	SYNC_EXT(budhaScale);
+
 	void bindTracks(sync_device * rocket, HSTREAM hstream);
 	void updateValues(sync_device * rocket, HSTREAM hstream);
 

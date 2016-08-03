@@ -84,6 +84,8 @@ namespace FW {
 
 		GLContext::Program * m_renderCurveNoTessProgram;
 
+		GLContext::Program * mSubmarineGodrayProgram;
+
 		std::unique_ptr<GBuffer> m_gbuffer;
 		std::unique_ptr<FBO> m_terrainLightFBO;
 		std::unique_ptr<FBO> m_ribbonFBO;
@@ -93,6 +95,8 @@ namespace FW {
 
 		GLContext::Program * mMeshCurveRenderProgram;
 		GLContext::Program * mMeshCurveRenderLightProgram;
+
+		GLContext::Program * mBillboardLensProgram;
 
 		GLuint m_planePatchVAO;
 		GLuint m_planePatchVBO;
@@ -105,11 +109,16 @@ namespace FW {
 
 		GLuint m_blurResultTex;
 
+		GLuint mLensFlareParticleTex;
+		GLuint mFlareParticlesVBO;
+		GLuint mFlareParticlesVAO;
+
 		// knobs
 		Vec4f m_knobs[10];
 
 		Vec2i m_ProcessTexSize;
 
+		void renderFlares(GLContext * gl, const Mat4f & toScreen, const Vec3f & cameraPosition, const Vec3f & cameraUp, const Vec3f & cameraHorizontal);
 
 		/*
 			
@@ -232,5 +241,9 @@ namespace FW {
 		void renderSurfaces(GLContext * gl, const Mat4f & toScreen, const Vec3f & lightPosition, const Vec3f & lightDirection, const Vec3f & lightColor, const Vec3f & seaColor, const Vec3f & camPos);
 		void renderSurfacesLight(GLContext * gl, const Mat4f & toScreen);
 		void renderAuthorLogos(GLContext * gl, const Mat4f & toScreen, const Vec3f & lightPosition, const Vec3f & lightDirection, const Vec3f & lightColor, const Vec3f & seaColor, const Vec3f & camPos);
+
+		std::unique_ptr<FBO> mGodrayFBO;
+
+		friend class FinalScene;
 	};
 };

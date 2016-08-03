@@ -345,15 +345,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\assignment\AABB.h" />
     <ClInclude Include="src\assignment\Action.h" />
     <ClInclude Include="src\assignment\AlphabetMesh.h" />
     <ClInclude Include="src\assignment\App.hpp" />
     <ClInclude Include="src\assignment\AutomaticDifferentiation.h" />
     <ClInclude Include="src\assignment\BassTimer.h" />
     <ClInclude Include="src\assignment\BrightPassFilter.h" />
-    <ClInclude Include="src\assignment\Bvh.hpp" />
-    <ClInclude Include="src\assignment\BvhNode.hpp" />
     <ClInclude Include="src\assignment\CameraPath.h" />
     <ClInclude Include="src\assignment\curve.h" />
     <ClInclude Include="src\assignment\DemoUtil.h" />
@@ -362,13 +359,12 @@
     <ClInclude Include="src\assignment\DynamicMarchingTetrahedra.h" />
     <ClInclude Include="src\assignment\FBO.h" />
     <ClInclude Include="src\assignment\FBOManager.h" />
-    <ClInclude Include="src\assignment\filesaves.hpp" />
+    <ClInclude Include="src\assignment\FinalScene.h" />
     <ClInclude Include="src\assignment\ForwardShading.h" />
     <ClInclude Include="src\assignment\GaussianFilter.h" />
     <ClInclude Include="src\assignment\GBuffer.h" />
     <ClInclude Include="src\assignment\Globals.h" />
     <ClInclude Include="src\assignment\GlobalSyncVars.h" />
-    <ClInclude Include="src\assignment\GPUBvh.h" />
     <ClInclude Include="src\assignment\GPUPrefixScan.h" />
     <ClInclude Include="src\assignment\HeightMapScene.h" />
     <ClInclude Include="src\assignment\InterestingCurves.h" />
@@ -379,7 +375,6 @@
     <ClInclude Include="src\assignment\MemoryAllignedAllocator.h" />
     <ClInclude Include="src\assignment\Mesher.h" />
     <ClInclude Include="src\assignment\MeshRenderHelper.h" />
-    <ClInclude Include="src\assignment\MortonCodes.h" />
     <ClInclude Include="src\assignment\NBodyTest.h" />
     <ClInclude Include="src\assignment\NewBloomFilter.h" />
     <ClInclude Include="src\assignment\Object.h" />
@@ -389,18 +384,13 @@
     <ClInclude Include="src\assignment\ParticleModelNBody.h" />
     <ClInclude Include="src\assignment\PrefixScanTests.h" />
     <ClInclude Include="src\assignment\ProceduralTextureScene.h" />
-    <ClInclude Include="src\assignment\QBVH.h" />
-    <ClInclude Include="src\assignment\RaycastResult.hpp" />
     <ClInclude Include="src\assignment\RayMarchScene.h" />
-    <ClInclude Include="src\assignment\RTTriangle.hpp" />
     <ClInclude Include="src\assignment\Samplers.h" />
-    <ClInclude Include="src\assignment\SBVH.h" />
     <ClInclude Include="src\assignment\Scene.h" />
     <ClInclude Include="src\assignment\SDFGeometryFactory.h" />
     <ClInclude Include="src\assignment\ShaderSetup.h" />
     <ClInclude Include="src\assignment\SpaceScene.h" />
     <ClInclude Include="src\assignment\Spline.h" />
-    <ClInclude Include="src\assignment\SplitMethod.h" />
     <ClInclude Include="src\assignment\SSAOKernel.h" />
     <ClInclude Include="src\assignment\surf.h" />
     <ClInclude Include="src\assignment\SyncVars.h" />
@@ -427,7 +417,6 @@
     <ClCompile Include="src\assignment\App.cpp" />
     <ClCompile Include="src\assignment\AutomaticDifferentiation.cpp" />
     <ClCompile Include="src\assignment\BrrightPassFilter.cpp" />
-    <ClCompile Include="src\assignment\Bvh.cpp" />
     <ClCompile Include="src\assignment\CameraPath.cpp" />
     <ClCompile Include="src\assignment\curve.cpp" />
     <ClCompile Include="src\assignment\CurveObject.cpp" />
@@ -436,10 +425,10 @@
     <ClCompile Include="src\assignment\DynamicMarchingTetrahedra.cpp" />
     <ClCompile Include="src\assignment\FBO.cpp" />
     <ClCompile Include="src\assignment\FBOManager.cpp" />
+    <ClCompile Include="src\assignment\FinalScene.cpp" />
     <ClCompile Include="src\assignment\ForwardShading.cpp" />
     <ClCompile Include="src\assignment\GaussianFilter.cpp" />
     <ClCompile Include="src\assignment\GBuffer.cpp" />
-    <ClCompile Include="src\assignment\GPUBvh.cpp" />
     <ClCompile Include="src\assignment\GPUPrefixScan.cpp" />
     <ClCompile Include="src\assignment\HeightMapScene.cpp" />
     <ClCompile Include="src\assignment\InterestingCurves.cpp" />
@@ -449,7 +438,6 @@
     <ClCompile Include="src\assignment\MarchingTetrahedra.cpp" />
     <ClCompile Include="src\assignment\Mesher.cpp" />
     <ClCompile Include="src\assignment\MeshRenderHelper.cpp" />
-    <ClCompile Include="src\assignment\MortonCodes.cpp" />
     <ClCompile Include="src\assignment\NBodyTest.cpp" />
     <ClCompile Include="src\assignment\NewBloomFilter.cpp" />
     <ClCompile Include="src\assignment\Object.cpp" />
@@ -459,14 +447,11 @@
     <ClCompile Include="src\assignment\BloomFilter.cpp" />
     <ClCompile Include="src\assignment\PrefixScanTest.cpp" />
     <ClCompile Include="src\assignment\ProceduralTextureScene.cpp" />
-    <ClCompile Include="src\assignment\QBVH.cpp" />
     <ClCompile Include="src\assignment\RayMarchScene.cpp" />
-    <ClCompile Include="src\assignment\SBVH.cpp" />
     <ClCompile Include="src\assignment\Scene.cpp" />
     <ClCompile Include="src\assignment\SDFGeometryFactory.cpp" />
     <ClCompile Include="src\assignment\ShaderSetup.cpp" />
     <ClCompile Include="src\assignment\SpaceScene.cpp" />
-    <ClCompile Include="src\assignment\SplitMethod.cpp" />
     <ClCompile Include="src\assignment\SSAOKernel.cpp" />
     <ClCompile Include="src\assignment\surf.cpp" />
     <ClCompile Include="src\assignment\SurfaceObject.cpp" />

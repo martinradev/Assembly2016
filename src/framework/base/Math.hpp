@@ -693,7 +693,7 @@ public:
 #if !FW_CUDA
     Mat3f                           getXYZ      (void) const;
     static Mat4f                    fitToView   (const Vec2f& pos, const Vec2f& size, const Vec2f& viewSize);
-    static Mat4f                    perspective (F32 fov, F32 nearDist, F32 farDist);
+    static Mat4f                    perspective (F32 fov, F32 nearDist, F32 farDist, F32 aspectRatio);
 #endif
 
     template <class V> FW_CUDA_FUNC Mat4f(const MatrixBase<F32, 4, V>& v) { set(v); }

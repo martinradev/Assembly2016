@@ -113,14 +113,15 @@ vec3 curlNoise(in vec3 v)
 vec3 evalF(in vec3 pos)
 {
 	
-	vec3 acc =  vec3(-pos.z, sin(dot(pos,pos))*0.15, pos.x) + curlStep*curlNoise(0.2*pos)*vec3(1,0.4,1);
+	//vec3 acc =  vec3(-pos.z, sin(dot(pos,pos))*0.15, pos.x) + curlStep*curlNoise(0.02*pos)*vec3(1,0.4,1);
+	vec3 acc = curlStep*curlNoise(pos)*vec3(1,0.4,1) + integrationStep*vec3(-pos.z, sin(dot(pos,pos))*0.15, pos.x);
 	
 	for (int a = 0; a < numAttractors; ++a)
 	{
 			
 			vec4 attrInfo = attractors[a];
 	
-			float otherMass = 0.7*attractorPower*attrInfo.w;
+			float otherMass = 0.1*attractorPower*attrInfo.w;
 			
 			vec3 dirToParticle = (attrInfo.xyz-pos);
 			

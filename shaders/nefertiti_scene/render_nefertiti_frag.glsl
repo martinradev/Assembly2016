@@ -34,8 +34,8 @@ uniform float AlphaUniform;
 vec3 calcLight(vec3 h, vec3 n, vec3 dir, vec3 difColor, vec3 intensity, vec3 specColorIN) {
 	vec3 diffuse;
 	diffuse = clamp(dot(n, dir), 0.008, 1.0) * difColor;
-	vec3 specular = specColorIN * pow(clamp(dot(h, n), 0.06, 1.0), 50.0);
-	vec3 Li = intensity * (30.0*diffuse+20.0*specular);
+	vec3 specular = specColorIN * pow(clamp(dot(h, n), 0.06, 1.0), 30.0);
+	vec3 Li = intensity * (20.0*diffuse+2.0*specular);
 	
 	return Li;
 }

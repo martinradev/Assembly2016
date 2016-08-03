@@ -17,7 +17,7 @@ void main() {
 	
 	positionFrag = (posToWorld * vec4(position.xyz, 1.0)).xyz;
 	normalFrag = -normalize((normalToWorld * vec4(normal.xyz, 0.0)).xyz);
-	uvFrag = vec2(position.w, normal.w) * vec2(235.0,5.0);
+	uvFrag = vec2(position.w, normal.w) * vec2(25.0,5.0);
 	
 	vec4 oldScreenPos = prevToScreen * vec4(position.xyz, 1.0);
 	oldScreenPos.xyz /= oldScreenPos.w;
