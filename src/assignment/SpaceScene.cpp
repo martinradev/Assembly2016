@@ -301,6 +301,10 @@ namespace FW {
 		mBackgroundTex = img->createGLTexture();
 		delete img;
 
+		img = importImage("assets/skybox/starfield.png");
+		mBackgroundStarTex = img->createGLTexture();
+		delete img;
+
 		generateParticleCloud();
 	}
 
@@ -641,8 +645,14 @@ namespace FW {
 
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, mBackgroundTex);
+		glActiveTexture(GL_TEXTURE0 + 1);
+		glBindTexture(GL_TEXTURE_2D, mBackgroundStarTex);
 
 		gl->setUniform(mBackgroundProgram->getUniformLoc("inTex"), 0);
+		gl->setUniform(mBackgroundProgram->getUniformLoc("inStarTex"), 1);
+		// we abuse overlay alpha channel here
+		gl->setUniform(mBackgroundProgram->getUniformLoc("inScrollX"), FWSync::overlayAlpha); 
+		gl->setUniform(mBackgroundProgram->getUniformLoc("inAspect"), 720.0f / 1280.f);
 
 		glBindVertexArray(mQuadVAO);
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);

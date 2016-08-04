@@ -105,7 +105,8 @@ mThreshold(0.0f)
 	m_commonCtrl.endSliderStack();
 	m_window.setTitle("Effects galore by Super Grand");
     m_window.addListener(this);
-	m_window.setSize(Vec2i(1280, 720));
+	//m_window.setSize(Vec2i(1280, 720));
+	m_window.setSize(Vec2i(1280/2, 720/2));
 	m_window.setFullScreen(false);
     m_window.addListener(&m_commonCtrl);
 

@@ -84,6 +84,7 @@ namespace FW {
 		//std::unique_ptr<FBO> mSkyBoxFBO;
 
 		GLuint mBackgroundTex;
+		GLuint mBackgroundStarTex;
 		void renderBackground(GLContext * gl);
 
 		void renderStatueParticles(GLContext * gl, const Mat4f & toScreen, const Mat4f & toWorld, const Mat4f & normalToWorld, const Vec3f & cameraPosition);
