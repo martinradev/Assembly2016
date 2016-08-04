@@ -141,8 +141,8 @@ void main()
 		vec2 newUV = uv;
 		newUV.y = 1.0 - uv.y;
 		vec4 overlayValue = texture(overlay, newUV);
-		overlayValue.a = step(overlayAlpha, overlayValue.a);
-		cl += overlayValue.xyz * overlayValue.a;
+		//overlayValue.a = step(overlayAlpha, overlayValue.a);
+		cl += overlayValue.xyz * overlayValue.a * overlayAlpha;
 	}
 	
 	vec3 newColor = texture(colorGradingLUT, cl).rbg;
