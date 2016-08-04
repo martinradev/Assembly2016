@@ -245,5 +245,8 @@ namespace FW {
 		std::unique_ptr<FBO> mGodrayFBO;
 
 		friend class FinalScene;
+		friend class TunnelScene;
+
+		Curve starCurve;
 	};
 };

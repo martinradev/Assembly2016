@@ -105,8 +105,8 @@ mThreshold(0.0f)
 	m_commonCtrl.endSliderStack();
 	m_window.setTitle("Effects galore by Super Grand");
     m_window.addListener(this);
-	//m_window.setSize(Vec2i(1280, 720));
-	m_window.setSize(Vec2i(1280/2, 720/2));
+	m_window.setSize(Vec2i(1280, 720));
+	//m_window.setSize(Vec2i(1280/2, 720/2));
 	m_window.setFullScreen(false);
     m_window.addListener(&m_commonCtrl);
 
@@ -426,7 +426,7 @@ void App::setupScenes() {
 	mSpaceScene = new SpaceScene(gl, sz.x, sz.y, mLastFBO.get(), &m_cameraCtrl);
 	m_allScenes.push_back(SceneDescriptor(mSpaceScene, "Space"));
 
-	mTunnelScene = new TunnelScene(gl, sz.x, sz.y, mLastFBO.get(), &m_cameraCtrl);
+	mTunnelScene = new TunnelScene(gl, sz.x, sz.y, mLastFBO.get(), &m_cameraCtrl, (TessellationTestScene*) mWaterScene);
 	m_allScenes.push_back(SceneDescriptor(mSpaceScene, "Tunnel"));
 
 	mFinalScene = new FinalScene(gl, sz.x, sz.y, mLastFBO.get(), &m_cameraCtrl, (TunnelScene*)mTunnelScene, (TessellationTestScene*)mWaterScene, (ParticleLogoSDF*)mLogoScene);

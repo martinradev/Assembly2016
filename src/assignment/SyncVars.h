@@ -111,6 +111,8 @@ namespace FWSync {
 
 	SYNC_EXT(budhaScale);
 
+	SYNC_EXT(particleSize);
+
 	void bindTracks(sync_device * rocket, HSTREAM hstream);
 	void updateValues(sync_device * rocket, HSTREAM hstream);
 

@@ -3,18 +3,21 @@
 #include "surf.h"
 #include "Globals.h"
 #include "TessellationTestScene.h"
+#include "Util.h"
 #include "SyncVars.h"
 #include <fstream>
+#include <unordered_map>
 #include <algorithm>
 
 namespace FW {
 
-	TunnelScene::TunnelScene(GLContext * ctx, int width, int height, FBO * lastPass, CameraControls * camPtr)
+	TunnelScene::TunnelScene(GLContext * ctx, int width, int height, FBO * lastPass, CameraControls * camPtr, TessellationTestScene * tessScene)
 
 		: mWidth(width),
 		  mHeight(height),
 		  mLastFBO(lastPass),
-		  mCamPtr(camPtr)
+		  mCamPtr(camPtr),
+		  mTessScene(tessScene)
 
 	{
 		GLuint depthTex = TEXTURE_POOL->request(TextureDescriptor(GL_DEPTH_COMPONENT32F, width, height, GL_DEPTH_COMPONENT, GL_FLOAT))->m_texture;
@@ -26,15 +29,11 @@ namespace FW {
 		mGBuffer.reset(new FBO(depthTex));
 		mGBuffer->attachTexture(0, colorTex);
 		mGBuffer->attachTexture(1, normalTex);
-		mGBuffer->attachTexture(2, velocityTex);
-
-		mMotionBlurFBO.reset(new FBO(depthTex));
-		mMotionBlurFBO->attachTexture(0, motionBlurTex);
+		//mGBuffer->attachTexture(2, velocityTex);
 
 		loadShaders(ctx);
 		setupGLBuffers();
 		generateTunnel();
-
 
 		Image * tunnelDiffuseImg = FW::importImage("assets/tunnel/synthetic_metal_04_diffuse.png");
 		mTunnelTexture = tunnelDiffuseImg->createGLTexture();
@@ -45,149 +44,268 @@ namespace FW {
 		Image * tunnelSpecularImg = FW::importImage("assets/tunnel/synthetic_metal_04_specular.png");
 		mTunnelSpecularTexture = tunnelSpecularImg->createGLTexture();
 
-		mMesher.reset(new Mesher(ctx, Vec4f(-20.0f, -20.0f, -20.0f, 0.625f), "shaders/tunnel/sdf.glsl"));
+		generateParticles();
+		generateRibbon();
+
+
 	}
 
+	void TunnelScene::generateRibbon()
+	{
+
+
+
+		std::vector<Vec3f> controlPoints = {
+			Vec3f(1000,45000, 1000),
+			Vec3f(1000,30000, 1000),
+			Vec3f(1000,15000, 1000),
+			Vec3f(1000,1000, 1000),
+		};
+
+		
+		Curve meteorCurve = evalCatmullRomspline(controlPoints, 500, false, 0.0, 0.0);
+
+		Curve starCurve = mTessScene->starCurve;
+		for (size_t i = 0; i < starCurve.size(); ++i)
+		{
+			starCurve[i].V *= 3.5f;
+		}
+
+		Surface surf = makeGenCyl(starCurve, meteorCurve);
+
+		mMeteorNumIndices = surf.VF.size();
+
+		std::vector<MissileMeshVertex> vertexData(surf.VV.size());
+
+		for (size_t k = 0; k < vertexData.size(); ++k)
+		{
+			vertexData[k] = MissileMeshVertex(surf.VV[k], surf.VN[k], surf.VT[k].x, surf.VT[k].y);
+		}
+
+		glGenVertexArrays(1, &mMeteorVAO);
+		glGenBuffers(1, &mMeteorIBO);
+		glGenBuffers(1, &mMeteorVBO);
+
+		glBindVertexArray(mMeteorVAO);
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mMeteorIBO);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, surf.VF.size() * sizeof(Vec3i), surf.VF.data(), GL_STATIC_DRAW);
+
+		glBindBuffer(GL_ARRAY_BUFFER, mMeteorVBO);
+		glBufferData(GL_ARRAY_BUFFER, vertexData.size() * sizeof(MissileMeshVertex), vertexData.data(), GL_STATIC_DRAW);
+
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(MissileMeshVertex), NULL);
+
+		glEnableVertexAttribArray(1);
+		glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(MissileMeshVertex), (char*)NULL + sizeof(Vec4f));
+
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindVertexArray(0);
+	}
+
+	static struct CityParticleComparator {
+
+		bool operator()(const ParticleInfo &a, const ParticleInfo &b)
+		{
+			return a.position.x < b.position.x;
+		}
+
+	};
+
+	void TunnelScene::generateParticles() {
+
+		Mesh<VertexPNTC> * cityMesh = (Mesh<VertexPNTC>*)importMesh("assets/city/city_tesselated.obj");
+
+		std::vector<ParticleMaterial> materials(cityMesh->numSubmeshes());
+
+		// texture handle, location
+		std::unordered_map<GLuint, int> textureMap;
+		std::unordered_map<GLuint, int>::iterator textureMapIterator;
+
+		int numTriangles = cityMesh->numTriangles();
+		int particlesPerTriangle = 19;
+		int cParticle = 0;
+
+		mNumCityParticles = particlesPerTriangle * numTriangles;
+
+		Random rnd;
+
+		std::vector<ParticleInfo> particleData(mNumCityParticles);
+
+		for (int i = 0; i < cityMesh->numSubmeshes(); ++i)
+		{
+
+			// copy material
+			const auto & cMaterial = cityMesh->material(i);;
+
+			int useDiffuseTexId = -1;
+			const auto & diffuseTex = cMaterial.textures[MeshBase::TextureType_Diffuse];
+			if (diffuseTex.exists())
+			{
+				GLuint textureHandle = diffuseTex.getGLTexture();
+				textureMapIterator = textureMap.find(textureHandle);
+
+				if (textureMapIterator == textureMap.end())
+				{
+					GLuint64 cTexHandle = glGetTextureHandleARB(textureHandle);
+					useDiffuseTexId = mTextureHandles.size();
+					mTextureHandles.push_back(cTexHandle);
+					textureMap[cTexHandle] = useDiffuseTexId;
+				}
+				else {
+					useDiffuseTexId = textureMapIterator->second;
+				}
+			}
+
+			materials[i] = ParticleMaterial(cMaterial.diffuse.getXYZ(), useDiffuseTexId, cMaterial.specular, -1);
+
+			const Array<Vec3i>& idx = cityMesh->indices(i);
+			for (int j = 0; j < idx.getSize(); ++j)
+			{
+
+				const VertexPNTC &v0 = cityMesh->vertex(idx[j][0]),
+					&v1 = cityMesh->vertex(idx[j][1]),
+					&v2 = cityMesh->vertex(idx[j][2]);
+
+
+
+				for (int k = 0; k < particlesPerTriangle; ++k) {
+					float u1 = rnd.getF32(0.0f, 1.0f);
+					float u2 = rnd.getF32(0.0f, 1.0f);
+					float su1 = sqrtf(u1);
+					float u = 1.0f - su1;
+					float v = su1 * u2;
+					Vec3f point = barycentricInterpolation(u, v, v0.p, v1.p, v2.p);
+					Vec3f rndVec = rnd.getVec3f(-1.0f, 1.0f).normalized();
+					Vec3f normal = barycentricInterpolation(u, v, v0.n, v1.n, v2.n).normalized();
+					Vec2f trigUV = barycentricInterpolation(u, v, v0.t, v1.t, v2.t);
+					particleData[cParticle] = ParticleInfo(Vec4f(point, trigUV.x), Vec4f(normal, trigUV.y), i);
+					++cParticle;
+				}
+
+			}
+		}
+
+		std::sort(particleData.begin(), particleData.end(), CityParticleComparator());
+
+		glGenBuffers(1, &mParticleMaterialSSBO);
+		glBindBuffer(GL_SHADER_STORAGE_BUFFER, mParticleMaterialSSBO);
+
+		glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(ParticleMaterial) * materials.size(), materials.data(), GL_STATIC_DRAW);
+
+		glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+
+
+
+		glGenVertexArrays(1, &mCityVAO);
+		glBindVertexArray(mCityVAO);
+
+		glGenBuffers(1, &mCityVBO);
+		glBindBuffer(GL_ARRAY_BUFFER, mCityVBO);
+
+		glBufferData(GL_ARRAY_BUFFER, sizeof(ParticleInfo) * mNumCityParticles, particleData.data(), GL_STATIC_DRAW);
+
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(ParticleInfo), (void*)NULL);
+
+		glEnableVertexAttribArray(1);
+		glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(ParticleInfo), (void*)(NULL + sizeof(Vec4f)));
+
+		glEnableVertexAttribArray(2);
+		glVertexAttribPointer(2, 1, GL_FLOAT, GL_FALSE, sizeof(ParticleInfo), (void*)(NULL + 2 * sizeof(Vec4f)));
+
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindVertexArray(0);
+	}
+
+	void TunnelScene::lightPass()
+	{
+
+	}
 
 	void TunnelScene::render(Window & wnd, const CameraControls & camera) {
 		GLContext *gl = wnd.getGL();
 
-		GLContext::Program * mesherProg = mMesher->getProgram();
-		mesherProg->use();
-		gl->setUniform(mesherProg->getUniformLoc("knob0"), Vec4f(FWSync::sdf1, FWSync::sdf2, FWSync::sdf3, FWSync::sdf4));
-		gl->setUniform(mesherProg->getUniformLoc("knob1"), Vec4f(FWSync::sdf5, FWSync::sdf6, FWSync::sdf7, FWSync::sdf8));
-		gl->setUniform(mesherProg->getUniformLoc("knob2"), Vec4f(FWSync::sdf9, FWSync::sdf10, FWSync::sdf11, FWSync::sdf12));
-		gl->setUniform(mesherProg->getUniformLoc("knob3"), Vec4f(FWSync::sdf13, FWSync::sdf14, FWSync::sdf15, FWSync::sdf16));
-		mMesher->update(gl);
+		explodeCity(gl);
 
-		Vec3f cameraPosition = getCameraPosition(FWSync::trefoilTime);
+		mCamPtr->setFar(100000);
 
-		mCamPtr->setPosition(cameraPosition);
-		mCamPtr->setForward(getCameraForward(FWSync::trefoilTime));
-		//mCamPtr->setUp(getCameraUp());
-		mCamPtr->setNear(2.0f);
+		Mat4f camToClip = camera.getWorldToClip();
+		Mat4f camToCamera = camera.getWorldToCamera();
+		Vec3f cameraDir = camera.getForward();
+		Vec3f cameraPos = camera.getPosition();
 
-		Mat4f toScreen = mCamPtr->getWorldToClip();
-		Mat4f toWorld = Mat4f::scale(Vec3f(200.0f));
+		Vec3f lightColor = Vec3f(0.5, 0.2, 0.2);
+		Vec3f fogColor = Vec3f(0.0005, 0.0005f, 0.003f);
+
+		Mat4f toLight, toLightClip;
+		mTessScene->getLightMatrix(cameraPos, toLight, toLightClip);
+
+		Vec3f lightPos = (toLight.inverted() * Vec4f(0, 0, 0, 1)).getXYZ();
+		Vec3f lightDir = ((toLight * Vec4f(0, 0, 0, 1)).getXYZ() - lightPos).normalized();
 
 		mGBuffer->bind();
 
-		glClearColor(0.05, 0.05, 0.1, 1.0);
+		glClearColor(fogColor.x, fogColor.y, fogColor.z, 1);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		//////////////////////////////////////////////////
+		renderCity(gl, camToClip, lightPos, lightDir, lightColor, fogColor);
 
-		mTunnelProgram->use();
+
+		/// --------------------------------------------
+
+
+
+		//int s = int(FWSync::ribbonStart)*mTessScene->mProfileNumIndices * 6;
+		//int e = int(FWSync::ribbonEnd)**mTessScene->mProfileNumIndices * 6;
+		//gl->setUniform(mMeteorRenderProgram->getUniformLoc("lastIndex"), float(e) / 6.0f);
+		//glDrawElements(GL_TRIANGLES, e - s, GL_UNSIGNED_INT, NULL + (char*)(s * sizeof(GL_UNSIGNED_INT)));
+
+		mMeteorRenderProgram->use();
+		gl->setUniform(mMeteorRenderProgram->getUniformLoc("toScreen"), camToClip);
+		gl->setUniform(mMeteorRenderProgram->getUniformLoc("cameraPosition"), cameraPos);
+		int s = int(FWSync::ribbonStart)*mTessScene->mProfileNumIndices * 6;
+		int e = int(FWSync::ribbonEnd)*mTessScene->mProfileNumIndices * 6;
+		gl->setUniform(mMeteorRenderProgram->getUniformLoc("lastIndex"), float(e) / 6.0f);
+		glBindVertexArray(mMeteorVAO);
+		glDrawElements(GL_TRIANGLES, e - s, GL_UNSIGNED_INT, NULL + (char*)(s * sizeof(GL_UNSIGNED_INT)));
+		glBindVertexArray(0);
+
 		
-		Vec3f lightDiffuseColor = Vec3f(0.02, 0.1, 0.16);
-		Vec3f lightSpecularColor = Vec3f(0.016, 0.05, 0.03);
+		
+		
+		
 
-		static Mat4f prevTunnelToScreen = toScreen*toWorld;
-
-		Mat4f tunnelToScreen = toScreen*toWorld;
-
-		gl->setUniform(mTunnelProgram->getUniformLoc("lightDiffuseColor"), lightDiffuseColor);
-		gl->setUniform(mTunnelProgram->getUniformLoc("lightSpecularColor"), lightSpecularColor);
-		gl->setUniform(mTunnelProgram->getUniformLoc("toScreen"), tunnelToScreen);
-		gl->setUniform(mTunnelProgram->getUniformLoc("prevToScreen"), prevTunnelToScreen);
-		gl->setUniform(mTunnelProgram->getUniformLoc("posToWorld"), toWorld);
-		gl->setUniform(mTunnelProgram->getUniformLoc("normalToWorld"), toWorld.inverted().transposed());
-		gl->setUniform(mTunnelProgram->getUniformLoc("cameraPosition"), cameraPosition);
-		gl->setUniform(mTunnelProgram->getUniformLoc("diffuseTexture"), 0);
-		gl->setUniform(mTunnelProgram->getUniformLoc("specularTexture"), 1);
-		gl->setUniform(mTunnelProgram->getUniformLoc("normalTexture"), 2);
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, mTunnelTexture);
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, mTunnelSpecularTexture);
-		glActiveTexture(GL_TEXTURE2);
-		glBindTexture(GL_TEXTURE_2D, mTunnelNormalTexture);
-
-		glBindVertexArray(mTunnelVAO);
-		glDrawElements(GL_TRIANGLES, mTunnelNumIndices, GL_UNSIGNED_INT, NULL);
-		glBindVertexArray(0);
-
-
-
-		/////////////////////////////////////
-
-		mTunnelEngravingProgram->use();
-		gl->setUniform(mTunnelEngravingProgram->getUniformLoc("lightDiffuseColor"), lightDiffuseColor);
-		gl->setUniform(mTunnelEngravingProgram->getUniformLoc("lightSpecularColor"), lightSpecularColor);
-		gl->setUniform(mTunnelEngravingProgram->getUniformLoc("toScreen"), tunnelToScreen);
-		gl->setUniform(mTunnelEngravingProgram->getUniformLoc("prevToScreen"), prevTunnelToScreen);
-		gl->setUniform(mTunnelEngravingProgram->getUniformLoc("posToWorld"), toWorld);
-		gl->setUniform(mTunnelEngravingProgram->getUniformLoc("normalToWorld"), toWorld.inverted().transposed());
-		gl->setUniform(mTunnelEngravingProgram->getUniformLoc("cameraPosition"), cameraPosition);
-		gl->setUniform(mTunnelEngravingProgram->getUniformLoc("diffuseTexture"), 0);
-		gl->setUniform(mTunnelEngravingProgram->getUniformLoc("specularTexture"), 1);
-		gl->setUniform(mTunnelEngravingProgram->getUniformLoc("normalTexture"), 2);
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, mTunnelTexture);
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, mTunnelSpecularTexture);
-		glActiveTexture(GL_TEXTURE2);
-		glBindTexture(GL_TEXTURE_2D, mTunnelNormalTexture);
-
-		glBindVertexArray(mTunnelEngravingVAO);
-		glDrawElementsInstanced(GL_TRIANGLES, mTunnelNumIndices, GL_UNSIGNED_INT, NULL, mNumEngravings);
-		glBindVertexArray(0);
-		////////////////////////////
-
-
-
-
-		Mat4f objToWorld = Mat4f::translate(getCameraPosition(FWSync::trefoilTime + 0.05f)) * Mat4f::scale(Vec3f(10.0f));
-		Mat4f objToScreen = toScreen * objToWorld;
-
-		renderMeshObject(gl, objToScreen, objToWorld, objToWorld.inverted().transposed(), cameraPosition);
+		/// --------------------------------------------
 
 		mGBuffer->unbind();
 
-		////////////////////////////
-
-		mMotionBlurFBO->bind();
-
-		glClear(GL_COLOR_BUFFER_BIT);
-		glDisable(GL_DEPTH_TEST);
-
-		mMotionBlurProgram->use();
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, mGBuffer->getTexture(2));
-		gl->setUniform(mMotionBlurProgram->getUniformLoc("velocityTex"), 0);
-
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, mGBuffer->getTexture(0));
-		gl->setUniform(mMotionBlurProgram->getUniformLoc("colorTex"), 1);
-
-		glBindVertexArray(mQuadVAO);
-		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-		glBindVertexArray(0);
-
-		glEnable(GL_DEPTH_TEST);
-		mMotionBlurFBO->unbind();
-		
-
-		////////////////////////////
 
 		mLastFBO->bind();
+
+		glClearColor(0, 0, 0, 1);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		mCombineProgram->use();
 
+		gl->setUniform(mCombineProgram->getUniformLoc("meshColorTex"), 0);
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, mGBuffer->getTexture(0));
-		glBindTexture(GL_TEXTURE_2D, mMotionBlurFBO->getTexture(0));
-		gl->setUniform(mTunnelProgram->getUniformLoc("meshColorTex"), 0);
 
-		glBindVertexArray(mQuadVAO);
+		/*gl->setUniform(mCombineProgram->getUniformLoc("godrayColorTex"), 1);
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, mTessScene->mGodrayBlurTex);*/
+		//glBindTexture(GL_TEXTURE_2D, mTessScene->mGodrayBlurTex);
+		//glBindTexture(GL_TEXTURE_2D, mTessScene->m_terrainLightFBO->getTexture(0));
+
+		glBindVertexArray(mTessScene->m_quadVAO);
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 		glBindVertexArray(0);
 
-
 		mLastFBO->unbind();
 
-		prevTunnelToScreen = toScreen*toWorld;
+
 	}
 
 	void TunnelScene::generateTunnel()
@@ -242,63 +360,6 @@ namespace FW {
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindVertexArray(0);
 
-		for (size_t i = 0; i < profilePoints.size(); ++i) profilePoints[i] *= 1.0f;
-		Curve cheapProfileCurve = evalBspline(profilePoints, 30.0, false, 0.0, 0.0);
-		Curve smallProfile = evalCircle(0.05f, 20);
-		Surface engraveSurface = makeGenCyl(smallProfile, cheapProfileCurve);
-		mTunnelEngravingNumIndices = engraveSurface.VF.size() * 3;
-		std::vector<MissileMeshVertex> vertexEngravingData(engraveSurface.VV.size());
-
-		for (size_t k = 0; k < vertexEngravingData.size(); ++k)
-		{
-			vertexEngravingData[k] = MissileMeshVertex(engraveSurface.VV[k], engraveSurface.VN[k].normalized(), engraveSurface.VT[k].x, engraveSurface.VT[k].y);
-		}
-
-		mNumEngravings = 40;
-		std::vector<Mat4f> engravingTransformations(mNumEngravings);
-		size_t engravingStep = sweepCurve.size() / mNumEngravings;
-
-		size_t idx = 0;
-		for (size_t i = 0; i < mNumEngravings; ++i)
-		{
-			engravingTransformations[i] = sweepCurve[idx].getTransformation();
-			idx += engravingStep;
-		}
-		
-
-		glGenVertexArrays(1, &mTunnelEngravingVAO);
-		glBindVertexArray(mTunnelEngravingVAO);
-
-		glGenBuffers(1, &mTunnelEngravingIBO);
-		glGenBuffers(1, &mTunnelEngravingVBO);
-		glGenBuffers(1, &mTunnelEngravingTransformationVBO);
-
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mTunnelEngravingIBO);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, engraveSurface.VF.size() * sizeof(Vec3i), engraveSurface.VF.data(), GL_STATIC_DRAW);
-
-		glBindBuffer(GL_ARRAY_BUFFER, mTunnelEngravingVBO);
-		glBufferData(GL_ARRAY_BUFFER, vertexEngravingData.size() * sizeof(MissileMeshVertex), vertexEngravingData.data(), GL_STATIC_DRAW);
-
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(MissileMeshVertex), NULL);
-
-		glEnableVertexAttribArray(1);
-		glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(MissileMeshVertex), (char*)NULL + sizeof(Vec4f));
-
-		glBindBuffer(GL_ARRAY_BUFFER, mTunnelEngravingTransformationVBO);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(Mat4f) * engravingTransformations.size(), engravingTransformations.data(), GL_STATIC_DRAW);
-
-		for (int i = 0; i < 4; ++i)
-		{
-			glEnableVertexAttribArray(2+i);
-			glVertexAttribPointer(2+i, 4, GL_FLOAT, GL_FALSE, sizeof(Mat4f), (char*)NULL + sizeof(Vec4f)*i);
-			glVertexAttribDivisor(2 + i, 1);
-		}
-
-
-
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		glBindVertexArray(0);
 	}
 
 	void TunnelScene::setupGLBuffers() {
@@ -339,14 +400,16 @@ namespace FW {
 
 	void TunnelScene::loadShaders(GLContext * ctx) {
 
-		if (mMesher) mMesher->loadShaders(ctx);
 
 		mCombineProgram = loadShader(ctx, "shaders/tunnel/combine_vertex.glsl", "shaders/tunnel/combine_fragment.glsl", "tunnel_combine");
-		mTunnelProgram = loadShader(ctx, "shaders/tunnel/tunnel_vert.glsl", "shaders/tunnel/tunnel_frag.glsl", "tunnel_render_program");
-		mTunnelEngravingProgram = loadShader(ctx, "shaders/tunnel/tunnel_engraving_vert.glsl", "shaders/tunnel/tunnel_engraving_frag.glsl", "tunnel_engraving_render_program");
 		mDisplayProgram = loadShader(ctx, "shaders/common/display_vertex.glsl", "shaders/common/display_fragment.glsl", "tunnel_display_program");
-		mMeshProgram = loadShader(ctx, "shaders/tunnel/mesh_object_vert.glsl", "shaders/tunnel/mesh_object_frag.glsl", "tunnel_mesh_render");
-		mMotionBlurProgram = loadShader(ctx, "shaders/common/display_vertex.glsl", "shaders/tunnel/motion_blur_frag.glsl", "motion_blur_tunnel");
+
+		mCityRenderProgram = loadShader(ctx, "shaders/particle_city/render_vert.glsl", "shaders/particle_city/render_frag.glsl", "particle_city_render..");
+		mCityLightRenderProgram = loadShader(ctx, "shaders/particle_city/render_light_vert.glsl", "shaders/particle_city/render_light_frag.glsl", "particle_city_light_render..");
+
+		mMeteorRenderProgram = loadShader(ctx, "shaders/particle_city/mesh_curve_vert.glsl", "shaders/particle_city/mesh_curve_frag.glsl", "particle_city_ribbon_meteor");
+
+		mParticleMoveProgram = loadShader(ctx, "shaders/particle_city/move_particles.glsl", "mesh_city_move_particles");
 	}
 
 
@@ -435,37 +498,67 @@ namespace FW {
 			-9.0f * sinf(3.0f * t))).normalized();
 	}
 
-	void TunnelScene::renderMeshObject(GLContext * gl, const Mat4f & toScreen, const Mat4f & toWorld, const Mat4f & normalToWorld, const Vec3f & cameraPosition)
+	void TunnelScene::renderCity(GLContext * gl, const Mat4f & toScreen, const Vec3f & lightPosition, const Vec3f & lightDirection, const Vec3f & lightColor, const Vec3f & fogColor)
 	{
-		mMeshProgram->use();
+		Mat4f toWorld = mTessScene->getCityMeshWorldMatrix();
 
-		static Mat4f prevMeshToScreen = toScreen;
+		mCityRenderProgram->use();
+		gl->setUniform(mCityRenderProgram->getUniformLoc("toScreen"), toScreen*toWorld);
+		gl->setUniform(mCityRenderProgram->getUniformLoc("posToWorld"), toWorld);
+		gl->setUniform(mCityRenderProgram->getUniformLoc("normalToWorld"), toWorld.inverted().transposed());
+		gl->setUniform(mCityRenderProgram->getUniformLoc("lightPos"), lightPosition);
+		gl->setUniform(mCityRenderProgram->getUniformLoc("lightDirection"), lightDirection);
+		gl->setUniform(mCityRenderProgram->getUniformLoc("cameraPosition"), mCamPtr->getPosition());
+		gl->setUniform(mCityRenderProgram->getUniformLoc("lightColor"), lightColor);
+		gl->setUniform(mCityRenderProgram->getUniformLoc("fogColor"), fogColor);
+		gl->setUniform(mCityRenderProgram->getUniformLoc("particleSize"), FWSync::particleSize);
+		for (size_t i = 0; i < mTextureHandles.size(); ++i) {
+			if (!glIsTextureHandleResidentARB(mTextureHandles[i])) glMakeTextureHandleResidentARB(mTextureHandles[i]);
+			// bound to unit
+			char buf[32];
+			sprintf_s(buf, "diffuseSamplers[%d]", int(i));
+			GLint loc = mCityRenderProgram->getUniformLoc(buf);
+			glUniformHandleui64ARB(loc, mTextureHandles[i]);
+		}
 
-		gl->setUniform(mMeshProgram->getUniformLoc("prevToScreen"), prevMeshToScreen);
-		gl->setUniform(mMeshProgram->getUniformLoc("toScreen"), toScreen);
-		gl->setUniform(mMeshProgram->getUniformLoc("posToWorld"), toWorld);
-		gl->setUniform(mMeshProgram->getUniformLoc("normalToWorld"), normalToWorld);
-		gl->setUniform(mMeshProgram->getUniformLoc("cameraPos"), cameraPosition);
-		gl->setUniform(mMeshProgram->getUniformLoc("lightColor"), Vec3f(0.35f, 0.267f, 0.5f));
+		glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, mParticleMaterialSSBO);
 
-		/*gl->setUniform(mMeshObjectProgram->getUniformLoc("envMapTex"), 0);
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_CUBE_MAP, mSkyBoxTex);*/
+		glBindVertexArray(mCityVAO);
+		glEnable(GL_POINT_SMOOTH);
+		glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
+		glDrawArrays(GL_POINTS, 0, mNumCityParticles);
+		glBindVertexArray(0);
 
-		glBindBuffer(GL_ARRAY_BUFFER, mMesher->getTriangleVBO());
+		glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, 0);
 
-		glEnableVertexAttribArray(0); // position
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(DMT_TriangleUnit), 0);
-
-		glEnableVertexAttribArray(1); // normal
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(DMT_TriangleUnit), (GLvoid*)((char*)NULL + sizeof(float) * 8));
-		int numTrigs = mMesher->getNumTriangles();
-		if (0<numTrigs)glDrawArrays(GL_TRIANGLES, 0, numTrigs);
-
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-		prevMeshToScreen = toScreen;
-
+		for (size_t i = 0; i < mTextureHandles.size(); ++i) {
+			if (glIsTextureHandleResidentARB(mTextureHandles[i])) {
+				glMakeTextureHandleNonResidentARB(mTextureHandles[i]);
+			}
+		}
 	}
+
+	void TunnelScene::explodeCity(GLContext * gl)
+	{
+		mParticleMoveProgram->use();
+
+		gl->setUniform(mParticleMoveProgram->getUniformLoc("numParticles"), mNumCityParticles);
+
+		gl->setUniform(mParticleMoveProgram->getUniformLoc("dtUniform"), GLOBAL_DT);
+
+		glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, mCityVBO);
+
+		int localSizeX = 128;
+
+		int groupSizeX = (mNumCityParticles + localSizeX - 1) / localSizeX;
+
+		glDispatchCompute(groupSizeX, 1, 1);
+
+		glMemoryBarrier(GL_ALL_BARRIER_BITS);
+
+		glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, 0);
+	}
+	
+
 
 };

@@ -1144,7 +1144,7 @@ namespace FW {
 			starControlPoints[i] *= 8.0;
 		}
 
-		Curve starCurve = evalCatmullRomspline(starControlPoints, 20, false, 0.0, 0.0);
+		starCurve = evalCatmullRomspline(starControlPoints, 20, false, 0.0, 0.0);
 		mProfileNumIndices = starCurve.size();
 		mCurveSurfacesVAO.resize(mRibbonCurves.size());
 		mCurveSurfacesVBO.resize(mRibbonCurves.size());

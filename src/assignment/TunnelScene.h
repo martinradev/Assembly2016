@@ -4,7 +4,7 @@
 #include "FBO.h"
 #include "GBuffer.h"
 #include "Mesher.h"
-
+#include "TessellationTestScene.h"
 #include <memory>
 #include <vector>
 
@@ -14,7 +14,7 @@ namespace FW {
 
 	public:
 
-		TunnelScene(GLContext * ctx, int width, int height, FBO * lastPass, CameraControls * camPtr);
+		TunnelScene(GLContext * ctx, int width, int height, FBO * lastPass, CameraControls * camPtr, TessellationTestScene * tessScene);
 
 		void render(Window & wnd, const CameraControls & camera);
 		void handleAction(const Action & action, Window & wnd, CommonControls & controls);
@@ -26,7 +26,7 @@ namespace FW {
 	private:
 
 		void loadShaders(GLContext * ctx);
-
+		void generateParticles();
 		
 		int mWidth;
 		int mHeight;
@@ -35,14 +35,10 @@ namespace FW {
 	
 		std::unique_ptr<FBO> mGBuffer;
 		std::unique_ptr<FBO> mGodrayFBO;
-		std::unique_ptr<FBO> mMotionBlurFBO;
+		std::unique_ptr<FBO> mFogFBO;
 
 		GLContext::Program * mCombineProgram;
 		GLContext::Program * mDisplayProgram;
-		GLContext::Program * mTunnelProgram;
-		GLContext::Program * mMotionBlurProgram;
-		GLContext::Program * mMeshProgram;
-		GLContext::Program * mTunnelEngravingProgram;
 
 		GLuint mTunnelVAO;
 		GLuint mTunnelVBO;
@@ -52,13 +48,6 @@ namespace FW {
 		GLuint mTunnelNormalTexture;
 		GLuint mTunnelSpecularTexture;
 
-		GLuint mTunnelEngravingVAO;
-		GLuint mTunnelEngravingVBO;
-		GLuint mTunnelEngravingIBO;
-		GLuint mTunnelEngravingTransformationVBO;
-		int mTunnelEngravingNumIndices;
-		int mNumEngravings;
-
 		void setupGLBuffers();
 		GLuint mQuadVAO;
 		GLuint mQuadVBO;
@@ -67,16 +56,46 @@ namespace FW {
 		Vec4f m_knobs[10];
 
 		void generateTunnel();
+		void generateRibbon();
 
-		std::unique_ptr<Mesher> mMesher;
-		void renderMeshObject(GLContext * gl, const Mat4f & toScreen, const Mat4f & toWorld, const Mat4f & normalToWorld, const Vec3f & cameraPosition);
+		//std::unique_ptr<Mesher> mMesher;
+		//void renderMeshObject(GLContext * gl, const Mat4f & toScreen, const Mat4f & toWorld, const Mat4f & normalToWorld, const Vec3f & cameraPosition);
 
 		Vec3f getCameraForward(float t);
 		Vec3f getCameraUp(float t);
 		Vec3f getCameraPosition(float t);
 
+		TessellationTestScene * mTessScene;
 
 		friend class FinalScene;
+
+		int mNumCityParticles;
+		std::vector<GLuint64> mTextureHandles;
+
+		GLuint mCityVAO;
+		GLuint mCityVBO;
+		GLuint mParticleMaterialSSBO;
+
+		void lightPass();
+
+		typedef GLContext::Program Program;
+
+		Program * mCityRenderProgram;
+		Program * mCityLightRenderProgram;
+
+		Program * mMeteorRenderProgram;
+
+		void renderCity(GLContext * gl, const Mat4f & toScreen, const Vec3f & lightPosition, const Vec3f & lightDirection, const Vec3f & lightColor, const Vec3f & fogColor);
+
+		GLuint mMeteorVAO;
+		GLuint mMeteorVBO;
+		GLuint mMeteorIBO;
+		int mMeteorNumIndices;
+
+		Program * mParticleMoveProgram;
+
+		void renderMeteor(GLContext * gl, const Mat4f & toScreen);
+		void explodeCity(GLContext * gl);
 	};
 
 };

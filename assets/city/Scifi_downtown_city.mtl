@@ -17,6 +17,7 @@ Kd 1 1 1
 Ks 1 1 1
 Km 0
 map_Kd /Maps/fac_231.png
+map_kS /Maps/fac_231_light.png
 
 newmtl default_bldg2
 d 1
@@ -27,6 +28,7 @@ Kd 1 1 1
 Ks 1 1 1
 Km 0
 map_Kd /Maps/fac_240.png
+map_kS /Maps/fac_240_light.png
 
 newmtl default_bldg
 d 1
@@ -37,6 +39,7 @@ Kd 1 1 1
 Ks 1 1 1
 Km 0
 map_Kd /Maps/fac_250.png
+map_kS /Maps/fac_250_light.png
 
 newmtl default_sony_sign
 d 1
@@ -66,6 +69,7 @@ Kd 1 1 1
 Ks 1 1 1
 Km 0
 map_Kd /Maps/fac_231.png
+map_kS /Maps/fac_231_light.png
 
 newmtl default_bldg_bldg3
 d 1
@@ -137,6 +141,7 @@ Kd 1 1 1
 Ks 1 1 1
 Km 0
 map_Kd /Maps/fac_231.png
+map_kS /Maps/fac_231_light.png
 
 newmtl default_bldg1_1
 d 1
@@ -178,6 +183,7 @@ Kd 1 1 1
 Ks 1 1 1
 Km 0
 map_Kd /Maps/fma1_03.png
+map_kS /Maps/fma1_03_light.png
 
 newmtl default_bldg_bldg5b
 d 1
@@ -198,6 +204,7 @@ Kd 1 1 1
 Ks 1 1 1
 Km 0
 map_Kd /Maps/fma1_03.png
+map_kS /Maps/fma1_03_light.png
 
 newmtl default_bldgs
 d 1
@@ -248,6 +255,7 @@ Kd 1 1 1
 Ks 1 1 1
 Km 0
 map_Kd /Maps/fac_280.png
+map_kS /Maps/fac_280_light.png
 
 newmtl default_bldg12
 d 1
@@ -278,6 +286,7 @@ Kd 1 1 1
 Ks 1 1 1
 Km 0
 map_Kd /Maps/fac_291.png
+map_kS /Maps/fac_291_light.png
 
 newmtl default_bldg11b
 d 1
@@ -288,6 +297,7 @@ Kd 1 1 1
 Ks 1 1 1
 Km 0
 map_Kd /Maps/fma1_03.png
+map_kS /Maps/fma1_03_light.png
 
 newmtl default_bldg1_2
 d 1
@@ -298,6 +308,8 @@ Kd 1 1 1
 Ks 1 1 1
 Km 0
 map_Kd /Maps/fac_240.png
+map_kS /Maps/fac_240_light.png
+
 
 newmtl default_bldg4_2
 d 1
@@ -328,6 +340,7 @@ Kd 1 1 1
 Ks 1 1 1
 Km 0
 map_Kd /Maps/fac_231.png
+map_kS /Maps/fac_231_light.png
 
 newmtl default_bldg8_1
 d 1
@@ -397,6 +410,7 @@ Kd 1 1 1
 Ks 1 1 1
 Km 0
 map_Kd /Maps/fac_291.png
+map_kS /Maps/fac_291_light.png
 
 newmtl default_beacon
 d 1
@@ -416,6 +430,7 @@ Kd 1 1 1
 Ks 1 1 1
 Km 0
 map_Kd /Maps/fac_280.png
+map_kS /Maps/fac_280_light.png
 
 newmtl default_fluid_processor_2
 d 1
@@ -487,6 +502,7 @@ Kd 1 1 1
 Ks 1 1 1
 Km 0
 map_Kd /Maps/fac_180.png
+map_kS /Maps/fac_180_light.png
 
 newmtl default_bldg_bldg_plant
 d 1
@@ -497,6 +513,7 @@ Kd 1 1 1
 Ks 1 1 1
 Km 0
 map_Kd /Maps/fac_160.png
+map_kS /Maps/fac_160_light.png
 
 newmtl default_bridge3
 d 1

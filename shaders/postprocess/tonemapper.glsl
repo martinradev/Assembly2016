@@ -142,6 +142,7 @@ void main()
 		newUV.y = 1.0 - uv.y;
 		vec4 overlayValue = texture(overlay, newUV);
 		//overlayValue.a = step(overlayAlpha, overlayValue.a);
+		cl = clamp(cl, vec3(0), vec3(1));
 		cl += overlayValue.xyz * overlayValue.a * overlayAlpha;
 	}
 	

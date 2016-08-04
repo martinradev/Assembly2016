@@ -37,6 +37,7 @@
 		<key row="2999" value="1.000000" interpolation="1"/>
 		<key row="3015" value="0.100000" interpolation="2"/>
 		<key row="3019" value="1.000000" interpolation="0"/>
+		<key row="3124" value="0.900000" interpolation="0"/>
 		<key row="3834" value="1.000000" interpolation="1"/>
 		<key row="3846" value="0.000000" interpolation="1"/>
 		<key row="3869" value="1.000000" interpolation="0"/>
@@ -127,6 +128,7 @@
 		<key row="2005" value="8.000000" interpolation="1"/>
 		<key row="2049" value="1200.000000" interpolation="1"/>
 		<key row="2174" value="2300.000000" interpolation="0"/>
+		<key row="3120" value="0.000000" interpolation="0"/>
 	</track>
 	<track name="ribbon_end">
 		<key row="671" value="0.000000" interpolation="1"/>
@@ -135,6 +137,8 @@
 		<key row="1318" value="3250.000000" interpolation="0"/>
 		<key row="1921" value="0.000000" interpolation="1"/>
 		<key row="2063" value="2300.000000" interpolation="0"/>
+		<key row="3120" value="0.000000" interpolation="1"/>
+		<key row="3231" value="1400.000000" interpolation="0"/>
 	</track>
 	<track name="bloom_lumi">
 		<key row="0" value="0.000000" interpolation="1"/>
@@ -146,6 +150,7 @@
 		<key row="1421" value="0.600000" interpolation="0"/>
 		<key row="1921" value="0.100000" interpolation="0"/>
 		<key row="3015" value="0.050000" interpolation="0"/>
+		<key row="3124" value="0.100000" interpolation="0"/>
 		<key row="3846" value="0.020000" interpolation="0"/>
 	</track>
 	<track name="bloom_thre">
@@ -157,6 +162,8 @@
 		<key row="1533" value="0.500000" interpolation="0"/>
 		<key row="1921" value="0.200000" interpolation="0"/>
 		<key row="3015" value="0.060000" interpolation="0"/>
+		<key row="3124" value="0.900000" interpolation="0"/>
+		<key row="3206" value="10.000000" interpolation="0"/>
 		<key row="3846" value="0.030000" interpolation="0"/>
 	</track>
 	<track name="bloom_offset">
@@ -170,12 +177,15 @@
 		<key row="1533" value="0.100000" interpolation="0"/>
 		<key row="1921" value="2.000000" interpolation="0"/>
 		<key row="3015" value="0.400000" interpolation="0"/>
+		<key row="3124" value="4.000000" interpolation="0"/>
+		<key row="3206" value="80.000000" interpolation="0"/>
 		<key row="3846" value="6.000000" interpolation="0"/>
 	</track>
 	<track name="exposure">
 		<key row="0" value="4.000000" interpolation="0"/>
 		<key row="1921" value="1.200000" interpolation="0"/>
 		<key row="3015" value="3.000000" interpolation="0"/>
+		<key row="3124" value="1.000000" interpolation="0"/>
 	</track>
 	<track name="nef_p_step">
 		<key row="1921" value="0.000000" interpolation="0"/>
@@ -571,6 +581,7 @@
 		<key row="1921" value="55.000000" interpolation="0"/>
 		<key row="3016" value="130.000000" interpolation="1"/>
 		<key row="3040" value="60.000000" interpolation="0"/>
+		<key row="3124" value="20.000000" interpolation="0"/>
 	</track>
 	<track name="knot_rotate">
 		<key row="3838" value="0.000000" interpolation="1"/>
@@ -586,5 +597,10 @@
 		<key row="271" value="4.000000" interpolation="0"/>
 		<key row="1920" value="2.000000" interpolation="0"/>
 		<key row="3846" value="4.000000" interpolation="0"/>
+	</track>
+	<track name="particle_size">
+		<key row="3124" value="2.000000" interpolation="1"/>
+		<key row="3211" value="4.000000" interpolation="0"/>
+		<key row="3215" value="3.000000" interpolation="0"/>
 	</track>
 </tracks>

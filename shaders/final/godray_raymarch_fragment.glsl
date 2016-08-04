@@ -107,7 +107,7 @@ void main()
 			lv += cosD * lightColor * q2 * q1 ;
 		}
 		else {
-			lv -= vec3(0.00007);
+			//lv -= vec3(0.000007);
 		}
 
 	}
