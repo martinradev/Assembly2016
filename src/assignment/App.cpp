@@ -37,6 +37,9 @@
 #include <omp.h>
 using namespace FW;
 
+// Define this when doing a release build for the compo.
+//#define DEMORELEASE
+
 // extern to be used from all scenes
 unsigned activeKnob;
 bool updateGUIExt;
@@ -296,7 +299,9 @@ void App::renderFrame(GLContext* gl)
 		m_scene = mFinalScene;
 	}
 	else if (FWSync::sceneIndex > 5.0f) {
+#if DEMORELEASE
 		exit(0);
+#endif
 	}
 
 	m_cameraCtrl.setFOV(FWSync::fov);
