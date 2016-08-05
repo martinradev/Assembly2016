@@ -141,59 +141,74 @@ namespace FW {
 
 		std::vector<ParticleInfo> particleData(mNumCityParticles);
 
-		for (int i = 0; i < cityMesh->numSubmeshes(); ++i)
-		{
-
-			// copy material
-			const auto & cMaterial = cityMesh->material(i);;
-
-			int useDiffuseTexId = -1;
-			const auto & diffuseTex = cMaterial.textures[MeshBase::TextureType_Diffuse];
-			if (diffuseTex.exists())
+		// Spawn particles until we have hit the limit
+		while (cParticle < mNumCityParticles) {
+			for (int i = 0; i < cityMesh->numSubmeshes(); ++i)
 			{
-				GLuint textureHandle = diffuseTex.getGLTexture();
-				textureMapIterator = textureMap.find(textureHandle);
+				// copy material
+				const auto & cMaterial = cityMesh->material(i);;
 
-				if (textureMapIterator == textureMap.end())
+				int useDiffuseTexId = -1;
+				const auto & diffuseTex = cMaterial.textures[MeshBase::TextureType_Diffuse];
+				if (diffuseTex.exists())
 				{
-					GLuint64 cTexHandle = glGetTextureHandleARB(textureHandle);
-					useDiffuseTexId = mTextureHandles.size();
-					mTextureHandles.push_back(cTexHandle);
-					textureMap[cTexHandle] = useDiffuseTexId;
-				}
-				else {
-					useDiffuseTexId = textureMapIterator->second;
-				}
-			}
+					GLuint textureHandle = diffuseTex.getGLTexture();
+					textureMapIterator = textureMap.find(textureHandle);
 
-			materials[i] = ParticleMaterial(cMaterial.diffuse.getXYZ(), useDiffuseTexId, cMaterial.specular, -1);
-
-			const Array<Vec3i>& idx = cityMesh->indices(i);
-			for (int j = 0; j < idx.getSize(); ++j)
-			{
-
-				const VertexPNTC &v0 = cityMesh->vertex(idx[j][0]),
-					&v1 = cityMesh->vertex(idx[j][1]),
-					&v2 = cityMesh->vertex(idx[j][2]);
-
-
-
-				for (int k = 0; k < particlesPerTriangle; ++k) {
-					float u1 = rnd.getF32(0.0f, 1.0f);
-					float u2 = rnd.getF32(0.0f, 1.0f);
-					float su1 = sqrtf(u1);
-					float u = 1.0f - su1;
-					float v = su1 * u2;
-					Vec3f point = barycentricInterpolation(u, v, v0.p, v1.p, v2.p);
-					Vec3f rndVec = rnd.getVec3f(-1.0f, 1.0f).normalized();
-					Vec3f normal = barycentricInterpolation(u, v, v0.n, v1.n, v2.n).normalized();
-					Vec2f trigUV = barycentricInterpolation(u, v, v0.t, v1.t, v2.t);
-					particleData[cParticle] = ParticleInfo(Vec4f(point, trigUV.x), Vec4f(normal, trigUV.y), i);
-					++cParticle;
+					if (textureMapIterator == textureMap.end())
+					{
+						GLuint64 cTexHandle = glGetTextureHandleARB(textureHandle);
+						useDiffuseTexId = mTextureHandles.size();
+						mTextureHandles.push_back(cTexHandle);
+						textureMap[cTexHandle] = useDiffuseTexId;
+					}
+					else {
+						useDiffuseTexId = textureMapIterator->second;
+					}
 				}
 
+				materials[i] = ParticleMaterial(cMaterial.diffuse.getXYZ(), useDiffuseTexId, cMaterial.specular, -1);
+
+				const Array<Vec3i>& idx = cityMesh->indices(i);
+				for (int j = 0; j < idx.getSize(); ++j)
+				{
+
+					const VertexPNTC &v0 = cityMesh->vertex(idx[j][0]),
+						&v1 = cityMesh->vertex(idx[j][1]),
+						&v2 = cityMesh->vertex(idx[j][2]);
+
+					const Vec3f p0 = v1.p - v0.p;
+					const Vec3f p1 = v2.p - v0.p;
+					const float area = p0.cross(p1).length() / 2.0f;
+					// take the log of area, a hack to deal with really big polygons
+					const float logArea = FW::log(1.0f + area);
+
+					for (int k = 0; k < particlesPerTriangle; ++k) {
+						if (rnd.getF32(0.0f, 3.0f) > area) {
+							break;
+						}
+						float u1 = rnd.getF32(0.0f, 1.0f);
+						float u2 = rnd.getF32(0.0f, 1.0f);
+						float su1 = sqrtf(u1);
+						float u = 1.0f - su1;
+						float v = su1 * u2;
+						Vec3f point = barycentricInterpolation(u, v, v0.p, v1.p, v2.p);
+						Vec3f rndVec = rnd.getVec3f(-1.0f, 1.0f).normalized();
+						Vec3f normal = barycentricInterpolation(u, v, v0.n, v1.n, v2.n).normalized();
+						Vec2f trigUV = barycentricInterpolation(u, v, v0.t, v1.t, v2.t);
+						particleData[cParticle] = ParticleInfo(Vec4f(point, trigUV.x), Vec4f(normal, trigUV.y), i);
+						++cParticle;
+
+						if (cParticle >= mNumCityParticles) {
+							goto generationDone;
+						}
+					}
+				}
 			}
 		}
+
+		// we jump here once enough particles have been spawned
+		generationDone:
 
 		std::sort(particleData.begin(), particleData.end(), CityParticleComparator());
 
