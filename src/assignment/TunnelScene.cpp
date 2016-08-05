@@ -123,7 +123,8 @@ namespace FW {
 
 	void TunnelScene::generateParticles() {
 
-		Mesh<VertexPNTC> * cityMesh = (Mesh<VertexPNTC>*)importMesh("assets/city/city_tesselated.obj");
+		//Mesh<VertexPNTC> * cityMesh = (Mesh<VertexPNTC>*)importMesh("assets/city/city_tesselated.obj");
+		Mesh<VertexPNTC> * cityMesh = (Mesh<VertexPNTC>*)importMesh("assets/city/Scifi downtown city.obj");
 
 		std::vector<ParticleMaterial> materials(cityMesh->numSubmeshes());
 
@@ -140,34 +141,38 @@ namespace FW {
 		Random rnd;
 
 		std::vector<ParticleInfo> particleData(mNumCityParticles);
+		for (int i = 0; i < cityMesh->numSubmeshes(); ++i)
+		{
+			// copy material
+			const auto & cMaterial = cityMesh->material(i);;
+
+			int useDiffuseTexId = -1;
+			const auto & diffuseTex = cMaterial.textures[MeshBase::TextureType_Diffuse];
+			if (diffuseTex.exists())
+			{
+				GLuint textureHandle = diffuseTex.getGLTexture();
+				textureMapIterator = textureMap.find(textureHandle);
+
+				if (textureMapIterator == textureMap.end())
+				{
+					GLuint64 cTexHandle = glGetTextureHandleARB(textureHandle);
+					useDiffuseTexId = mTextureHandles.size();
+					mTextureHandles.push_back(cTexHandle);
+					textureMap[cTexHandle] = useDiffuseTexId;
+				}
+				else {
+					useDiffuseTexId = textureMapIterator->second;
+				}
+			}
+
+			materials[i] = ParticleMaterial(cMaterial.diffuse.getXYZ(), useDiffuseTexId, cMaterial.specular, -1);
+		}
 
 		// Spawn particles until we have hit the limit
 		while (cParticle < mNumCityParticles) {
+
 			for (int i = 0; i < cityMesh->numSubmeshes(); ++i)
 			{
-				// copy material
-				const auto & cMaterial = cityMesh->material(i);;
-
-				int useDiffuseTexId = -1;
-				const auto & diffuseTex = cMaterial.textures[MeshBase::TextureType_Diffuse];
-				if (diffuseTex.exists())
-				{
-					GLuint textureHandle = diffuseTex.getGLTexture();
-					textureMapIterator = textureMap.find(textureHandle);
-
-					if (textureMapIterator == textureMap.end())
-					{
-						GLuint64 cTexHandle = glGetTextureHandleARB(textureHandle);
-						useDiffuseTexId = mTextureHandles.size();
-						mTextureHandles.push_back(cTexHandle);
-						textureMap[cTexHandle] = useDiffuseTexId;
-					}
-					else {
-						useDiffuseTexId = textureMapIterator->second;
-					}
-				}
-
-				materials[i] = ParticleMaterial(cMaterial.diffuse.getXYZ(), useDiffuseTexId, cMaterial.specular, -1);
 
 				const Array<Vec3i>& idx = cityMesh->indices(i);
 				for (int j = 0; j < idx.getSize(); ++j)
@@ -180,13 +185,10 @@ namespace FW {
 					const Vec3f p0 = v1.p - v0.p;
 					const Vec3f p1 = v2.p - v0.p;
 					const float area = p0.cross(p1).length() / 2.0f;
-					// take the log of area, a hack to deal with really big polygons
-					const float logArea = FW::log(1.0f + area);
 
-					for (int k = 0; k < particlesPerTriangle; ++k) {
-						if (rnd.getF32(0.0f, 3.0f) > area) {
-							break;
-						}
+					int count = (int)floor(area);
+
+					for (int k = 0; k < count; ++k) {
 						float u1 = rnd.getF32(0.0f, 1.0f);
 						float u2 = rnd.getF32(0.0f, 1.0f);
 						float su1 = sqrtf(u1);
