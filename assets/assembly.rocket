@@ -34,6 +34,7 @@
 		<key row="247" value="1.000000" interpolation="1"/>
 		<key row="271" value="0.200000" interpolation="1"/>
 		<key row="276" value="1.000000" interpolation="0"/>
+		<key row="1921" value="4.000000" interpolation="0"/>
 		<key row="2999" value="1.000000" interpolation="1"/>
 		<key row="3015" value="0.100000" interpolation="2"/>
 		<key row="3019" value="1.000000" interpolation="0"/>
@@ -148,7 +149,7 @@
 		<key row="730" value="0.600000" interpolation="0"/>
 		<key row="1373" value="0.020000" interpolation="1"/>
 		<key row="1421" value="0.600000" interpolation="0"/>
-		<key row="1921" value="0.100000" interpolation="0"/>
+		<key row="1921" value="0.500000" interpolation="0"/>
 		<key row="3015" value="0.050000" interpolation="0"/>
 		<key row="3124" value="0.100000" interpolation="0"/>
 		<key row="3846" value="0.020000" interpolation="0"/>
@@ -160,7 +161,7 @@
 		<key row="670" value="0.100000" interpolation="0"/>
 		<key row="1478" value="0.600000" interpolation="1"/>
 		<key row="1533" value="0.500000" interpolation="0"/>
-		<key row="1921" value="0.200000" interpolation="0"/>
+		<key row="1921" value="1.000000" interpolation="0"/>
 		<key row="3015" value="0.060000" interpolation="0"/>
 		<key row="3124" value="0.900000" interpolation="0"/>
 		<key row="3206" value="10.000000" interpolation="0"/>
@@ -175,7 +176,7 @@
 		<key row="1072" value="25.000000" interpolation="0"/>
 		<key row="1478" value="0.600000" interpolation="1"/>
 		<key row="1533" value="0.100000" interpolation="0"/>
-		<key row="1921" value="2.000000" interpolation="0"/>
+		<key row="1921" value="3.000000" interpolation="0"/>
 		<key row="3015" value="0.400000" interpolation="0"/>
 		<key row="3124" value="4.000000" interpolation="0"/>
 		<key row="3206" value="80.000000" interpolation="0"/>
@@ -514,6 +515,7 @@
 		<key row="0" value="-2.000000" interpolation="0"/>
 		<key row="336" value="0.000000" interpolation="0"/>
 		<key row="452" value="-1.000000" interpolation="0"/>
+		<key row="1920" value="-1.000000" interpolation="0"/>
 		<key row="3878" value="1.000000" interpolation="0"/>
 	</track>
 	<track name="overlay_a">
