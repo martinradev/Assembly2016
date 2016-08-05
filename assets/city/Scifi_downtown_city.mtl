@@ -28,7 +28,7 @@ Kd 1 1 1
 Ks 1 1 1
 Km 0
 map_Kd /Maps/fac_240.png
-map_kS /Maps/fac_240_light.png
+#map_kS /Maps/fac_240_light.png
 
 newmtl default_bldg
 d 1
@@ -39,7 +39,7 @@ Kd 1 1 1
 Ks 1 1 1
 Km 0
 map_Kd /Maps/fac_250.png
-map_kS /Maps/fac_250_light.png
+#map_kS /Maps/fac_250_light.png
 
 newmtl default_sony_sign
 d 1
@@ -69,7 +69,7 @@ Kd 1 1 1
 Ks 1 1 1
 Km 0
 map_Kd /Maps/fac_231.png
-map_kS /Maps/fac_231_light.png
+#map_kS /Maps/fac_231_light.png
 
 newmtl default_bldg_bldg3
 d 1
@@ -141,7 +141,7 @@ Kd 1 1 1
 Ks 1 1 1
 Km 0
 map_Kd /Maps/fac_231.png
-map_kS /Maps/fac_231_light.png
+#map_kS /Maps/fac_231_light.png
 
 newmtl default_bldg1_1
 d 1
@@ -266,7 +266,7 @@ Kd 1 1 1
 Ks 1 1 1
 Km 0
 map_Kd /Maps/fac_231.png
-map_kS /Maps/fac_231_light.png
+#map_kS /Maps/fac_231_light.png
 
 newmtl default_bank_sign
 d 1
@@ -308,7 +308,7 @@ Kd 1 1 1
 Ks 1 1 1
 Km 0
 map_Kd /Maps/fac_240.png
-map_kS /Maps/fac_240_light.png
+#map_kS /Maps/fac_240_light.png
 
 
 newmtl default_bldg4_2
@@ -340,7 +340,7 @@ Kd 1 1 1
 Ks 1 1 1
 Km 0
 map_Kd /Maps/fac_231.png
-map_kS /Maps/fac_231_light.png
+#map_kS /Maps/fac_231_light.png
 
 newmtl default_bldg8_1
 d 1
@@ -461,7 +461,7 @@ Kd 1 1 1
 Ks 1 1 1
 Km 0
 map_Kd /Maps/fac_250.png
-map_kS /Maps/fac_250_light.png
+#map_kS /Maps/fac_250_light.png
 
 newmtl default_floors_bldg16
 d 1

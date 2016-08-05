@@ -37,7 +37,7 @@ uniform vec3 cameraPosition;
 
 uniform vec2 ldSamples[36];
 
-vec3 calcLight(vec3 h, vec3 n, vec3 dir, vec3 difColor, vec3 intensity) {
+vec3 calcLight(vec3 h, vec3 n, vec3 dir, vec3 difColor, vec3 intensity, float specularMask) {
 	vec3 diffuse;
 	diffuse = clamp(dot(n, dir), 0.0, 1.0) * difColor;
 	vec3 specular = vec3(1.0) * pow(max(0, dot(h, n)), 100.0);
@@ -90,11 +90,12 @@ void main() {
 	
 	float s = exp(-0.00055*depthFrag);
 	
-	vec3 color = calcLight(h,normalFrag,-lightDirection,difColor,lightColor);
+	float specMask = texture(specularSampler, uvFrag).r;
+	
+	vec3 color = calcLight(h,normalFrag,-lightDirection,difColor,lightColor, specMask);
 	float pcf = getShadowI(positionFrag);
 	color.rgb = mix(color.rgb, 0.05*color.rgb,  pcf);
 	color.rgb = mix(seaColor, color.rgb, s);
-	
 	
 	
 	if (useSpecularMap)
@@ -105,7 +106,7 @@ void main() {
 		a = smoothstep(0.8, 2.5, a);
 		a = step(2000.0, positionFrag.y)*a;
 		color.rgb += 60.0*a*specColor;
-	}	
+	}
 	
 	fragColor = vec4(color, 1.0);
 	normal = vec4(normalFrag, uvFrag.s);
