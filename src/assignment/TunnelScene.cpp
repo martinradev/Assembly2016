@@ -124,7 +124,7 @@ namespace FW {
 	void TunnelScene::generateParticles() {
 
 		//Mesh<VertexPNTC> * cityMesh = (Mesh<VertexPNTC>*)importMesh("assets/city/city_tesselated.obj");
-		Mesh<VertexPNTC> * cityMesh = (Mesh<VertexPNTC>*)importMesh("assets/city/Scifi downtown city.obj");
+		Mesh<VertexPNTC> * cityMesh = (Mesh<VertexPNTC>*)importMesh("assets/city/city_lightmapped.obj");
 
 		std::vector<ParticleMaterial> materials(cityMesh->numSubmeshes());
 

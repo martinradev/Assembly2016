@@ -77,7 +77,8 @@ void main() {
 		gl_PointCoord.x * 0.25 + uvOffsetX, 
 		gl_PointCoord.y);
 	vec4 color = texture(bokehTextureStrip, uv);
-	color.a = color.r * 0.01;	
+	color.rgb *= difColorIN;
+	color.a = color.r * 0.02;	
 	//color.rg = gl_PointCoord.xy;
 	//color.rg = vec2(1.0);
 	colorOUT = color;
