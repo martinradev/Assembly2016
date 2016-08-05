@@ -522,6 +522,8 @@
 		<key row="339" value="1.000000" interpolation="0"/>
 		<key row="421" value="1.000000" interpolation="1"/>
 		<key row="451" value="0.000000" interpolation="0"/>
+		<key row="1920" value="0.000000" interpolation="3"/>
+		<key row="3016" value="0.250000" interpolation="0"/>
 		<key row="3878" value="0.000000" interpolation="1"/>
 		<key row="3883" value="1.000000" interpolation="0"/>
 		<key row="4048" value="1.000000" interpolation="1"/>
