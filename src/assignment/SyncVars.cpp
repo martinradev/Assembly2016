@@ -94,6 +94,7 @@ namespace FWSync {
 	SYNC_DEF(budhaScale);
 
 	SYNC_DEF(particleSize);
+	SYNC_DEF(particleDim);
 
 	static const float bpm = 150.0f; /* beats per minute */
 	static const float rpb = 8.0f; /* rows per beat */
@@ -223,6 +224,7 @@ namespace FWSync {
 		budhaScalePtr = sync_get_track(rocket, "budha_scale");
 
 		particleSizePtr = sync_get_track(rocket, "particle_size");
+		particleDimPtr = sync_get_track(rocket, "particle_dim");
 	}
 
 
@@ -314,6 +316,7 @@ namespace FWSync {
 		budhaScale = sync_get_val(FWSync::budhaScalePtr, row);
 
 		particleSize = sync_get_val(FWSync::particleSizePtr, row);
+		particleDim = sync_get_val(FWSync::particleDimPtr, row);
 	}
 
 };

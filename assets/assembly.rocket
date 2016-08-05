@@ -200,19 +200,23 @@
 		<key row="1921" value="0.000000" interpolation="0"/>
 		<key row="2472" value="0.000000" interpolation="1"/>
 		<key row="2555" value="0.100000" interpolation="0"/>
+		<key row="3019" value="0.000000" interpolation="0"/>
 	</track>
 	<track name="nef_curl_step">
 		<key row="1921" value="0.000000" interpolation="0"/>
 		<key row="2472" value="0.000000" interpolation="1"/>
 		<key row="2555" value="0.300000" interpolation="0"/>
+		<key row="3019" value="0.000000" interpolation="0"/>
 	</track>
 	<track name="cloud_p_step">
 		<key row="1921" value="0.100000" interpolation="0"/>
 		<key row="2472" value="0.400000" interpolation="0"/>
+		<key row="3019" value="0.000000" interpolation="0"/>
 	</track>
 	<track name="cloud_curl_step">
 		<key row="1921" value="0.000000" interpolation="0"/>
 		<key row="2472" value="2.200000" interpolation="0"/>
+		<key row="3019" value="0.000000" interpolation="0"/>
 	</track>
 	<track name="nefertiti_alpha">
 		<key row="1921" value="0.000000" interpolation="0"/>
@@ -611,8 +615,12 @@
 		<key row="3846" value="4.000000" interpolation="0"/>
 	</track>
 	<track name="particle_size">
+		<key row="3027" value="3.000000" interpolation="0"/>
 		<key row="3124" value="2.000000" interpolation="1"/>
 		<key row="3211" value="4.000000" interpolation="0"/>
 		<key row="3215" value="3.000000" interpolation="0"/>
+	</track>
+	<track name="particle_dim">
+		<key row="3016" value="0.000000" interpolation="0"/>
 	</track>
 </tracks>

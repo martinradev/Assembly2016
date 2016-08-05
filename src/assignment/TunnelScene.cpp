@@ -537,6 +537,7 @@ namespace FW {
 		gl->setUniform(mCityRenderProgram->getUniformLoc("lightColor"), lightColor);
 		gl->setUniform(mCityRenderProgram->getUniformLoc("fogColor"), fogColor);
 		gl->setUniform(mCityRenderProgram->getUniformLoc("particleSize"), FWSync::particleSize);
+		gl->setUniform(mCityRenderProgram->getUniformLoc("particleDim"), FWSync::particleDim);
 
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, mBokehTexture);

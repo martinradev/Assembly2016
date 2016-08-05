@@ -32,6 +32,7 @@ uniform vec3 cameraPosition;
 uniform vec3 lightDirection;
 uniform vec3 lightColor;
 uniform vec3 fogColor;
+uniform float particleDim;
 
 vec3 calcLight(vec3 h, vec3 n, vec3 dir, vec3 difColor, vec3 intensity, vec3 specularMatColor) {
 	vec3 diffuse;
@@ -78,7 +79,9 @@ void main() {
 		gl_PointCoord.y);
 	vec4 color = texture(bokehTextureStrip, uv);
 	color.rgb *= difColorIN;
-	color.a = color.r * 0.02;	
+	color.a = color.r * 0.02;
+	color.rgb = mix(color.rgb, color.rgb * 0.1, particleDim);
+	
 	//color.rg = gl_PointCoord.xy;
 	//color.rg = vec2(1.0);
 	colorOUT = color;
