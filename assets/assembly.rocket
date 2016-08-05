@@ -110,6 +110,9 @@
 	<track name="rr_alpha">
 		<key row="0" value="0.000000" interpolation="0"/>
 		<key row="1108" value="1.000000" interpolation="0"/>
+		<key row="1921" value="1.000000" interpolation="0"/>
+		<key row="2550" value="0.000000" interpolation="2"/>
+		<key row="2696" value="1.000000" interpolation="0"/>
 	</track>
 	<track name="cam_idx">
 		<key row="0" value="0.000000" interpolation="0"/>
@@ -150,6 +153,7 @@
 		<key row="1373" value="0.020000" interpolation="1"/>
 		<key row="1421" value="0.600000" interpolation="0"/>
 		<key row="1921" value="0.500000" interpolation="0"/>
+		<key row="2165" value="0.040000" interpolation="0"/>
 		<key row="3015" value="0.050000" interpolation="0"/>
 		<key row="3124" value="0.100000" interpolation="0"/>
 		<key row="3846" value="0.020000" interpolation="0"/>
@@ -162,6 +166,7 @@
 		<key row="1478" value="0.600000" interpolation="1"/>
 		<key row="1533" value="0.500000" interpolation="0"/>
 		<key row="1921" value="1.000000" interpolation="0"/>
+		<key row="2165" value="1.500000" interpolation="0"/>
 		<key row="3015" value="0.060000" interpolation="0"/>
 		<key row="3124" value="0.900000" interpolation="0"/>
 		<key row="3206" value="10.000000" interpolation="0"/>
@@ -214,9 +219,8 @@
 	</track>
 	<track name="godray_weight">
 		<key row="1921" value="28.000000" interpolation="1"/>
-		<key row="2049" value="120.000000" interpolation="3"/>
-		<key row="2088" value="15.000000" interpolation="1"/>
-		<key row="2096" value="1.000000" interpolation="0"/>
+		<key row="1968" value="120.000000" interpolation="2"/>
+		<key row="2096" value="0.000000" interpolation="0"/>
 		<key row="2184" value="1.000000" interpolation="1"/>
 		<key row="2188" value="5.000000" interpolation="1"/>
 		<key row="2194" value="1.000000" interpolation="0"/>

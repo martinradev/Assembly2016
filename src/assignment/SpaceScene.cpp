@@ -67,6 +67,7 @@ namespace FW {
 
 		mGaussiaFilter.reset(new GaussianFilter(ctx, mWndSize));
 
+		glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS); // not actually required during creation, only when rendering
 		loadSkybox();
 	}
 
@@ -650,8 +651,9 @@ namespace FW {
 
 		gl->setUniform(mBackgroundProgram->getUniformLoc("inTex"), 0);
 		gl->setUniform(mBackgroundProgram->getUniformLoc("inStarTex"), 1);
-		// we abuse overlay alpha channel here
+		// we abuse overlay alpha and rocket ribbon alpha here
 		gl->setUniform(mBackgroundProgram->getUniformLoc("inScrollX"), FWSync::overlayAlpha); 
+		gl->setUniform(mBackgroundProgram->getUniformLoc("inBackgroundFade"), FWSync::rocketRibbonAlpha); 
 		gl->setUniform(mBackgroundProgram->getUniformLoc("inAspect"), 720.0f / 1280.f);
 
 		glBindVertexArray(mQuadVAO);
