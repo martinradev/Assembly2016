@@ -32,7 +32,8 @@ void main() {
 	const float MAX_POINT_SIZE = 62.0;
 	const float MIN_POINT_SIZE = 1.0;
 	
-	gl_PointSize = particleSize;
+	float sizeJitter = 0.1 + 2.0*abs(sin(float(gl_VertexID)));
+	gl_PointSize = (10000.0/depth) * sizeJitter;
 	
 	depthFrag = depth;
 }

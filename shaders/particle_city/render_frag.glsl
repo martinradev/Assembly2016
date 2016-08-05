@@ -41,14 +41,15 @@ vec3 calcLight(vec3 h, vec3 n, vec3 dir, vec3 difColor, vec3 intensity, vec3 spe
 
 void main() {
    
-	
-	ParticleMaterial mat = materials[materialIndexFrag];
-	
+   ParticleMaterial mat = materials[materialIndexFrag];
 	vec3 difColorIN;
+	difColorIN = mat.diffuseColor;
+	
+	/*
 	vec3 specularMatColor;
 	if (mat.diffuseTextureIndex == -1)
 	{
-		difColorIN = mat.diffuseColor;
+		
 	}
 	else
 	{
@@ -66,9 +67,10 @@ void main() {
 	
 	vec3 color = difColorIN;
 	color.rgb = mix(fogColor, color.rgb, s);
+	*/
 	
-	
+	vec3 color = difColorIN * 1.0;
 
-	colorOUT = vec4(color, 1.0);
+	colorOUT = vec4(color, 0.01);
 	positionOUT = vec4(positionFrag, uvFrag.t);
 }

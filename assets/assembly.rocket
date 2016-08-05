@@ -2,6 +2,7 @@
 	<track name="simStep">
 		<key row="1922" value="20000.000000" interpolation="0"/>
 		<key row="3847" value="30000.000000" interpolation="0"/>
+		<key row="4318" value="30000.000000" interpolation="0"/>
 	</track>
 	<track name="curlStep">
 		<key row="0" value="0.000000" interpolation="0"/>
@@ -37,7 +38,7 @@
 		<key row="1921" value="4.000000" interpolation="0"/>
 		<key row="2999" value="1.000000" interpolation="1"/>
 		<key row="3015" value="0.100000" interpolation="2"/>
-		<key row="3019" value="1.000000" interpolation="0"/>
+		<key row="3019" value="1.100000" interpolation="0"/>
 		<key row="3124" value="0.900000" interpolation="0"/>
 		<key row="3834" value="1.000000" interpolation="1"/>
 		<key row="3846" value="0.000000" interpolation="1"/>
@@ -110,7 +111,8 @@
 	<track name="rr_alpha">
 		<key row="0" value="0.000000" interpolation="0"/>
 		<key row="1108" value="1.000000" interpolation="0"/>
-		<key row="1921" value="1.000000" interpolation="0"/>
+		<key row="1921" value="1.000000" interpolation="1"/>
+		<key row="1928" value="0.000000" interpolation="0"/>
 		<key row="2550" value="0.000000" interpolation="2"/>
 		<key row="2696" value="1.000000" interpolation="0"/>
 	</track>
@@ -168,6 +170,7 @@
 		<key row="1921" value="1.000000" interpolation="0"/>
 		<key row="2165" value="1.500000" interpolation="0"/>
 		<key row="3015" value="0.060000" interpolation="0"/>
+		<key row="3016" value="100.000000" interpolation="0"/>
 		<key row="3124" value="0.900000" interpolation="0"/>
 		<key row="3206" value="10.000000" interpolation="0"/>
 		<key row="3846" value="0.030000" interpolation="0"/>
@@ -182,7 +185,7 @@
 		<key row="1478" value="0.600000" interpolation="1"/>
 		<key row="1533" value="0.100000" interpolation="0"/>
 		<key row="1921" value="3.000000" interpolation="0"/>
-		<key row="3015" value="0.400000" interpolation="0"/>
+		<key row="3015" value="4.000000" interpolation="0"/>
 		<key row="3124" value="4.000000" interpolation="0"/>
 		<key row="3206" value="80.000000" interpolation="0"/>
 		<key row="3846" value="6.000000" interpolation="0"/>
@@ -221,9 +224,10 @@
 		<key row="1921" value="28.000000" interpolation="1"/>
 		<key row="1968" value="120.000000" interpolation="2"/>
 		<key row="2096" value="0.000000" interpolation="0"/>
+		<key row="2175" value="0.000000" interpolation="1"/>
 		<key row="2184" value="1.000000" interpolation="1"/>
-		<key row="2188" value="5.000000" interpolation="1"/>
-		<key row="2194" value="1.000000" interpolation="0"/>
+		<key row="2188" value="5.000000" interpolation="2"/>
+		<key row="2194" value="1.000000" interpolation="2"/>
 		<key row="2207" value="0.000000" interpolation="0"/>
 		<key row="2297" value="0.000000" interpolation="1"/>
 		<key row="2407" value="25.000000" interpolation="0"/>

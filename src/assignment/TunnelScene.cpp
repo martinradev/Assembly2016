@@ -526,7 +526,11 @@ namespace FW {
 		glBindVertexArray(mCityVAO);
 		glEnable(GL_POINT_SMOOTH);
 		glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
+		glEnable(GL_BLEND);
+		//glBlendFunc(GL_SRC_ALPHA, GL_ONE); // additive blending
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // additive blending
 		glDrawArrays(GL_POINTS, 0, mNumCityParticles);
+		glDisable(GL_BLEND);
 		glBindVertexArray(0);
 
 		glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, 0);
