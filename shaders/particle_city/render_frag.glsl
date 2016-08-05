@@ -4,6 +4,7 @@ in vec3 positionFrag;
 in vec3 normalFrag;
 in vec2 uvFrag;
 in float depthFrag;
+flat in float uvOffsetX;
 flat in int materialIndexFrag;
 
 layout(location = 0) out vec4 colorOUT;
@@ -24,6 +25,8 @@ layout(binding = 0, std430) buffer MaterialDeclaration {
 };
 
 uniform sampler2D diffuseSamplers[64];
+uniform sampler2D bokehTexture;
+uniform sampler2D bokehTextureStrip;
 uniform vec3 lightPos;
 uniform vec3 cameraPosition;
 uniform vec3 lightDirection;
@@ -69,8 +72,14 @@ void main() {
 	color.rgb = mix(fogColor, color.rgb, s);
 	*/
 	
-	vec3 color = difColorIN * 1.0;
-
-	colorOUT = vec4(color, 0.01);
+	//vec3 color = difColorIN * 1.0;
+	vec2 uv = vec2(
+		gl_PointCoord.x * 0.25 + uvOffsetX, 
+		gl_PointCoord.y);
+	vec4 color = texture(bokehTextureStrip, uv);
+	color.a = color.r * 0.01;	
+	//color.rg = gl_PointCoord.xy;
+	//color.rg = vec2(1.0);
+	colorOUT = color;
 	positionOUT = vec4(positionFrag, uvFrag.t);
 }

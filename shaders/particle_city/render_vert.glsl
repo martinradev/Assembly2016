@@ -8,6 +8,7 @@ out vec3 positionFrag;
 out vec3 normalFrag;
 out vec2 uvFrag;
 out float depthFrag;
+flat out float uvOffsetX;
 flat out int materialIndexFrag;
 
 
@@ -32,6 +33,7 @@ void main() {
 	const float MAX_POINT_SIZE = 62.0;
 	const float MIN_POINT_SIZE = 1.0;
 	
+	uvOffsetX = float(gl_VertexID % 4) * 0.25; 
 	float sizeJitter = 0.1 + 2.0*abs(sin(float(gl_VertexID)));
 	gl_PointSize = (10000.0/depth) * sizeJitter;
 	

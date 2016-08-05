@@ -47,6 +47,8 @@ namespace FW {
 		GLuint mTunnelTexture;
 		GLuint mTunnelNormalTexture;
 		GLuint mTunnelSpecularTexture;
+		GLuint mBokehTexture;
+		GLuint mBokehTextureStrip;
 
 		void setupGLBuffers();
 		GLuint mQuadVAO;

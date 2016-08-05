@@ -44,6 +44,14 @@ namespace FW {
 		Image * tunnelSpecularImg = FW::importImage("assets/tunnel/synthetic_metal_04_specular.png");
 		mTunnelSpecularTexture = tunnelSpecularImg->createGLTexture();
 
+		Image * bokehImage = FW::importImage("assets/bokeh.png");
+		mBokehTexture = bokehImage->createGLTexture();
+		delete bokehImage;
+
+		Image * bokehImage2 = FW::importImage("assets/bokeh2.png");
+		mBokehTextureStrip = bokehImage2->createGLTexture();
+		delete bokehImage2;
+
 		generateParticles();
 		generateRibbon();
 
@@ -512,6 +520,15 @@ namespace FW {
 		gl->setUniform(mCityRenderProgram->getUniformLoc("lightColor"), lightColor);
 		gl->setUniform(mCityRenderProgram->getUniformLoc("fogColor"), fogColor);
 		gl->setUniform(mCityRenderProgram->getUniformLoc("particleSize"), FWSync::particleSize);
+
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, mBokehTexture);
+		glActiveTexture(GL_TEXTURE0 + 1);
+		glBindTexture(GL_TEXTURE_2D, mBokehTextureStrip);
+
+		gl->setUniform(mCityRenderProgram->getUniformLoc("bokehTexture"), 0);
+		gl->setUniform(mCityRenderProgram->getUniformLoc("bokehTextureStrip"), 1);
+
 		for (size_t i = 0; i < mTextureHandles.size(); ++i) {
 			if (!glIsTextureHandleResidentARB(mTextureHandles[i])) glMakeTextureHandleResidentARB(mTextureHandles[i]);
 			// bound to unit
@@ -524,12 +541,17 @@ namespace FW {
 		glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, mParticleMaterialSSBO);
 
 		glBindVertexArray(mCityVAO);
-		glEnable(GL_POINT_SMOOTH);
+		glEnable(GL_POINT_SPRITE);
+		glDisable(GL_POINT_SMOOTH);
+		glDepthMask(GL_FALSE);
+		glDisable(GL_DEPTH_TEST);
 		glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
 		glEnable(GL_BLEND);
 		//glBlendFunc(GL_SRC_ALPHA, GL_ONE); // additive blending
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // additive blending
 		glDrawArrays(GL_POINTS, 0, mNumCityParticles);
+		glDepthMask(GL_TRUE);
+		glEnable(GL_DEPTH_TEST);
 		glDisable(GL_BLEND);
 		glBindVertexArray(0);
 
