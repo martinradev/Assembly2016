@@ -83,6 +83,7 @@ mThreshold(0.0f)
 	m_commonCtrl.addButton((S32*)&m_action, (S32)Action::Action_SavePath, FW_KEY_NONE, "Save cam points");
 	m_commonCtrl.addButton((S32*)&m_action, (S32)Action::Action_RenderPath, FW_KEY_NONE, "Render path");
 	m_commonCtrl.addButton((S32*)&m_action, (S32)Action::Action_FollowPath, FW_KEY_NONE, "Follow path");
+	m_commonCtrl.addButton((S32*)&m_action, (S32)Action::Action_RestartAnimation, FW_KEY_NONE, "Restart animation");
 	m_commonCtrl.addToggle(&m_displaySceneTabs, FW_KEY_Q, "Show scene tabs (Q)");
 	m_commonCtrl.addSeparator();
 	m_commonCtrl.addToggle((S32*)&m_activeKnob, (S32)Knob::Knob1, FW_KEY_1, "Knob1");

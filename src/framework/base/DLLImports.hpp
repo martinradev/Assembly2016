@@ -215,6 +215,8 @@ typedef int64_t GLint64;
 #define GL_QUERY_RESULT_AVAILABLE         0x8867 // m r
 #define GL_QUERY_RESULT                   0x8866 // m r
 #define GL_TEXTURE_CUBE_MAP_SEAMLESS 0x884F// m r
+#define GL_COPY_WRITE_BUFFER 0x8F37
+#define GL_COPY_READ_BUFFER               0x8F36
 #define GL_TIME_ELAPSED                   0x88BF
 #define GL_TEXTURE_FETCH_BARRIER_BIT		0x00000008
 #define GL_VERTEX_PROGRAM_POINT_SIZE		0x8642

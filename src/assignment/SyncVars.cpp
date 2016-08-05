@@ -95,6 +95,8 @@ namespace FWSync {
 
 	SYNC_DEF(particleSize);
 	SYNC_DEF(particleDim);
+	SYNC_DEF(pUpdateTo);
+	SYNC_DEF(pUpdateFrom);
 
 	static const float bpm = 150.0f; /* beats per minute */
 	static const float rpb = 8.0f; /* rows per beat */
@@ -225,6 +227,8 @@ namespace FWSync {
 
 		particleSizePtr = sync_get_track(rocket, "particle_size");
 		particleDimPtr = sync_get_track(rocket, "particle_dim");
+		pUpdateFromPtr = sync_get_track(rocket, "p_update_from");
+		pUpdateToPtr = sync_get_track(rocket, "p_update_to");
 	}
 
 
@@ -317,6 +321,9 @@ namespace FWSync {
 
 		particleSize = sync_get_val(FWSync::particleSizePtr, row);
 		particleDim = sync_get_val(FWSync::particleDimPtr, row);
+
+		pUpdateFrom = sync_get_val(FWSync::pUpdateFromPtr, row);
+		pUpdateTo = sync_get_val(FWSync::pUpdateToPtr, row);
 	}
 
 };

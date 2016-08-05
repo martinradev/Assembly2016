@@ -27,7 +27,8 @@ namespace FW {
 		Action_DebugRenderRibbonPath,
 		Action_SaveRibbonPath,
 		Action_LeftButton,
-		Action_RightButton
+		Action_RightButton,
+		Action_RestartAnimation
 	};
 
 	

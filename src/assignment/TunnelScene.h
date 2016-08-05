@@ -5,6 +5,7 @@
 #include "GBuffer.h"
 #include "Mesher.h"
 #include "TessellationTestScene.h"
+#include "Spline.h"
 #include <memory>
 #include <vector>
 
@@ -65,7 +66,7 @@ namespace FW {
 
 		Vec3f getCameraForward(float t);
 		Vec3f getCameraUp(float t);
-		Vec3f getCameraPosition(float t);
+		Vec3f getCameraPosition();
 
 		TessellationTestScene * mTessScene;
 
@@ -98,6 +99,22 @@ namespace FW {
 
 		void renderMeteor(GLContext * gl, const Mat4f & toScreen);
 		void explodeCity(GLContext * gl);
+
+		std::vector<std::vector<Vec3f> > mCameraPaths;
+		void loadCamPaths();
+
+		FW::Random pRnd;
+
+		GLContext::Program * mGodrayBlurProgram;
+
+		std::unique_ptr<FBO> mGodrayBlurFBO;
+		std::unique_ptr<GaussianFilter> mGaussiaFilter;
+		GLuint mGodrayBlurTex;
+
+		void godrayPass(GLContext * gl, const Mat4f & toScreen);
+
+		void restartAnimation();
+		GLuint mCityVBOCopy;
 	};
 
 };

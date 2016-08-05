@@ -463,6 +463,7 @@ FW_DLL_DECLARE_VOID(void, APIENTRY, glMakeTextureHandleNonResidentARB, (GLuint64
 FW_DLL_DECLARE_VOID(void, APIENTRY, glUniformHandleui64ARB, (GLint location, GLuint64 value), (location, value)) // Added by Martin Radev
 FW_DLL_DECLARE_RETV(GLboolean, APIENTRY, glIsTextureHandleResidentARB, (GLuint64 value), (value)) // Added by Martin Radev
 FW_DLL_DECLARE_VOID(void, APIENTRY, glVertexAttribDivisor, (GLuint index, GLuint divisor), (index, divisor)) // Added by Martin Radev
+FW_DLL_DECLARE_VOID(void, APIENTRY, glCopyBufferSubData, (GLenum readTarget, GLenum writeTarget, GLintptr readOffset, GLintptr writeOffset, GLsizeiptr size), (readTarget, writeTarget, readOffset, writeOffset, size)) // Added by Martin Radev
 #endif
 
 //------------------------------------------------------------------------

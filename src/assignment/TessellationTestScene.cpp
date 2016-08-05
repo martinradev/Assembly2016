@@ -632,7 +632,7 @@ namespace FW {
 			std::make_pair(Vec4f(-1.0f), Vec4f(1.0f)), // knob3
 			std::make_pair(Vec4f(-20.0f), Vec4f(20.0f)), // knob4
 			std::make_pair(Vec4f(0.0f), Vec4f(10.0f)), // knob5
-			std::make_pair(Vec4f(-150.0f), Vec4f(150.0f)), // knob6
+			std::make_pair(Vec4f(-8500.0f), Vec4f(8500.0f)), // knob6
 			std::make_pair(Vec4f(0.0f), Vec4f(10.0f)), // knob7
 			std::make_pair(Vec4f(0.0f), Vec4f(0.2f)), // knob8
 			std::make_pair(Vec4f(0.0f), Vec4f(1.0f)), // knob9
@@ -985,7 +985,7 @@ namespace FW {
 	{
 
 		for (size_t i = 0; i < mCurveControlPoints.size(); ++i) {
-			std::string filePath = "assets/ribbon_path_" + std::to_string(i + 1) + ".txt";
+			std::string filePath = "assets/particle_city/cam_path_water_" + std::to_string(i + 1) + ".txt";
 			saveRibbonPath(filePath, mCurveControlPoints[i]);
 		}
 
@@ -1029,7 +1029,7 @@ namespace FW {
 		glMatrixMode(GL_MODELVIEW);
 		glLoadMatrixf(&worldToCamera(0, 0));
 
-		glLineWidth(2.5f);
+		glLineWidth(20.5f);
 		glBegin(GL_LINES);
 
 		for (size_t k = 0; k < mRibbonCurves.size(); ++k) {
@@ -1114,7 +1114,7 @@ namespace FW {
 		float t = 1.0f;
 		for (size_t k = 0; k < mCurveControlPoints.size(); ++k) {
 			for (size_t i = 0; i < mCurveControlPoints[k].size(); ++i) {
-				if (intersect_sphere(Ro, Rd, mCurveControlPoints[k][i], 10.0f, t)) {
+				if (intersect_sphere(Ro, Rd, mCurveControlPoints[k][i], 125.0f, t)) {
 					mSelectedCurveIndex = k;
 					mSelectedControlPointIndex = i;
 					mSelectedPointOrigValue = mCurveControlPoints[k][i];
@@ -1124,16 +1124,23 @@ namespace FW {
 	}
 
 	void TessellationTestScene::loadRibbonPaths() {
-		static const int ribbonsCount = 4;
+		/*
+			TODO
+			CHANGE tess 240
+			cam_path_water -> ribbon_path
+			ribbonsCount -> 4
+		*/
+
+		static const int ribbonsCount = 8;
 
 		mRibbons.resize(ribbonsCount);
 		mCurveControlPoints.resize(ribbonsCount);
 		mRibbonCurves.resize(ribbonsCount);
 
 		for (size_t i = 0; i < ribbonsCount; ++i) {
-			std::string filePath = "assets/ribbon_path_" + std::to_string(i + 1) + ".txt";
+			std::string filePath = "assets/particle_city/cam_path_water_" + std::to_string(i + 1) + ".txt";
 			loadRibbonPath(filePath, mCurveControlPoints[i]);
-			mRibbonCurves[i] = evalCatmullRomspline(mCurveControlPoints[i], 240.0f, false, 0.0f, 0.0f);
+			mRibbonCurves[i] = evalCatmullRomspline(mCurveControlPoints[i], 20.0f, false, 0.0f, 0.0f);
 		}
 
 		std::vector<Vec3f> starControlPoints;

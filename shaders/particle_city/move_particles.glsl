@@ -18,7 +18,9 @@ layout(binding = 0, std430) buffer ParticleArray {
 
 uniform int numParticles;
 uniform float dtUniform;
-
+uniform int offset;
+uniform float curlStep;
+uniform float attractorStep;
 
 vec3 verlet(in vec3 a, in vec3 x, in vec3 xOld, in float dt) {
 	
@@ -104,7 +106,7 @@ vec3 curlNoise(in vec3 v)
 
 vec3 evalF(in vec3 pos)
 {
-	return 30.0*curlNoise(0.01*pos);
+	return 100.0*curlNoise(0.01*pos);
 }
 
 vec3 euler(in vec3 pos)
@@ -143,9 +145,9 @@ void main() {
 
 	const int PARTICLES_PER_THREAD = 1;
 
-	int index = PARTICLES_PER_THREAD * int(gl_WorkGroupSize.x * gl_WorkGroupID.x + gl_LocalInvocationID.x);
+	int index = offset + PARTICLES_PER_THREAD * int(gl_WorkGroupSize.x * gl_WorkGroupID.x + gl_LocalInvocationID.x);
 	
-	if (index >= numParticles) return;
+	if (index >= numParticles || index < 0) return;
 
 	
 	const float G = 9.8;

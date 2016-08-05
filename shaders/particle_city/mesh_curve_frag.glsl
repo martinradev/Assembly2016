@@ -20,7 +20,7 @@ void main() {
 	
 	float falloff = max(0.0, lastIndex- vertIndex);
 	
-	float r = smoothstep(0.0, 80000.0, falloff);
+	float r = smoothstep(0.0, 90000.0, falloff);
 	
 	float q = max(0.0, 1.0-r);
 	vec3 lavaColor = vec3(857.0, 0.0, 0.0) / 255.0;

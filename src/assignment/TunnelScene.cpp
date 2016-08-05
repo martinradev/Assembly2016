@@ -8,6 +8,7 @@
 #include <fstream>
 #include <unordered_map>
 #include <algorithm>
+#include "curve.h"
 
 namespace FW {
 
@@ -54,7 +55,17 @@ namespace FW {
 
 		generateParticles();
 		generateRibbon();
+		loadCamPaths();
 
+		mGodrayFBO.reset(new FBO(depthTex));
+		mGodrayFBO->attachTexture(0, colorTex);
+		GLuint godrayColorTex = TEXTURE_POOL->request(TextureDescriptor(GL_RGBA32F, width, height, GL_RGBA, GL_FLOAT))->m_texture;
+		mGodrayBlurFBO.reset(new FBO(depthTex));
+		mGodrayBlurFBO->attachTexture(0, godrayColorTex);
+
+		mGodrayBlurTex = TEXTURE_POOL->request(TextureDescriptor(GL_RGBA32F, width, height, GL_RGBA, GL_FLOAT))->m_texture;
+
+		mGaussiaFilter.reset(new GaussianFilter(ctx, Vec2i(width, height)));
 
 	}
 
@@ -116,7 +127,7 @@ namespace FW {
 
 		bool operator()(const ParticleInfo &a, const ParticleInfo &b)
 		{
-			return a.position.x < b.position.x;
+			return a.position.y < b.position.y;
 		}
 
 	};
@@ -242,6 +253,13 @@ namespace FW {
 
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindVertexArray(0);
+
+#ifndef SYNC_PLAYER
+		glGenBuffers(1, &mCityVBOCopy);
+		glBindBuffer(GL_ARRAY_BUFFER, mCityVBOCopy);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(ParticleInfo) * mNumCityParticles, particleData.data(), GL_STATIC_DRAW);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+#endif
 	}
 
 	void TunnelScene::lightPass()
@@ -254,7 +272,9 @@ namespace FW {
 
 		explodeCity(gl);
 
-		mCamPtr->setFar(100000);
+		mCamPtr->setFar(400000);
+
+		//mCamPtr->setPosition(getCameraPosition());
 
 		Mat4f camToClip = camera.getWorldToClip();
 		Mat4f camToCamera = camera.getWorldToCamera();
@@ -304,8 +324,17 @@ namespace FW {
 
 		/// --------------------------------------------
 
+		if (FWSync::godrayWeight > 0.0f)
+		{
+			godrayPass(gl, camToClip);
+		}
+		
+
+		/// -------------------------------------------
+
 		mGBuffer->unbind();
 
+		glDisable(GL_DEPTH_TEST);
 
 		mLastFBO->bind();
 
@@ -318,9 +347,9 @@ namespace FW {
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, mGBuffer->getTexture(0));
 
-		/*gl->setUniform(mCombineProgram->getUniformLoc("godrayColorTex"), 1);
+		gl->setUniform(mCombineProgram->getUniformLoc("godrayColorTex"), 1);
 		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, mTessScene->mGodrayBlurTex);*/
+		glBindTexture(GL_TEXTURE_2D, mGodrayBlurTex);
 		//glBindTexture(GL_TEXTURE_2D, mTessScene->mGodrayBlurTex);
 		//glBindTexture(GL_TEXTURE_2D, mTessScene->m_terrainLightFBO->getTexture(0));
 
@@ -328,9 +357,11 @@ namespace FW {
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 		glBindVertexArray(0);
 
+		mTessScene->debugRenderPath(gl);
+
 		mLastFBO->unbind();
 
-
+		glEnable(GL_DEPTH_TEST);
 	}
 
 	void TunnelScene::generateTunnel()
@@ -417,6 +448,15 @@ namespace FW {
 		case Action::Action_ReloadShaders:
 			loadShaders(wnd.getGL());
 			break;
+		case Action::Action_SaveRibbonPath:
+			mTessScene->saveRibbonPaths();
+			break;
+		case Action::Action_RightButton:
+			mTessScene->selectControlPoint(wnd.getMousePos());
+			break;
+		case Action::Action_RestartAnimation:
+			restartAnimation();
+			break;
 		default:
 			break;
 		}
@@ -435,6 +475,9 @@ namespace FW {
 		mMeteorRenderProgram = loadShader(ctx, "shaders/particle_city/mesh_curve_vert.glsl", "shaders/particle_city/mesh_curve_frag.glsl", "particle_city_ribbon_meteor");
 
 		mParticleMoveProgram = loadShader(ctx, "shaders/particle_city/move_particles.glsl", "mesh_city_move_particles");
+
+		mGodrayBlurProgram = loadShader(ctx, "shaders/common/display_vertex.glsl",
+			"shaders/particle_city/godray_blur_frag.glsl", "godray_blur_city_particle");
 	}
 
 
@@ -459,7 +502,7 @@ namespace FW {
 
 	void TunnelScene::updateGUI(Window & wnd, CommonControls & controls) {
 
-		cleanUpGUI(wnd, controls);
+		/*cleanUpGUI(wnd, controls);
 
 		controls.addSeparator();
 
@@ -487,18 +530,28 @@ namespace FW {
 		controls.addSlider(&m_knobs[activeKnob].y, KNOB_SLIDE_DATA[activeKnob].first.y, KNOB_SLIDE_DATA[activeKnob].second.y, false, FW_KEY_NONE, FW_KEY_NONE, yStr);
 		controls.addSlider(&m_knobs[activeKnob].z, KNOB_SLIDE_DATA[activeKnob].first.z, KNOB_SLIDE_DATA[activeKnob].second.z, false, FW_KEY_NONE, FW_KEY_NONE, zStr);
 		controls.addSlider(&m_knobs[activeKnob].w, KNOB_SLIDE_DATA[activeKnob].first.w, KNOB_SLIDE_DATA[activeKnob].second.w, false, FW_KEY_NONE, FW_KEY_NONE, wStr);
-		controls.endSliderStack();
+		controls.endSliderStack();*/
+
+		mTessScene->updateGUI(wnd, controls);
 
 	}
 
-	Vec3f TunnelScene::getCameraPosition(float t) {
+	Vec3f TunnelScene::getCameraPosition() {
 
-		float tmp = (2.0f + cosf(3.0f*t));
-		float xCoord = tmp * cosf(2.0f * t);
-		float yCoord = tmp * sinf(2.0f * t);
-		float zCoord = sinf(3.0f * t);
-
-		return 3200.0f*Vec3f(xCoord, yCoord, zCoord);
+		float t = FWSync::cameraTime;
+		int idx = int(t);
+		int camIndex = FWSync::cameraIndex;
+		t -= float(idx);
+		if (idx + 3 >= mCameraPaths[camIndex].size()) {
+			idx = mCameraPaths[camIndex].size() - 4;
+			t = 1.0f;
+		}
+		Vec3f off = CarmullRomCurve::evalCatmullRom(
+			mCameraPaths[camIndex][idx],
+			mCameraPaths[camIndex][idx + 1],
+			mCameraPaths[camIndex][idx + 2],
+			mCameraPaths[camIndex][idx + 3], t);
+		return off;
 
 	}
 
@@ -510,8 +563,19 @@ namespace FW {
 		float yCoord = tmp * sinf(2.0f * tNext);
 		float zCoord = sinf(3.0f * tNext);
 
-		return normalize(3200.0f*Vec3f(xCoord, yCoord, zCoord) - getCameraPosition(t));
+		return normalize(3200.0f*Vec3f(xCoord, yCoord, zCoord) - getCameraPosition());
 
+	}
+
+	void TunnelScene::loadCamPaths()
+	{
+		size_t numCamPaths = 8;
+		mCameraPaths.resize(numCamPaths);
+		for (size_t i = 0; i < numCamPaths; ++i)
+		{
+			std::string filePath = "assets/particle_city/cam_path_water_" + std::to_string(i + 1) + ".txt";
+			mTessScene->loadCamPath(filePath, mCameraPaths[i]);
+		}
 	}
 
 	Vec3f TunnelScene::getCameraUp(float t)
@@ -589,10 +653,16 @@ namespace FW {
 		gl->setUniform(mParticleMoveProgram->getUniformLoc("numParticles"), mNumCityParticles);
 
 		gl->setUniform(mParticleMoveProgram->getUniformLoc("dtUniform"), GLOBAL_DT);
+		gl->setUniform(mParticleMoveProgram->getUniformLoc("offset"), 0);
+
+		gl->setUniform(mParticleMoveProgram->getUniformLoc("curlStep"), FWSync::cloudParticleCurlStep);
+		gl->setUniform(mParticleMoveProgram->getUniformLoc("attractorStep"), FWSync::cloudParticleStep);
 
 		glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, mCityVBO);
 
 		int localSizeX = 128;
+
+		int numParticlesToUpdate = int(FWSync::pUpdateTo);
 
 		int groupSizeX = (mNumCityParticles + localSizeX - 1) / localSizeX;
 
@@ -603,6 +673,43 @@ namespace FW {
 		glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, 0);
 	}
 	
+	void TunnelScene::godrayPass(GLContext * gl, const Mat4f & toScreen)
+	{
+		mGodrayBlurFBO->bind();
 
+		mGodrayBlurProgram->use();
+
+		Vec4f lightClipSpace = toScreen * Vec4f(0, 0, 0, 1.0f);
+		lightClipSpace /= lightClipSpace.w;
+		lightClipSpace.x = lightClipSpace.x*0.5 + 0.5;
+		lightClipSpace.y = lightClipSpace.y*0.5 + 0.5;
+
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, mGodrayFBO->getTexture(0));
+
+		gl->setUniform(mGodrayBlurProgram->getUniformLoc("bwSmapler"), 0);
+		gl->setUniform(mGodrayBlurProgram->getUniformLoc("lightPos"), lightClipSpace.getXY());
+		gl->setUniform(mGodrayBlurProgram->getUniformLoc("WEIGHT"), FWSync::godrayWeight);
+		gl->setUniform(mGodrayBlurProgram->getUniformLoc("time"), GLOBAL_DT);
+
+		glDisable(GL_DEPTH_TEST);
+		glBindVertexArray(mQuadVAO);
+		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+		glBindVertexArray(0);
+		glEnable(GL_DEPTH_TEST);
+
+		mGodrayBlurFBO->unbind();
+
+
+
+		mGaussiaFilter->process(gl, mGodrayBlurFBO->getTexture(0), mGodrayBlurTex, 2);
+	}
+
+	void TunnelScene::restartAnimation()
+	{
+		glBindBuffer(GL_COPY_READ_BUFFER, mCityVBOCopy);
+		glBindBuffer(GL_COPY_WRITE_BUFFER, mCityVBO);
+		glCopyBufferSubData(GL_COPY_READ_BUFFER, GL_COPY_WRITE_BUFFER, 0, 0, sizeof(ParticleInfo) * mNumCityParticles);
+	}
 
 };

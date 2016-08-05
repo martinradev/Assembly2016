@@ -114,6 +114,11 @@ namespace FWSync {
 	SYNC_EXT(particleSize);
 	SYNC_EXT(particleDim);
 
+	SYNC_EXT(particleDim);
+	SYNC_EXT(pUpdateFrom);
+	SYNC_EXT(pUpdateTo);
+
+
 	void bindTracks(sync_device * rocket, HSTREAM hstream);
 	void updateValues(sync_device * rocket, HSTREAM hstream);
 
