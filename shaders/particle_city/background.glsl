@@ -13,7 +13,7 @@ vec3 sky(float a, float b) {
     bb += sin(a*4.0)*0.05;
 	
     
-    c += vec3(max(0., sign(b)) * 1.0 - max(0.0, bb)) * vec3(0.4, 0.45, 0.48)*0.05;
+    c += vec3(max(0., sign(b)) * 1.0 - max(0.0, bb)) * vec3(0.4, 0.45, 0.6)*0.1;
     vec3 low = vec3(0.4, 0.35, 0.35)*0.05*0.5;
     c += vec3(max(0.0, sign(-b)) * max(0.0, 1.0+bb -0.08)) * low;
 	

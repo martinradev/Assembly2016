@@ -41,7 +41,7 @@ namespace FW {
 		float mExposure;
 		GLuint mOverlays[6];
 
-		GLuint mColorGradingTexture[5];
+		GLuint mColorGradingTexture[6];
 	};
 
 };

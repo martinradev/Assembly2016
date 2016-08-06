@@ -303,6 +303,7 @@ namespace FW {
 		gl->setUniform(mRenderLogoProgram->getUniformLoc("toLightClip"), toLightClip);
 		gl->setUniform(mRenderLogoProgram->getUniformLoc("shadowMapTex"), 0);
 		gl->setUniform(mRenderLogoProgram->getUniformLoc("shadowMapSize"), Vec2f(mShadowViewportSize));
+		gl->setUniform(mRenderLogoProgram->getUniformLoc("particleSize"), FWSync::waterLightParticleSize);
 		
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, mShadowMapFBO->getTexture(0));
@@ -311,6 +312,8 @@ namespace FW {
 
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_ONE_MINUS_DST_COLOR, GL_ONE);
+		glDisable(GL_DEPTH_TEST);
+		glDepthMask(GL_FALSE);
 		glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, mParticleMaterialSSBO);
 
 		glBindVertexArray(mParticleVAO);
@@ -319,6 +322,8 @@ namespace FW {
 		glDrawArrays(GL_POINTS, 0, mNumParticles);
 		glBindVertexArray(0);
 
+		glEnable(GL_DEPTH_TEST);
+		glDepthMask(GL_TRUE);
 		glDisable(GL_BLEND);
 
 		glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, 0);

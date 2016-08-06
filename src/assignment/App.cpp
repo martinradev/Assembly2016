@@ -38,7 +38,7 @@
 using namespace FW;
 
 // Define this when doing a release build for the compo.
-//#define DEMORELEASE
+#define DEMORELEASE
 
 // extern to be used from all scenes
 unsigned activeKnob;
@@ -107,18 +107,27 @@ mThreshold(0.0f)
 	m_commonCtrl.addSlider(&mThreshold, 0.0, 1.0, false, FW_KEY_NONE, FW_KEY_NONE, "thre = %f");
 	m_commonCtrl.addSlider(&mOffset, 0.0, 10.0, false, FW_KEY_NONE, FW_KEY_NONE, "off = %f");
 	m_commonCtrl.endSliderStack();
-	m_window.setTitle("Effects galore by Super Grand");
+	m_window.setTitle("Deep Down by Super Grand");
     m_window.addListener(this);
 	m_window.setSize(Vec2i(1280, 720));
 	//m_window.setSize(Vec2i(1280/2, 720/2));
-	m_window.setFullScreen(true);
+	
+	
     m_window.addListener(&m_commonCtrl);
 
-	m_commonCtrl.setStateFilePrefix( "Effects galore by Super Grand" );
-	
+	m_commonCtrl.setStateFilePrefix( "Deep Down by Super Grand" );
+
+#ifdef DEMORELEASE
+	m_window.setFullScreen(true);
 	m_commonCtrl.showControls(false);
 	m_commonCtrl.showFPS(false);
 	ShowCursor(false);
+#else
+	m_window.setFullScreen(false);
+	m_commonCtrl.showControls(true);
+	m_commonCtrl.showFPS(true);
+	ShowCursor(true);
+#endif
 	
 	GLContext * gl = m_window.getGL(); // grab the appropriate gl context to be able to setup()
 	
@@ -423,7 +432,7 @@ void App::setupScenes() {
 	GLContext * gl = m_window.getGL();
 	Vec2i sz = m_window.getSize();
 
-	mLogoScene = new ParticleLogoSDF(gl, 110, mLastFBO.get(), sz.x, sz.y, m_cameraCtrl);
+	mLogoScene = new ParticleLogoSDF(gl, 20, mLastFBO.get(), sz.x, sz.y, m_cameraCtrl);
 	m_allScenes.push_back(SceneDescriptor(mLogoScene, "Particle logo"));
 
 	mWaterScene = new TessellationTestScene(&m_cameraCtrl,"tess_test", gl, sz.x, sz.y, mLastFBO.get());

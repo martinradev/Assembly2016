@@ -22,9 +22,9 @@ namespace FW {
 			delete tmpImg;
 		}
 
-		glGenTextures(5, mColorGradingTexture);
+		glGenTextures(6, mColorGradingTexture);
 
-		for (int i = 0; i < 5; ++i)
+		for (int i = 0; i < 6; ++i)
 		{
 			std::string name = "assets/color_grading/" + std::to_string(i) + ".png";
 			FW::Image * colorLutImage = importImage(name.c_str());
@@ -156,7 +156,7 @@ namespace FW {
 		}
 
 		int colorGradingIndex = floor(FWSync::colorGradingIndex);
-		colorGradingIndex = clamp(colorGradingIndex, 0, 4);
+		colorGradingIndex = clamp(colorGradingIndex, 0, 5);
 
 		glActiveTexture(GL_TEXTURE2+1);
 		glBindTexture(GL_TEXTURE_3D, mColorGradingTexture[colorGradingIndex]);

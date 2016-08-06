@@ -33,9 +33,18 @@ uniform float AlphaUniform;
 
 vec3 calcLight(vec3 h, vec3 n, vec3 dir, vec3 difColor, vec3 intensity, vec3 specColorIN) {
 	vec3 diffuse;
-	diffuse = clamp(dot(n, dir), 0.008, 1.0) * difColor;
-	vec3 specular = specColorIN * pow(clamp(dot(h, n), 0.06, 1.0), 30.0);
-	vec3 Li = intensity * (20.0*diffuse+2.0*specular);
+	diffuse = clamp(dot(n, dir), 0.008, 1.0) * vec3(0.15, 0.0, 0.01);
+	diffuse *= 1.4;
+	vec3 specular = vec3(1.0, 0.6, 0.1) * specColorIN * pow(clamp(dot(h, n), 0.06, 1.0), 30.0);
+	specular *= 25.0;
+	
+	/*diffuse = clamp(dot(n, dir), 0.008, 1.0) * vec3(0.15, 0.01, 0.01);
+	diffuse *= 1.0;
+	vec3 specular = vec3(1.0, 0.6, 0.1) * specColorIN * pow(clamp(dot(h, n), 0.06, 1.0), 30.0);
+	specular *= 10.0;*/
+	
+	//vec3 Li = (diffuse+2.0*specular);
+	vec3 Li = intensity * (diffuse+2.0*specular);
 	
 	return Li;
 }
@@ -70,7 +79,7 @@ void main() {
 	vec3 color = calcLight(normalize(-lightDirection[0] + V),normalFrag,-lightDirection[0],difColorIN,lightColor[0], specColorIN);
 	color += calcLight(normalize(-lightDirection[1] + V),normalFrag,-lightDirection[1],difColorIN,lightColor[1], specColorIN);
 	
-	diffuseColorOUT = vec4(4.0*color, AlphaUniform);
+	diffuseColorOUT = vec4(1.0*color, AlphaUniform);
 	
 	normalOUT = vec4(normalFrag, uvFrag.s);
 	positionOUT = vec4(positionFrag, uvFrag.t);

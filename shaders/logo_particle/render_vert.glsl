@@ -10,6 +10,8 @@ out vec2 uvFrag;
 flat out int materialIndexFrag;
 out float depthFrag;
 
+uniform float particleSize;
+
 
 uniform mat4 toScreen;
 uniform mat4 posToWorld;
@@ -28,8 +30,8 @@ void main() {
 	float depth = gl_Position.z;
 	depthFrag = depth;
 	const float MAX_POINT_SIZE = 4.0;
-	const float MIN_POINT_SIZE = 2.0;
+	const float MIN_POINT_SIZE = 4.0;
 	
-	gl_PointSize = mix(MIN_POINT_SIZE, MAX_POINT_SIZE, smoothstep(5.0, 1300.0, depth));
+	gl_PointSize =  particleSize; //mix(MIN_POINT_SIZE, MAX_POINT_SIZE, smoothstep(5.0, 1300.0, depth));
 
 }
