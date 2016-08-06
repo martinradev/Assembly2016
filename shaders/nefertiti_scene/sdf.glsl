@@ -42,21 +42,21 @@ float scene2(in vec3 p)
 	
 	float f2 = fSphere(p, knob0.x);
 	float f3 = fCapsule(p, 2.5, knob0.x);
-	f2 = fOpDifferenceRound(f2,f3,0.5);
+	f2 = fOpDifferenceRound(f2,f3,0.2);
 	
 	f2 = fOpUnionChamfer(f1,f2, 0.0);
 	
 	float fCube = fBox(p, vec3(knob0.y));
 	
-	fCube = fOpDifferenceRound(fCube, f3, 0.5);
-	fCube = fOpUnionChamfer(f2,fCube, 0.2);
+	fCube = fOpDifferenceRound(fCube, f3, 0.2);
+	fCube = fOpUnionChamfer(f2,fCube, 0.1);
+	
 	
 	float cubeIn = fBox(p, vec3(knob1.y)*vec3(0.3,1.5,0.3));
 	cubeIn = fOpUnionChamfer(cubeIn, fBox(p, vec3(knob1.y)*vec3(0.3,0.3,1.5)), 0.0);
 	cubeIn = fOpUnionChamfer(cubeIn, fBox(p, vec3(knob1.y)*vec3(1.5,0.3,0.3)), 0.0);
 	fCube = fOpDifferenceRound(fCube, cubeIn, 1.0);
-	
-	
+
 	cost = fCube;
 	
 	return cost;

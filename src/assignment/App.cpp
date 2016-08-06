@@ -111,14 +111,14 @@ mThreshold(0.0f)
     m_window.addListener(this);
 	m_window.setSize(Vec2i(1280, 720));
 	//m_window.setSize(Vec2i(1280/2, 720/2));
-	m_window.setFullScreen(false);
+	m_window.setFullScreen(true);
     m_window.addListener(&m_commonCtrl);
 
 	m_commonCtrl.setStateFilePrefix( "Effects galore by Super Grand" );
 	
-	//m_commonCtrl.showControls(false);
-	//m_commonCtrl.showFPS(false);
-	//ShowCursor(false);
+	m_commonCtrl.showControls(false);
+	m_commonCtrl.showFPS(false);
+	ShowCursor(false);
 	
 	GLContext * gl = m_window.getGL(); // grab the appropriate gl context to be able to setup()
 	
@@ -300,7 +300,7 @@ void App::renderFrame(GLContext* gl)
 		m_scene = mFinalScene;
 	}
 	else if (FWSync::sceneIndex > 5.0f) {
-#if DEMORELEASE
+#ifdef DEMORELEASE
 		exit(0);
 #endif
 	}

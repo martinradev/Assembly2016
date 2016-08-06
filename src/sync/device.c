@@ -118,7 +118,7 @@ static int load_track_data(struct sync_track *t, const char *path)
 	for (i = 0; i < (int)t->num_keys; ++i) {
 		struct track_key *key = t->keys + i;
 		char type;
-		fread(&key->row, sizeof(size_t), 1, fp);
+		fread(&key->row, sizeof(int), 1, fp);
 		fread(&key->value, sizeof(float), 1, fp);
 		fread(&type, sizeof(char), 1, fp);
 		key->type = (enum key_type)type;

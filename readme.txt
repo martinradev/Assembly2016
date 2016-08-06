@@ -33,6 +33,8 @@
 : Jade Buddha model    : by arc101            :
 : Sci Fi Downtown city : by Herminio Nieves   :
 : SkyBox Volume 2      : by Hedgehog Team     :
+: Submarine            : by 3dregenerator     :
+: AVMT-300 Matador     : by willian_2014      :
 : Noise                : by David Hoskins     :
 : Bright Pass Shader   : from Cesium library  :
 : NV Framework         : by NVidia            :

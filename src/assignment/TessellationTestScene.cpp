@@ -1131,16 +1131,16 @@ namespace FW {
 			ribbonsCount -> 4
 		*/
 
-		static const int ribbonsCount = 8;
+		static const int ribbonsCount = 4;
 
 		mRibbons.resize(ribbonsCount);
 		mCurveControlPoints.resize(ribbonsCount);
 		mRibbonCurves.resize(ribbonsCount);
 
 		for (size_t i = 0; i < ribbonsCount; ++i) {
-			std::string filePath = "assets/particle_city/cam_path_water_" + std::to_string(i + 1) + ".txt";
+			std::string filePath = "assets/ribbon_path_" + std::to_string(i + 1) + ".txt";
 			loadRibbonPath(filePath, mCurveControlPoints[i]);
-			mRibbonCurves[i] = evalCatmullRomspline(mCurveControlPoints[i], 20.0f, false, 0.0f, 0.0f);
+			mRibbonCurves[i] = evalCatmullRomspline(mCurveControlPoints[i], 240.0f, false, 0.0f, 0.0f);
 		}
 
 		std::vector<Vec3f> starControlPoints;

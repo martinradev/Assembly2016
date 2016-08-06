@@ -254,12 +254,12 @@ namespace FW {
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindVertexArray(0);
 
-#ifndef SYNC_PLAYER
+
 		glGenBuffers(1, &mCityVBOCopy);
 		glBindBuffer(GL_ARRAY_BUFFER, mCityVBOCopy);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(ParticleInfo) * mNumCityParticles, particleData.data(), GL_STATIC_DRAW);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
-#endif
+
 	}
 
 	void TunnelScene::lightPass()
@@ -329,10 +329,13 @@ namespace FW {
 		gl->setUniform(mMeteorRenderProgram->getUniformLoc("cameraPosition"), cameraPos);
 		int s = int(FWSync::ribbonStart)*mTessScene->mProfileNumIndices * 6;
 		int e = int(FWSync::ribbonEnd)*mTessScene->mProfileNumIndices * 6;
-		gl->setUniform(mMeteorRenderProgram->getUniformLoc("lastIndex"), float(e) / 6.0f);
-		glBindVertexArray(mMeteorVAO);
-		glDrawElements(GL_TRIANGLES, e - s, GL_UNSIGNED_INT, NULL + (char*)(s * sizeof(GL_UNSIGNED_INT)));
-		glBindVertexArray(0);
+		if (e - s > 0)
+		{
+			gl->setUniform(mMeteorRenderProgram->getUniformLoc("lastIndex"), float(e) / 6.0f);
+			glBindVertexArray(mMeteorVAO);
+			glDrawElements(GL_TRIANGLES, e - s, GL_UNSIGNED_INT, NULL + (char*)(s * sizeof(GL_UNSIGNED_INT)));
+			glBindVertexArray(0);
+		}
 		glDisable(GL_BLEND);
 		
 		

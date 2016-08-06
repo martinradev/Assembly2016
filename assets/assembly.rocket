@@ -1,5 +1,6 @@
 <tracks rows="7200">
 	<track name="simStep">
+		<key row="0" value="0.000000" interpolation="0"/>
 		<key row="1922" value="20000.000000" interpolation="0"/>
 		<key row="3015" value="1.000000" interpolation="0"/>
 		<key row="3160" value="1.000000" interpolation="0"/>
@@ -101,6 +102,7 @@
 		<key row="3472" value="3.000000" interpolation="0"/>
 	</track>
 	<track name="sub_off">
+		<key row="0" value="0.000000" interpolation="0"/>
 		<key row="271" value="0.000000" interpolation="1"/>
 		<key row="549" value="-5000.000000" interpolation="0"/>
 		<key row="550" value="-3500.000000" interpolation="1"/>
@@ -109,6 +111,7 @@
 		<key row="1094" value="-500.000000" interpolation="0"/>
 	</track>
 	<track name="rocket_triangles">
+		<key row="0" value="0.000000" interpolation="0"/>
 		<key row="1081" value="0.000000" interpolation="1"/>
 		<key row="1106" value="30000.000000" interpolation="0"/>
 	</track>
@@ -134,11 +137,12 @@
 		<key row="3294" value="1.000000" interpolation="0"/>
 	</track>
 	<track name="ribbon_start">
+		<key row="0" value="0.000000" interpolation="0"/>
 		<key row="671" value="0.000000" interpolation="0"/>
 		<key row="845" value="1000.000000" interpolation="1"/>
 		<key row="1065" value="2200.000000" interpolation="1"/>
 		<key row="1108" value="3300.000000" interpolation="0"/>
-		<key row="1246" value="3300.000000" interpolation="1"/>
+		<key row="1246" value="3300.000000" interpolation="2"/>
 		<key row="1318" value="3250.000000" interpolation="0"/>
 		<key row="1921" value="0.000000" interpolation="0"/>
 		<key row="1996" value="1.000000" interpolation="1"/>
@@ -150,9 +154,10 @@
 		<key row="3216" value="0.000000" interpolation="0"/>
 	</track>
 	<track name="ribbon_end">
+		<key row="0" value="0.000000" interpolation="0"/>
 		<key row="671" value="0.000000" interpolation="1"/>
 		<key row="1108" value="3300.000000" interpolation="0"/>
-		<key row="1246" value="3300.000000" interpolation="1"/>
+		<key row="1246" value="3300.000000" interpolation="2"/>
 		<key row="1318" value="3250.000000" interpolation="0"/>
 		<key row="1921" value="0.000000" interpolation="1"/>
 		<key row="2063" value="2300.000000" interpolation="0"/>
@@ -174,8 +179,7 @@
 		<key row="1921" value="0.500000" interpolation="0"/>
 		<key row="2165" value="0.040000" interpolation="0"/>
 		<key row="3015" value="0.050000" interpolation="0"/>
-		<key row="3017" value="0.100000" interpolation="0"/>
-		<key row="3846" value="0.040000" interpolation="0"/>
+		<key row="3017" value="0.070000" interpolation="0"/>
 	</track>
 	<track name="bloom_thre">
 		<key row="0" value="0.150000" interpolation="1"/>
@@ -188,8 +192,7 @@
 		<key row="2165" value="1.500000" interpolation="0"/>
 		<key row="3015" value="0.060000" interpolation="0"/>
 		<key row="3016" value="100.000000" interpolation="0"/>
-		<key row="3017" value="0.900000" interpolation="0"/>
-		<key row="3846" value="0.030000" interpolation="0"/>
+		<key row="3017" value="0.030000" interpolation="0"/>
 	</track>
 	<track name="bloom_offset">
 		<key row="0" value="0.500000" interpolation="1"/>
@@ -202,8 +205,7 @@
 		<key row="1533" value="0.100000" interpolation="0"/>
 		<key row="1921" value="3.000000" interpolation="0"/>
 		<key row="3015" value="4.000000" interpolation="0"/>
-		<key row="3017" value="4.000000" interpolation="0"/>
-		<key row="3846" value="6.000000" interpolation="0"/>
+		<key row="3017" value="6.000000" interpolation="0"/>
 	</track>
 	<track name="exposure">
 		<key row="0" value="4.000000" interpolation="0"/>
@@ -211,18 +213,21 @@
 		<key row="3015" value="3.000000" interpolation="0"/>
 	</track>
 	<track name="nef_p_step">
+		<key row="0" value="0.000000" interpolation="0"/>
 		<key row="1921" value="0.000000" interpolation="0"/>
 		<key row="2472" value="0.000000" interpolation="1"/>
 		<key row="2555" value="0.100000" interpolation="0"/>
 		<key row="3019" value="0.000000" interpolation="0"/>
 	</track>
 	<track name="nef_curl_step">
+		<key row="0" value="0.000000" interpolation="0"/>
 		<key row="1921" value="0.000000" interpolation="0"/>
 		<key row="2472" value="0.000000" interpolation="1"/>
 		<key row="2555" value="0.300000" interpolation="0"/>
 		<key row="3019" value="0.000000" interpolation="0"/>
 	</track>
 	<track name="cloud_p_step">
+		<key row="0" value="0.000000" interpolation="0"/>
 		<key row="1921" value="0.100000" interpolation="0"/>
 		<key row="2472" value="0.400000" interpolation="0"/>
 		<key row="3013" value="0.000000" interpolation="0"/>
@@ -235,6 +240,7 @@
 		<key row="3294" value="5.000000" interpolation="0"/>
 	</track>
 	<track name="cloud_curl_step">
+		<key row="0" value="0.000000" interpolation="0"/>
 		<key row="1921" value="0.000000" interpolation="0"/>
 		<key row="2472" value="2.200000" interpolation="0"/>
 		<key row="3013" value="0.000000" interpolation="0"/>
@@ -247,12 +253,14 @@
 		<key row="3423" value="50.000000" interpolation="0"/>
 	</track>
 	<track name="nefertiti_alpha">
+		<key row="0" value="0.000000" interpolation="0"/>
 		<key row="1921" value="0.000000" interpolation="0"/>
 		<key row="2399" value="1.000000" interpolation="0"/>
 		<key row="2496" value="1.000000" interpolation="1"/>
 		<key row="2524" value="0.700000" interpolation="0"/>
 	</track>
 	<track name="godray_weight">
+		<key row="0" value="0.000000" interpolation="0"/>
 		<key row="1921" value="28.000000" interpolation="1"/>
 		<key row="1968" value="120.000000" interpolation="2"/>
 		<key row="2096" value="0.000000" interpolation="0"/>
@@ -260,7 +268,10 @@
 		<key row="2184" value="1.000000" interpolation="1"/>
 		<key row="2188" value="5.000000" interpolation="2"/>
 		<key row="2194" value="1.000000" interpolation="2"/>
-		<key row="2207" value="0.000000" interpolation="0"/>
+		<key row="2201" value="0.000000" interpolation="0"/>
+		<key row="2203" value="0.000000" interpolation="1"/>
+		<key row="2218" value="10.000000" interpolation="2"/>
+		<key row="2225" value="0.000000" interpolation="0"/>
 		<key row="2297" value="0.000000" interpolation="1"/>
 		<key row="2407" value="25.000000" interpolation="0"/>
 		<key row="2422" value="15.000000" interpolation="1"/>
@@ -350,16 +361,18 @@
 		<key row="3282" value="0.000000" interpolation="0"/>
 	</track>
 	<track name="sdf_1">
-		<key row="1921" value="0.000000" interpolation="1"/>
-		<key row="2045" value="4.000000" interpolation="1"/>
+		<key row="0" value="0.000000" interpolation="0"/>
+		<key row="1921" value="0.000000" interpolation="2"/>
+		<key row="2045" value="4.000000" interpolation="2"/>
 		<key row="2071" value="8.000000" interpolation="0"/>
 		<key row="2088" value="8.000000" interpolation="2"/>
 		<key row="2128" value="5.000000" interpolation="2"/>
 		<key row="2167" value="6.000000" interpolation="2"/>
 		<key row="2188" value="0.000000" interpolation="1"/>
-		<key row="2407" value="20.000000" interpolation="2"/>
+		<key row="2212" value="1.000000" interpolation="2"/>
+		<key row="2407" value="15.000000" interpolation="2"/>
 		<key row="2421" value="0.000000" interpolation="0"/>
-		<key row="2471" value="300.000000" interpolation="0"/>
+		<key row="2471" value="0.000000" interpolation="0"/>
 		<key row="3015" value="1.000000" interpolation="1"/>
 		<key row="3042" value="10.000000" interpolation="0"/>
 		<key row="3312" value="0.000000" interpolation="0"/>
@@ -373,12 +386,13 @@
 		<key row="3573" value="0.600000" interpolation="0"/>
 	</track>
 	<track name="sdf_2">
+		<key row="0" value="0.000000" interpolation="0"/>
 		<key row="1921" value="0.100000" interpolation="2"/>
 		<key row="2040" value="2.000000" interpolation="0"/>
 		<key row="2172" value="2.000000" interpolation="2"/>
 		<key row="2188" value="0.000000" interpolation="2"/>
-		<key row="2268" value="6.950000" interpolation="1"/>
-		<key row="2283" value="2.000000" interpolation="2"/>
+		<key row="2268" value="6.950000" interpolation="2"/>
+		<key row="2295" value="2.000000" interpolation="2"/>
 		<key row="2421" value="0.000000" interpolation="0"/>
 		<key row="2471" value="0.000000" interpolation="0"/>
 		<key row="3015" value="2.000000" interpolation="0"/>
@@ -389,15 +403,16 @@
 		<key row="3355" value="16.000000" interpolation="0"/>
 	</track>
 	<track name="sdf_3">
+		<key row="0" value="0.000000" interpolation="0"/>
 		<key row="1921" value="3.000000" interpolation="0"/>
 		<key row="2040" value="3.000000" interpolation="2"/>
 		<key row="2090" value="5.000000" interpolation="0"/>
 		<key row="2147" value="5.000000" interpolation="2"/>
 		<key row="2193" value="8.000000" interpolation="2"/>
 		<key row="2205" value="5.000000" interpolation="2"/>
-		<key row="2268" value="1.000000" interpolation="2"/>
-		<key row="2278" value="1.000000" interpolation="1"/>
-		<key row="2353" value="20.000000" interpolation="1"/>
+		<key row="2268" value="2.000000" interpolation="2"/>
+		<key row="2278" value="2.000000" interpolation="2"/>
+		<key row="2353" value="20.000000" interpolation="2"/>
 		<key row="2384" value="4.000000" interpolation="0"/>
 		<key row="2392" value="4.000000" interpolation="1"/>
 		<key row="2439" value="30.000000" interpolation="0"/>
@@ -406,21 +421,23 @@
 		<key row="3485" value="1.500000" interpolation="0"/>
 	</track>
 	<track name="sdf_4">
+		<key row="0" value="0.000000" interpolation="0"/>
 		<key row="1921" value="0.000000" interpolation="2"/>
 		<key row="2040" value="3.000000" interpolation="0"/>
 		<key row="2188" value="8.000000" interpolation="0"/>
-		<key row="2195" value="8.000000" interpolation="1"/>
-		<key row="2471" value="25.000000" interpolation="0"/>
+		<key row="2195" value="8.000000" interpolation="2"/>
+		<key row="2471" value="16.000000" interpolation="0"/>
 		<key row="3015" value="0.000000" interpolation="0"/>
 		<key row="3312" value="1.000000" interpolation="0"/>
 		<key row="3511" value="1.000000" interpolation="1"/>
 		<key row="3530" value="0.000000" interpolation="0"/>
 	</track>
 	<track name="sdf_5">
+		<key row="0" value="0.000000" interpolation="0"/>
 		<key row="1921" value="0.000000" interpolation="2"/>
 		<key row="2188" value="8.000000" interpolation="0"/>
 		<key row="2195" value="8.000000" interpolation="3"/>
-		<key row="2471" value="25.000000" interpolation="0"/>
+		<key row="2471" value="16.000000" interpolation="0"/>
 		<key row="3015" value="1.000000" interpolation="0"/>
 		<key row="3057" value="1.000000" interpolation="1"/>
 		<key row="3086" value="8.000000" interpolation="0"/>
@@ -439,11 +456,12 @@
 		<key row="3673" value="40.000000" interpolation="0"/>
 	</track>
 	<track name="sdf_6">
+		<key row="0" value="0.000000" interpolation="0"/>
 		<key row="1921" value="0.000000" interpolation="0"/>
 		<key row="2164" value="3.000000" interpolation="1"/>
 		<key row="2179" value="8.000000" interpolation="0"/>
 		<key row="2189" value="8.000000" interpolation="1"/>
-		<key row="2204" value="0.000000" interpolation="0"/>
+		<key row="2204" value="1.000000" interpolation="0"/>
 		<key row="3015" value="0.000000" interpolation="0"/>
 		<key row="3030" value="0.000000" interpolation="1"/>
 		<key row="3042" value="20.000000" interpolation="0"/>
@@ -461,6 +479,7 @@
 		<key row="3673" value="40.000000" interpolation="0"/>
 	</track>
 	<track name="sdf_7">
+		<key row="0" value="0.000000" interpolation="0"/>
 		<key row="2273" value="0.000000" interpolation="2"/>
 		<key row="2278" value="6.000000" interpolation="2"/>
 		<key row="2299" value="6.000000" interpolation="2"/>
@@ -476,12 +495,14 @@
 		<key row="3673" value="40.000000" interpolation="0"/>
 	</track>
 	<track name="sdf_8">
+		<key row="0" value="0.000000" interpolation="0"/>
 		<key row="1921" value="0.000000" interpolation="0"/>
 		<key row="2188" value="1.000000" interpolation="0"/>
 		<key row="3015" value="0.000000" interpolation="0"/>
 		<key row="3313" value="1.000000" interpolation="0"/>
 	</track>
 	<track name="sdf_9">
+		<key row="0" value="0.000000" interpolation="0"/>
 		<key row="2203" value="0.000000" interpolation="1"/>
 		<key row="2309" value="2.000000" interpolation="0"/>
 		<key row="3015" value="0.000000" interpolation="0"/>
@@ -492,6 +513,7 @@
 		<key row="3535" value="4.000000" interpolation="0"/>
 	</track>
 	<track name="sdf_10">
+		<key row="0" value="0.000000" interpolation="0"/>
 		<key row="2203" value="3.000000" interpolation="1"/>
 		<key row="2285" value="8.000000" interpolation="0"/>
 		<key row="3015" value="0.000000" interpolation="0"/>
@@ -509,6 +531,7 @@
 		<key row="3682" value="2.000000" interpolation="0"/>
 	</track>
 	<track name="sdf_11">
+		<key row="0" value="0.000000" interpolation="0"/>
 		<key row="2281" value="0.000000" interpolation="1"/>
 		<key row="2308" value="0.800000" interpolation="1"/>
 		<key row="2341" value="0.000000" interpolation="0"/>
@@ -521,6 +544,7 @@
 		<key row="3703" value="0.120000" interpolation="0"/>
 	</track>
 	<track name="sdf_12">
+		<key row="0" value="0.000000" interpolation="0"/>
 		<key row="2171" value="0.000000" interpolation="0"/>
 		<key row="2198" value="1.000000" interpolation="0"/>
 		<key row="2427" value="1.000000" interpolation="1"/>
@@ -545,15 +569,20 @@
 		<key row="3587" value="200.000000" interpolation="0"/>
 	</track>
 	<track name="sdf_14">
+		<key row="0" value="0.000000" interpolation="0"/>
 		<key row="3292" value="0.000000" interpolation="2"/>
 		<key row="3439" value="30.000000" interpolation="0"/>
 	</track>
 	<track name="sdf_15">
+		<key row="0" value="0.000000" interpolation="0"/>
 		<key row="3292" value="0.000000" interpolation="3"/>
 		<key row="3439" value="30.000000" interpolation="0"/>
 	</track>
-	<track name="sdf_16"/>
+	<track name="sdf_16">
+		<key row="0" value="0.000000" interpolation="0"/>
+	</track>
 	<track name="attractorPower">
+		<key row="0" value="0.000000" interpolation="0"/>
 		<key row="2471" value="0.000000" interpolation="0"/>
 		<key row="2743" value="0.000000" interpolation="1"/>
 		<key row="2811" value="-0.500000" interpolation="1"/>
@@ -589,6 +618,7 @@
 		<key row="4088" value="0.000000" interpolation="0"/>
 	</track>
 	<track name="city_sine_t">
+		<key row="0" value="0.000000" interpolation="0"/>
 		<key row="272" value="0.000000" interpolation="1"/>
 		<key row="781" value="20.000000" interpolation="0"/>
 	</track>
@@ -610,6 +640,7 @@
 		<key row="215" value="15.000000" interpolation="0"/>
 	</track>
 	<track name="ribbon_end_cam">
+		<key row="0" value="0.000000" interpolation="0"/>
 		<key row="671" value="0.000000" interpolation="1"/>
 		<key row="1108" value="1600.000000" interpolation="0"/>
 	</track>
@@ -645,6 +676,7 @@
 		<key row="3294" value="50.000000" interpolation="0"/>
 	</track>
 	<track name="knot_rotate">
+		<key row="0" value="0.000000" interpolation="0"/>
 		<key row="3838" value="0.000000" interpolation="1"/>
 		<key row="4317" value="5.000000" interpolation="0"/>
 	</track>
@@ -657,9 +689,11 @@
 		<key row="0" value="0.000000" interpolation="0"/>
 		<key row="271" value="4.000000" interpolation="0"/>
 		<key row="1920" value="2.000000" interpolation="0"/>
+		<key row="3009" value="4.000000" interpolation="0"/>
 		<key row="3846" value="4.000000" interpolation="0"/>
 	</track>
 	<track name="particle_size">
+		<key row="0" value="0.000000" interpolation="0"/>
 		<key row="3009" value="1.000000" interpolation="0"/>
 		<key row="3160" value="1.000000" interpolation="1"/>
 		<key row="3164" value="4.000000" interpolation="0"/>
@@ -668,6 +702,7 @@
 		<key row="3294" value="2.000000" interpolation="0"/>
 	</track>
 	<track name="particle_dim">
+		<key row="0" value="0.000000" interpolation="0"/>
 		<key row="3016" value="0.000000" interpolation="0"/>
 		<key row="3033" value="0.000000" interpolation="0"/>
 		<key row="3846" value="0.900000" interpolation="0"/>
@@ -688,6 +723,7 @@
 		<key row="3596" value="2000000.000000" interpolation="0"/>
 	</track>
 	<track name="sphere_r">
+		<key row="0" value="0.000000" interpolation="0"/>
 		<key row="3009" value="60000.000000" interpolation="1"/>
 		<key row="3092" value="35000.000000" interpolation="0"/>
 		<key row="3093" value="20000.000000" interpolation="0"/>
@@ -699,6 +735,7 @@
 		<key row="3294" value="20000.000000" interpolation="0"/>
 	</track>
 	<track name="sphere_a">
+		<key row="0" value="0.000000" interpolation="0"/>
 		<key row="3002" value="90.000000" interpolation="0"/>
 		<key row="3009" value="90.000000" interpolation="0"/>
 		<key row="3093" value="30.000000" interpolation="1"/>
@@ -712,6 +749,7 @@
 		<key row="3845" value="80.000000" interpolation="0"/>
 	</track>
 	<track name="sphere_theta">
+		<key row="0" value="0.000000" interpolation="0"/>
 		<key row="3009" value="90.000000" interpolation="0"/>
 		<key row="3093" value="20.000000" interpolation="0"/>
 		<key row="3124" value="90.000000" interpolation="0"/>
@@ -724,12 +762,14 @@
 		<key row="4176" value="200.000000" interpolation="0"/>
 	</track>
 	<track name="look_at_x">
+		<key row="0" value="0.000000" interpolation="0"/>
 		<key row="3009" value="10.000000" interpolation="0"/>
 		<key row="3124" value="10.000000" interpolation="0"/>
 		<key row="3160" value="0.000000" interpolation="0"/>
 		<key row="3216" value="2950.000000" interpolation="0"/>
 	</track>
 	<track name="look_at_y">
+		<key row="0" value="0.000000" interpolation="0"/>
 		<key row="3009" value="0.000000" interpolation="0"/>
 		<key row="3093" value="3000.000000" interpolation="1"/>
 		<key row="3122" value="3400.000000" interpolation="0"/>
@@ -740,30 +780,36 @@
 		<key row="3294" value="3100.000000" interpolation="0"/>
 	</track>
 	<track name="look_at_z">
+		<key row="0" value="0.000000" interpolation="0"/>
 		<key row="3009" value="0.000000" interpolation="0"/>
 		<key row="3124" value="0.000000" interpolation="0"/>
 		<key row="3160" value="0.000000" interpolation="0"/>
 		<key row="3216" value="-710.000000" interpolation="0"/>
 	</track>
 	<track name="attr_x">
+		<key row="0" value="0.000000" interpolation="0"/>
 		<key row="3160" value="0.000000" interpolation="0"/>
 		<key row="3216" value="-30.000000" interpolation="0"/>
 	</track>
 	<track name="attr_y">
+		<key row="0" value="0.000000" interpolation="0"/>
 		<key row="3160" value="0.000000" interpolation="0"/>
 		<key row="3216" value="0.000000" interpolation="0"/>
 	</track>
 	<track name="attr_z">
+		<key row="0" value="0.000000" interpolation="0"/>
 		<key row="3160" value="0.000000" interpolation="0"/>
 		<key row="3169" value="-50.000000" interpolation="0"/>
 		<key row="3216" value="-50.000000" interpolation="0"/>
 	</track>
 	<track name="inv_mod">
+		<key row="0" value="0.000000" interpolation="0"/>
 		<key row="3009" value="0.001000" interpolation="0"/>
 		<key row="3232" value="20.000000" interpolation="0"/>
 		<key row="3294" value="50.000000" interpolation="0"/>
 	</track>
 	<track name="inv_scale">
+		<key row="0" value="0.000000" interpolation="0"/>
 		<key row="3009" value="1.000000" interpolation="0"/>
 		<key row="3232" value="10.000000" interpolation="0"/>
 		<key row="3294" value="0.100000" interpolation="0"/>
