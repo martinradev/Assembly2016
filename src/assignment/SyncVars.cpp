@@ -98,6 +98,22 @@ namespace FWSync {
 	SYNC_DEF(pUpdateTo);
 	SYNC_DEF(pUpdateFrom);
 
+
+	SYNC_DEF(sphereR);
+	SYNC_DEF(sphereAlpha);
+	SYNC_DEF(splhereTheta);
+
+	SYNC_DEF(lookAtX);
+	SYNC_DEF(lookAtY);
+	SYNC_DEF(lookAtZ);
+
+	SYNC_DEF(attrX);
+	SYNC_DEF(attrY);
+	SYNC_DEF(attrZ);
+
+	SYNC_DEF(invocationModulate);
+	SYNC_DEF(invocationScale);
+
 	static const float bpm = 150.0f; /* beats per minute */
 	static const float rpb = 8.0f; /* rows per beat */
 	static const double row_rate = (double(bpm) / 60) * rpb;
@@ -229,6 +245,21 @@ namespace FWSync {
 		particleDimPtr = sync_get_track(rocket, "particle_dim");
 		pUpdateFromPtr = sync_get_track(rocket, "p_update_from");
 		pUpdateToPtr = sync_get_track(rocket, "p_update_to");
+
+		sphereRPtr = sync_get_track(rocket, "sphere_r");
+		sphereAlphaPtr = sync_get_track(rocket, "sphere_a");
+		splhereThetaPtr = sync_get_track(rocket, "sphere_theta");
+
+		lookAtXPtr = sync_get_track(rocket, "look_at_x");
+		lookAtYPtr = sync_get_track(rocket, "look_at_y");
+		lookAtZPtr = sync_get_track(rocket, "look_at_z");
+
+		attrXPtr = sync_get_track(rocket, "attr_x");
+		attrYPtr = sync_get_track(rocket, "attr_y");
+		attrZPtr = sync_get_track(rocket, "attr_z");
+
+		invocationModulatePtr = sync_get_track(rocket, "inv_mod");
+		invocationScalePtr = sync_get_track(rocket, "inv_scale");
 	}
 
 
@@ -324,6 +355,22 @@ namespace FWSync {
 
 		pUpdateFrom = sync_get_val(FWSync::pUpdateFromPtr, row);
 		pUpdateTo = sync_get_val(FWSync::pUpdateToPtr, row);
+
+
+		sphereR = sync_get_val(FWSync::sphereRPtr, row);
+		sphereAlpha = sync_get_val(FWSync::sphereAlphaPtr, row);
+		splhereTheta = sync_get_val(FWSync::splhereThetaPtr, row);
+
+		lookAtX = sync_get_val(FWSync::lookAtXPtr, row);
+		lookAtY = sync_get_val(FWSync::lookAtYPtr, row);
+		lookAtZ = sync_get_val(FWSync::lookAtZPtr, row);
+
+		attrX = sync_get_val(FWSync::attrXPtr, row);
+		attrY = sync_get_val(FWSync::attrYPtr, row);
+		attrZ = sync_get_val(FWSync::attrZPtr, row);
+
+		invocationModulate = sync_get_val(FWSync::invocationModulatePtr, row);
+		invocationScale = sync_get_val(FWSync::invocationScalePtr, row);
 	}
 
 };

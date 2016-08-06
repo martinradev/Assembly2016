@@ -22,6 +22,11 @@ uniform int offset;
 uniform float curlStep;
 uniform float attractorStep;
 
+uniform float invocationModulate;
+uniform float invocationScale;
+
+uniform vec3 attractorPosition;
+
 vec3 verlet(in vec3 a, in vec3 x, in vec3 xOld, in float dt) {
 	
 	return 2.0*x - x + 0.5* a * dt*dt;
@@ -104,9 +109,39 @@ vec3 curlNoise(in vec3 v)
 	return normalize(curl);
 }
 
+vec3 getCurlF(in vec3 pos) 
+{
+	return curlStep * curlNoise(pos*0.01);
+}
+
+vec3 getAttractorF(in vec3 pos)
+{
+	
+	float hdist = abs(pos.y - attractorPosition.y);
+	float raddist = distance(pos.xz, attractorPosition.xz);
+	
+	float randomMass = 1.0 + invocationScale * abs(sin(invocationModulate*float(gl_GlobalInvocationID.x)));
+	
+	float attractorMass = -600.0 * raddist * attractorStep * randomMass * exp(-0.03*hdist);
+	
+	vec3 dirToParticle = (attractorPosition-pos);
+			
+	float r = length(dirToParticle);
+			
+	return dirToParticle * attractorMass / pow(dot(dirToParticle,dirToParticle) + 1.0, 1.5);
+
+}
+
+vec3 getGravity(in vec3 pos)
+{
+	return vec3(0.0, -3.0*attractorStep*smoothstep(0.0, 100.0, pos.y), 0.0);
+}
+
 vec3 evalF(in vec3 pos)
 {
-	return 100.0*curlNoise(0.01*pos);
+	//return 100.0*curlNoise(0.01*pos);
+	
+	return getAttractorF(pos) + getGravity(pos) + getCurlF(pos);
 }
 
 vec3 euler(in vec3 pos)

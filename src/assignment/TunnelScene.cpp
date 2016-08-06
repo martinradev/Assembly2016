@@ -75,7 +75,7 @@ namespace FW {
 
 
 		std::vector<Vec3f> controlPoints = {
-			Vec3f(1000,45000, 1000),
+			Vec3f(1000,60000, 1000),
 			Vec3f(1000,30000, 1000),
 			Vec3f(1000,15000, 1000),
 			Vec3f(1000,1000, 1000),
@@ -274,7 +274,8 @@ namespace FW {
 
 		mCamPtr->setFar(400000);
 
-		//mCamPtr->setPosition(getCameraPosition());
+		mCamPtr->setPosition(getCameraPosition());
+		mCamPtr->setForward(getCameraForward());
 
 		Mat4f camToClip = camera.getWorldToClip();
 		Mat4f camToCamera = camera.getWorldToCamera();
@@ -295,6 +296,19 @@ namespace FW {
 		glClearColor(fogColor.x, fogColor.y, fogColor.z, 1);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+		glDisable(GL_DEPTH_TEST);
+		mBackgroundRenderProgram->use();
+		
+
+		gl->setUniform(mBackgroundRenderProgram->getUniformLoc("invClip"), camToClip.inverted());
+
+		glBindVertexArray(mTessScene->m_quadVAO);
+		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+		glBindVertexArray(0);
+		glEnable(GL_DEPTH_TEST);
+
+
+
 		renderCity(gl, camToClip, lightPos, lightDir, lightColor, fogColor);
 
 
@@ -307,8 +321,11 @@ namespace FW {
 		//gl->setUniform(mMeteorRenderProgram->getUniformLoc("lastIndex"), float(e) / 6.0f);
 		//glDrawElements(GL_TRIANGLES, e - s, GL_UNSIGNED_INT, NULL + (char*)(s * sizeof(GL_UNSIGNED_INT)));
 
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 		mMeteorRenderProgram->use();
 		gl->setUniform(mMeteorRenderProgram->getUniformLoc("toScreen"), camToClip);
+		gl->setUniform(mMeteorRenderProgram->getUniformLoc("ribbonAlpha"), FWSync::simulationStep);
 		gl->setUniform(mMeteorRenderProgram->getUniformLoc("cameraPosition"), cameraPos);
 		int s = int(FWSync::ribbonStart)*mTessScene->mProfileNumIndices * 6;
 		int e = int(FWSync::ribbonEnd)*mTessScene->mProfileNumIndices * 6;
@@ -316,7 +333,7 @@ namespace FW {
 		glBindVertexArray(mMeteorVAO);
 		glDrawElements(GL_TRIANGLES, e - s, GL_UNSIGNED_INT, NULL + (char*)(s * sizeof(GL_UNSIGNED_INT)));
 		glBindVertexArray(0);
-
+		glDisable(GL_BLEND);
 		
 		
 		
@@ -350,14 +367,14 @@ namespace FW {
 		gl->setUniform(mCombineProgram->getUniformLoc("godrayColorTex"), 1);
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, mGodrayBlurTex);
-		//glBindTexture(GL_TEXTURE_2D, mTessScene->mGodrayBlurTex);
-		//glBindTexture(GL_TEXTURE_2D, mTessScene->m_terrainLightFBO->getTexture(0));
+		
+		gl->setUniform(mCombineProgram->getUniformLoc("useGodray"), FWSync::godrayWeight>0.0f);
 
 		glBindVertexArray(mTessScene->m_quadVAO);
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 		glBindVertexArray(0);
 
-		mTessScene->debugRenderPath(gl);
+		//mTessScene->debugRenderPath(gl);
 
 		mLastFBO->unbind();
 
@@ -478,6 +495,8 @@ namespace FW {
 
 		mGodrayBlurProgram = loadShader(ctx, "shaders/common/display_vertex.glsl",
 			"shaders/particle_city/godray_blur_frag.glsl", "godray_blur_city_particle");
+
+		mBackgroundRenderProgram = loadShader(ctx, "shaders/common/display_vertex.glsl", "shaders/particle_city/background.glsl", "particle_city_background");
 	}
 
 
@@ -538,32 +557,57 @@ namespace FW {
 
 	Vec3f TunnelScene::getCameraPosition() {
 
-		float t = FWSync::cameraTime;
-		int idx = int(t);
 		int camIndex = FWSync::cameraIndex;
-		t -= float(idx);
-		if (idx + 3 >= mCameraPaths[camIndex].size()) {
-			idx = mCameraPaths[camIndex].size() - 4;
-			t = 1.0f;
+		if (camIndex == 6)
+		{
+
+			// curve path
+			float t = FWSync::cameraTime;
+			int idx = int(t);
+
+			t -= float(idx);
+			if (idx + 3 >= mCameraPaths[camIndex].size()) {
+				idx = mCameraPaths[camIndex].size() - 4;
+				t = 1.0f;
+			}
+			return CarmullRomCurve::evalCatmullRom(
+				mCameraPaths[camIndex][idx],
+				mCameraPaths[camIndex][idx + 1],
+				mCameraPaths[camIndex][idx + 2],
+				mCameraPaths[camIndex][idx + 3], t);
 		}
-		Vec3f off = CarmullRomCurve::evalCatmullRom(
-			mCameraPaths[camIndex][idx],
-			mCameraPaths[camIndex][idx + 1],
-			mCameraPaths[camIndex][idx + 2],
-			mCameraPaths[camIndex][idx + 3], t);
-		return off;
+		else if (camIndex == 0)
+		{
+			float r = FWSync::sphereR;
+			float a = FWSync::sphereAlpha * FW_PI / 180.0f;
+			float th = FWSync::splhereTheta * FW_PI / 180.0f;
+			float x = r * cosf(th) *sinf(a);
+			float y = r * sinf(th) * sinf(a);
+			float z = r * cosf(a);
+			return Vec3f(x, y, z);
+		}
+		else if (camIndex == 1)
+		{
+			float r = FWSync::sphereR;
+			float a = FWSync::sphereAlpha * FW_PI / 180.0f;
+			float th = FWSync::splhereTheta * FW_PI / 180.0f;
+			float x = r * cosf(th);
+			float y = FWSync::sphereAlpha;
+			float z = r * sin(th);
+			return Vec3f(x, y, z);
+		}
+		else
+		{
+			return Vec3f(0.0f);
+		}
+			
 
 	}
 
-	Vec3f TunnelScene::getCameraForward(float t) {
+	Vec3f TunnelScene::getCameraForward() {
 
-		float tNext = t+0.1f;
-		float tmp = (2.0f + cosf(3.0f*tNext));
-		float xCoord = tmp * cosf(2.0f * tNext);
-		float yCoord = tmp * sinf(2.0f * tNext);
-		float zCoord = sinf(3.0f * tNext);
 
-		return normalize(3200.0f*Vec3f(xCoord, yCoord, zCoord) - getCameraPosition());
+		return normalize(Vec3f(FWSync::lookAtX, FWSync::lookAtY, FWSync::lookAtZ) - mCamPtr->getPosition());
 
 	}
 
@@ -648,6 +692,15 @@ namespace FW {
 
 	void TunnelScene::explodeCity(GLContext * gl)
 	{
+
+		static float lastValue = FWSync::trefoilTime;
+
+		if (lastValue + 0.5f < FWSync::trefoilTime)
+		{
+			restartAnimation();
+		}
+		lastValue = FWSync::trefoilTime;
+
 		mParticleMoveProgram->use();
 
 		gl->setUniform(mParticleMoveProgram->getUniformLoc("numParticles"), mNumCityParticles);
@@ -657,6 +710,10 @@ namespace FW {
 
 		gl->setUniform(mParticleMoveProgram->getUniformLoc("curlStep"), FWSync::cloudParticleCurlStep);
 		gl->setUniform(mParticleMoveProgram->getUniformLoc("attractorStep"), FWSync::cloudParticleStep);
+		gl->setUniform(mParticleMoveProgram->getUniformLoc("invocationModulate"), FWSync::invocationModulate);
+		gl->setUniform(mParticleMoveProgram->getUniformLoc("invocationScale"), FWSync::invocationScale);
+
+		gl->setUniform(mParticleMoveProgram->getUniformLoc("attractorPosition"), Vec3f(FWSync::attrX, FWSync::attrY, FWSync::attrZ));
 
 		glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, mCityVBO);
 

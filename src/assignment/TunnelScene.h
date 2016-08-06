@@ -64,7 +64,7 @@ namespace FW {
 		//std::unique_ptr<Mesher> mMesher;
 		//void renderMeshObject(GLContext * gl, const Mat4f & toScreen, const Mat4f & toWorld, const Mat4f & normalToWorld, const Vec3f & cameraPosition);
 
-		Vec3f getCameraForward(float t);
+		Vec3f getCameraForward();
 		Vec3f getCameraUp(float t);
 		Vec3f getCameraPosition();
 
@@ -115,6 +115,8 @@ namespace FW {
 
 		void restartAnimation();
 		GLuint mCityVBOCopy;
+
+		Program * mBackgroundRenderProgram;
 	};
 
 };

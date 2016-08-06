@@ -125,11 +125,15 @@ void main() {
 	const float MIN_POINT_SIZE = 1.0;
 	
 	uvOffsetX = float(gl_VertexID % 4) * 0.25; 
-	float sizeJitter = 0.1 + 2.0*abs(sin(float(gl_VertexID)));
+	float sizeJitter = 0.55 + 0.5*sin(float(gl_VertexID));
+	sizeJitter *= sizeJitter;
+	sizeJitter = (1.0 - smoothstep(0.0, 1.0, sizeJitter))*5.0;
+	
 	gl_PointSize = (10000.0/depth) * sizeJitter;
 	
-	if (particleSize > 0.0) gl_PointSize += 2.0*(0.5*snoise(0.0005*vec4(positionFrag, particleSize))+0.5);
+	//if (particleSize > 0.0) gl_PointSize += 2.0*(0.5*snoise(0.00005*vec4(positionFrag, particleSize))+0.5);
 	
+	gl_PointSize *= particleSize;
 	
 	depthFrag = depth;
 }

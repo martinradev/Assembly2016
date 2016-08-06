@@ -11,6 +11,7 @@ layout(location = 1) out vec4 positionOUT;
 
 
 uniform float lastIndex;
+uniform float ribbonAlpha;
 
 void main() {
 	
@@ -28,7 +29,7 @@ void main() {
 	
 	color.rgb = color.rgb*max(q, 0.4) + addColor;
 	
-	diffuseColorOUT = vec4(color, 1.0);
+	diffuseColorOUT = vec4(color, ribbonAlpha);
 	positionOUT = vec4(positionFrag, 1.0);
 	
 }

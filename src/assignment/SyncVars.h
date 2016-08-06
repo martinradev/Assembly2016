@@ -118,6 +118,20 @@ namespace FWSync {
 	SYNC_EXT(pUpdateFrom);
 	SYNC_EXT(pUpdateTo);
 
+	SYNC_EXT(sphereR);
+	SYNC_EXT(sphereAlpha);
+	SYNC_EXT(splhereTheta);
+
+	SYNC_EXT(lookAtX);
+	SYNC_EXT(lookAtY);
+	SYNC_EXT(lookAtZ);
+
+	SYNC_EXT(attrX);
+	SYNC_EXT(attrY);
+	SYNC_EXT(attrZ);
+
+	SYNC_EXT(invocationModulate);
+	SYNC_EXT(invocationScale);
 
 	void bindTracks(sync_device * rocket, HSTREAM hstream);
 	void updateValues(sync_device * rocket, HSTREAM hstream);
